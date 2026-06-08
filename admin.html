@@ -64,10 +64,39 @@ const db = getFirestore(app);
 const ordersContainer =
 document.getElementById("orders");
 
-const snapshot =
-await getDocs(collection(db,"orders"));
+try {
+
+const snapshot = await getDocs(collection(db,"orders"));
+
+document.getElementById("orders").innerHTML =
+`<p>Orders found: ${snapshot.size}</p>`;
 
 snapshot.forEach(doc => {
+
+```
+const data = doc.data();
+
+ordersContainer.innerHTML += `
+<div class="order">
+  <p><b>From:</b> ${data.fromCurrency}</p>
+  <p><b>To:</b> ${data.toCurrency}</p>
+  <p><b>Amount:</b> ${data.amount}</p>
+  <p class="status">${data.status || "pending"}</p>
+</div>
+`;
+```
+
+});
+
+} catch(error) {
+
+document.getElementById("orders").innerHTML =
+`<p>Error: ${error.message}</p>`;
+
+console.error(error);
+
+}
+
 
 const data = doc.data();
 
