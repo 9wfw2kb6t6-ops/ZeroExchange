@@ -1,12 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zero Exchange</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0d1117;
+color:white;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:#111827;
+border-bottom:1px solid #222;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#f5b942;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+}
+
+.hero{
+padding:80px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.hero p{
+color:#bdbdbd;
+font-size:18px;
+margin-bottom:30px;
+}
+
+.btn{
+display:inline-block;
+background:#f5b942;
+color:black;
+padding:15px 35px;
+border-radius:10px;
+font-weight:bold;
+text-decoration:none;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+padding:30px;
+}
+
+.card{
+background:#161b22;
+padding:25px;
+border-radius:15px;
+text-align:center;
+}
+
+.card h2{
+color:#f5b942;
+margin-bottom:10px;
+}
+
+.exchange-box{
+background:#161b22;
+margin:30px;
+padding:25px;
+border-radius:15px;
+}
+
+.exchange-box h2{
+margin-bottom:20px;
+}
+
+input,select{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+}
+
+footer{
+text-align:center;
+padding:25px;
+margin-top:40px;
+border-top:1px solid #222;
+color:#999;
+}
+</style>
 </head>
+
 <body>
-<h1>Zero Exchange</h1>
-<p>Crypto & Fiat Exchange Platform</p>
+
+<header>
+<div class="logo">Zero Exchange</div>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">Markets</a>
+<a href="#">Exchange</a>
+<a href="#">Support</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>Exchange Crypto & Fiat Instantly</h1>
+
+<p>
+USDT ↔ TRY
+<br>
+TRY ↔ IRR
+<br>
+Fast • Secure • Simple
+</p>
+
+<a href="#" class="btn">Start Exchange</a>
+</section>
+
+<section class="stats">
+
+<div class="card">
+<h2>50K+</h2>
+<p>Users</p>
+</div>
+
+<div class="card">
+<h2>$10M+</h2>
+<p>Volume</p>
+</div>
+
+<div class="card">
+<h2>24/7</h2>
+<p>Support</p>
+</div>
+
+</section>
+
+<section class="exchange-box">
+
+<h2>Quick Exchange</h2>
+
+<select>
+<option>USDT</option>
+<option>TRY</option>
+<option>IRR</option>
+</select>
+
+<input type="number" placeholder="Amount">
+
+<select>
+<option>TRY</option>
+<option>USDT</option>
+<option>IRR</option>
+</select>
+
+<a href="#" class="btn">Calculate</a>
+
+</section>
+
+<footer>
+© 2026 Zero Exchange. All Rights Reserved.
+</footer>
+
 </body>
 </html>
