@@ -70,13 +70,14 @@ await updateDoc(doc(db, "orders", id), {
   status: status
 });
 
-alert("Status updated");
+alert("Updating...");
 
 location.reload();
 ```
 
 } catch(error){
-
+alert("Error: " + error.message);
+console.error(error);
 ```
 alert(error.message);
 console.error(error);
