@@ -6,51 +6,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔐 Telegram Config
-const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN";
-const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID";
-
-// 📩 Telegram Notifier
-async function sendTelegram(msg){
-  await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: msg
-    })
-  });
-}
-
-// 📊 Log system
 let logs = [];
 
-function addLog(action, data){
-  const log = {
-    action,
-    data,
-    time: new Date().toISOString()
-  };
+/* LOG SYSTEM */
+app.post("/log",(req,res)=>{
+logs.push({
+data:req.body,
+time:new Date().toISOString()
+});
+res.json({ok:true});
+});
 
-  logs.push(log);
-
-  sendTelegram(`📢 ${action}\n${JSON.stringify(data)}`);
+/* TELEGRAM */
+async function telegram(msg){
+await fetch("https://api.telegram.org/botTOKEN/sendMessage",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+chat_id:"CHAT_ID",
+text:msg
+})
+});
 }
 
-// 🚀 Update order status API
-app.post("/update-order", async (req,res)=>{
-  const { orderId, status } = req.body;
+/* UPDATE NOTIFY */
+app.post("/notify",async (req,res)=>{
 
-  addLog("ORDER_UPDATE", {orderId, status});
+await telegram(`ORDER UPDATE: ${JSON.stringify(req.body)}`);
 
-  res.json({success:true});
+res.json({ok:true});
 });
 
-// 📜 Logs API
-app.get("/logs",(req,res)=>{
-  res.json(logs);
-});
-
-app.listen(3000, ()=>{
-  console.log("Backend running on port 3000");
-});
+app.listen(3000,()=>console.log("V5 running"));
