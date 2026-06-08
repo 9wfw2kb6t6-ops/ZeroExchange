@@ -176,7 +176,7 @@ body{
 
   display:grid;
 
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr);
 
   gap:15px;
 
@@ -448,7 +448,7 @@ input,select{
     <div class="nav-right">
 
       <div class="balance">
-        Balance: 24,580 USDT
+        Balance: ₺845,000 TRY
       </div>
 
       <button
@@ -524,6 +524,20 @@ input,select{
 
         </div>
 
+        <div class="coin">
+
+          <h3>TRY/USDT</h3>
+
+          <p>₺39.12</p>
+
+          <br>
+
+          <span class="green">
+            +0.42%
+          </span>
+
+        </div>
+
       </div>
 
     </div>
@@ -539,6 +553,7 @@ input,select{
         <option>USDT</option>
         <option>BTC</option>
         <option>ETH</option>
+        <option>TRY</option>
 
       </select>
 
@@ -553,6 +568,7 @@ input,select{
         <option>BTC</option>
         <option>ETH</option>
         <option>USDT</option>
+        <option>TRY</option>
 
       </select>
 
@@ -593,11 +609,11 @@ window.addEventListener("load",()=>{
 
     height:420,
 
-    symbol:"BINANCE:BTCUSDT",
+    symbol:"BINANCE:BTCTRY",
 
     interval:"15",
 
-    timezone:"Etc/UTC",
+    timezone:"Europe/Istanbul",
 
     theme:"dark",
 
@@ -701,6 +717,11 @@ async function login(){
 
   }
 
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  loginBtn.innerHTML = "Loading...";
+
   try{
 
     await signInWithEmailAndPassword(
@@ -712,6 +733,8 @@ async function login(){
   }catch(error){
 
     alert(error.message);
+
+    loginBtn.innerHTML = "Login";
 
   }
 
@@ -855,7 +878,7 @@ function loadOrders(){
 
 }
 
-/* BUTTON EVENTS */
+/* EVENTS */
 
 window.addEventListener(
   "DOMContentLoaded",
