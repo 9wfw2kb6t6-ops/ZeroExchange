@@ -44,7 +44,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+doc,
+updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -59,6 +61,30 @@ measurementId: "G-8P5XH8DT64"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+window.updateStatus = async function(id, status){
+
+try {
+
+```
+await updateDoc(doc(db, "orders", id), {
+  status: status
+});
+
+alert("Status updated");
+
+location.reload();
+```
+
+} catch(error){
+
+```
+alert(error.message);
+console.error(error);
+```
+
+}
+
+}
 
 const ordersContainer = document.getElementById("orders");
 ordersContainer.innerHTML = "<h2>JavaScript Works</h2>";
@@ -79,6 +105,15 @@ ordersContainer.innerHTML += `
 <p><b>To:</b> ${data.toCurrency}</p>
 <p><b>Amount:</b> ${data.amount}</p>
 <p class="status">${data.status || "pending"}</p>
+
+<button onclick="updateStatus('${doc.id}','approved')">
+Approve
+</button>
+
+<button onclick="updateStatus('${doc.id}','rejected')">
+Reject
+</button>
+
 </div>
 `;
 
