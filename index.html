@@ -34,6 +34,12 @@ button{
   margin:10px 0;
   border-radius:10px;
 }
+
+.logout-btn{
+  background:#dc3545;
+  color:white;
+  width:auto;
+}
 </style>
 
 </head>
@@ -52,6 +58,12 @@ button{
 
 <div id="app" style="display:none">
 
+<button class="logout-btn" onclick="logout()">
+Logout
+</button>
+
+<hr>
+
 <h3>Create Order</h3>
 
 <select id="from">
@@ -62,7 +74,12 @@ button{
 
 <br>
 
-<input id="amount" type="number" placeholder="Amount">
+<input
+id="amount"
+type="number"
+placeholder="Amount"
+
+>
 
 <br>
 
@@ -74,29 +91,36 @@ button{
 
 <br>
 
-<button onclick="createOrder()">Submit</button>
+<button onclick="createOrder()">
+Submit
+</button>
 
 <h3>Orders</h3>
+
 <div id="orders"></div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
   collection,
   addDoc,
   onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  onAuthStateChanged,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
@@ -108,54 +132,88 @@ const firebaseConfig = {
   measurementId: "G-DNJ0V10CG2"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+
+/* LOGIN */
 
 window.login = async () => {
 
-  const emailVal =
+  const email =
     document.getElementById("email").value.trim();
 
-  const passVal =
+  const password =
     document.getElementById("password").value;
 
-  if(!emailVal || !passVal){
+  if(!email || !password){
+
     alert("Email and password required");
     return;
+
   }
 
-  try {
+  try{
 
     await signInWithEmailAndPassword(
       auth,
-      emailVal,
-      passVal
+      email,
+      password
     );
 
     alert("Login success");
 
-  } catch(e){
+  }catch(error){
 
-    alert("Login error: " + e.message);
-    console.error(e);
+    alert(
+      "Login error: " + error.message
+    );
+
+    console.error(error);
 
   }
 
 };
 
+/* LOGOUT */
+
+window.logout = async () => {
+
+  try{
+
+    await signOut(auth);
+
+    alert("Logged out");
+
+    location.reload();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+};
+
+/* AUTH STATE */
+
 onAuthStateChanged(auth,(user)=>{
 
   if(user){
 
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("app").style.display="block";
+    document.getElementById("loginBox")
+      .style.display = "none";
+
+    document.getElementById("app")
+      .style.display = "block";
 
     loadOrders();
 
   }
 
 });
+
+/* CREATE ORDER */
 
 window.createOrder = async ()=>{
 
@@ -180,11 +238,14 @@ window.createOrder = async ()=>{
     await addDoc(
       collection(db,"orders"),
       {
-        from,
-        to,
-        amount:Number(amount),
-        status:"pending",
-        createdAt:new Date().toISOString()
+        uid: auth.currentUser.uid,
+        email: auth.currentUser.email,
+        from: from,
+        to: to,
+        amount: Number(amount),
+        status: "pending",
+        createdAt:
+          new Date().toISOString()
       }
     );
 
@@ -192,14 +253,19 @@ window.createOrder = async ()=>{
 
     document.getElementById("amount").value="";
 
-  }catch(e){
+  }catch(error){
 
-    alert("Error: " + e.message);
-    console.error(e);
+    alert(
+      "Error: " + error.message
+    );
+
+    console.error(error);
 
   }
 
 };
+
+/* LOAD ORDERS */
 
 function loadOrders(){
 
@@ -210,17 +276,41 @@ function loadOrders(){
       const container =
         document.getElementById("orders");
 
-      container.innerHTML="";
+      container.innerHTML = "";
 
       snapshot.forEach((doc)=>{
 
-        const o = doc.data();
+        const order = doc.data();
 
         container.innerHTML += `
           <div class="order">
-            <b>${o.from} → ${o.to}</b><br>
-            Amount: ${o.amount}<br>
-            Status: ${o.status}
+
+            <b>
+            ${order.from}
+            →
+            ${order.to}
+            </b>
+
+            <br>
+
+            User:
+            ${order.email || "Unknown"}
+
+            <br>
+
+            Amount:
+            ${order.amount}
+
+            <br>
+
+            Status:
+            ${order.status}
+
+            <br>
+
+            Date:
+            ${order.createdAt || "-"}
+
           </div>
         `;
 
