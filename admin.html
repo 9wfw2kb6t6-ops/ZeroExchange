@@ -14,10 +14,6 @@ font-family:Arial,sans-serif;
 padding:20px;
 }
 
-h1{
-margin-bottom:20px;
-}
-
 .order{
 background:#161b22;
 padding:15px;
@@ -32,13 +28,14 @@ font-weight:bold;
 </style>
 
 </head>
+
 <body>
 
 <h1>Zero Exchange Admin Panel</h1>
 
-<h1>Zero Exchange Admin Panel</h1>
-<p>Admin page loaded</p>
-<div id="orders"></div>
+<div id="orders">
+Loading orders...
+</div>
 
 <script type="module">
 
@@ -63,42 +60,16 @@ measurementId: "G-8P5XH8DT64"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const ordersContainer =
-document.getElementById("orders");
+const ordersContainer = document.getElementById("orders");
 
 try {
 
 const snapshot = await getDocs(collection(db,"orders"));
 
-document.getElementById("orders").innerHTML =
-`<p>Orders found: ${snapshot.size}</p>`;
+ordersContainer.innerHTML =
+`<h3>Orders Found: ${snapshot.size}</h3>`;
 
-snapshot.forEach(doc => {
-
-```
-const data = doc.data();
-
-ordersContainer.innerHTML += `
-<div class="order">
-  <p><b>From:</b> ${data.fromCurrency}</p>
-  <p><b>To:</b> ${data.toCurrency}</p>
-  <p><b>Amount:</b> ${data.amount}</p>
-  <p class="status">${data.status || "pending"}</p>
-</div>
-`;
-```
-
-});
-
-} catch(error) {
-
-document.getElementById("orders").innerHTML =
-`<p>Error: ${error.message}</p>`;
-
-console.error(error);
-
-}
-
+snapshot.forEach((doc) => {
 
 const data = doc.data();
 
@@ -107,13 +78,20 @@ ordersContainer.innerHTML += `
 <p><b>From:</b> ${data.fromCurrency}</p>
 <p><b>To:</b> ${data.toCurrency}</p>
 <p><b>Amount:</b> ${data.amount}</p>
-<p class="status">
-${data.status || "pending"}
-</p>
+<p class="status">${data.status || "pending"}</p>
 </div>
 `;
 
 });
+
+} catch(error) {
+
+ordersContainer.innerHTML =
+`<h3>Error: ${error.message}</h3>`;
+
+console.error(error);
+
+}
 
 </script>
 
