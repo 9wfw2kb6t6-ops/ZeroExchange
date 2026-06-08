@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="fa">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Zero Exchange V5</title>
 
 <style>
+
 body{
   background:#0d1117;
   color:white;
@@ -40,6 +42,7 @@ button{
   color:white;
   width:auto;
 }
+
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -66,6 +69,7 @@ button{
   }
 
 }
+
 </style>
 
 </head>
@@ -74,77 +78,109 @@ button{
 
 <h2>🚀 Zero Exchange V5</h2>
 
+<!-- LOGIN -->
+
 <div id="loginBox">
-  <input id="email" type="email" placeholder="Email">
+
+  <input
+    id="email"
+    type="email"
+    placeholder="Email"
+  >
+
   <br>
-  <input id="password" type="password" placeholder="Password">
+
+  <input
+    id="password"
+    type="password"
+    placeholder="Password"
+  >
+
   <br>
-  <button onclick="login()">Login</button>
+
+  <button id="loginBtn">
+    Login
+  </button>
+
 </div>
+
+<!-- APP -->
 
 <div id="app" style="display:none">
 
-<button class="logout-btn" onclick="logout()">
-Logout
-</button>
+  <button
+    class="logout-btn"
+    id="logoutBtn"
+  >
+    Logout
+  </button>
 
-<hr>
-<div class="stats">
+  <hr>
 
-  <div class="stat-card">
-    <h2 id="totalOrders">0</h2>
-    <p>Total Orders</p>
+  <!-- STATS -->
+
+  <div class="stats">
+
+    <div class="stat-card">
+      <h2 id="totalOrders">0</h2>
+      <p>Total Orders</p>
+    </div>
+
+    <div class="stat-card">
+      <h2 id="pendingOrders">0</h2>
+      <p>Pending</p>
+    </div>
+
+    <div class="stat-card">
+      <h2 id="approvedOrders">0</h2>
+      <p>Approved</p>
+    </div>
+
   </div>
 
-  <div class="stat-card">
-    <h2 id="pendingOrders">0</h2>
-    <p>Pending</p>
-  </div>
+  <!-- CREATE ORDER -->
 
-  <div class="stat-card">
-    <h2 id="approvedOrders">0</h2>
-    <p>Approved</p>
-  </div>
+  <h3>Create Order</h3>
 
-</div>
-<h3>Create Order</h3>
+  <select id="from">
+    <option>USDT</option>
+    <option>TRY</option>
+    <option>IRR</option>
+  </select>
 
-<select id="from">
-  <option>USDT</option>
-  <option>TRY</option>
-  <option>IRR</option>
-</select>
+  <br>
 
-<br>
+  <input
+    id="amount"
+    type="number"
+    placeholder="Amount"
+  >
 
-<input
-id="amount"
-type="number"
-placeholder="Amount"
+  <br>
 
->
+  <select id="to">
+    <option>TRY</option>
+    <option>USDT</option>
+    <option>IRR</option>
+  </select>
 
-<br>
+  <br>
 
-<select id="to">
-  <option>TRY</option>
-  <option>USDT</option>
-  <option>IRR</option>
-</select>
+  <button id="submitBtn">
+    Submit
+  </button>
 
-<br>
+  <!-- ORDERS -->
 
-<button onclick="createOrder()">
-Submit
-</button>
+  <h3>Orders</h3>
 
-<h3>Orders</h3>
-
-<div id="orders"></div>
+  <div id="orders"></div>
 
 </div>
 
 <script type="module">
+
+/* FIREBASE */
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -165,29 +201,55 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* CONFIG */
+
 const firebaseConfig = {
+
   apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
-  authDomain: "zero-exchange-v5.firebaseapp.com",
-  projectId: "zero-exchange-v5",
-  storageBucket: "zero-exchange-v5.firebasestorage.app",
-  messagingSenderId: "430232197516",
-  appId: "1:430232197516:web:8abcd54749b17acc791ea9",
-  measurementId: "G-DNJ0V10CG2"
+
+  authDomain:
+    "zero-exchange-v5.firebaseapp.com",
+
+  projectId:
+    "zero-exchange-v5",
+
+  storageBucket:
+    "zero-exchange-v5.firebasestorage.app",
+
+  messagingSenderId:
+    "430232197516",
+
+  appId:
+    "1:430232197516:web:8abcd54749b17acc791ea9",
+
+  measurementId:
+    "G-DNJ0V10CG2"
+
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
+/* INIT */
+
+const firebaseApp =
+  initializeApp(firebaseConfig);
+
+const db =
+  getFirestore(firebaseApp);
+
+const auth =
+  getAuth(firebaseApp);
 
 /* LOGIN */
 
-window.login = async () => {
+async function login(){
 
   const email =
-    document.getElementById("email").value.trim();
+    document.getElementById("email")
+    .value
+    .trim();
 
   const password =
-    document.getElementById("password").value;
+    document.getElementById("password")
+    .value;
 
   if(!email || !password){
 
@@ -216,11 +278,11 @@ window.login = async () => {
 
   }
 
-};
+}
 
 /* LOGOUT */
 
-window.logout = async () => {
+async function logout(){
 
   try{
 
@@ -236,7 +298,7 @@ window.logout = async () => {
 
   }
 
-};
+}
 
 /* AUTH STATE */
 
@@ -258,7 +320,7 @@ onAuthStateChanged(auth,(user)=>{
 
 /* CREATE ORDER */
 
-window.createOrder = async ()=>{
+async function createOrder(){
 
   const from =
     document.getElementById("from").value;
@@ -281,20 +343,29 @@ window.createOrder = async ()=>{
     await addDoc(
       collection(db,"orders"),
       {
+
         uid: auth.currentUser.uid,
+
         email: auth.currentUser.email,
+
         from: from,
+
         to: to,
+
         amount: Number(amount),
+
         status: "pending",
+
         createdAt:
           new Date().toISOString()
+
       }
     );
 
     alert("Order created");
 
-    document.getElementById("amount").value="";
+    document.getElementById("amount")
+      .value = "";
 
   }catch(error){
 
@@ -306,91 +377,106 @@ window.createOrder = async ()=>{
 
   }
 
-};
+}
 
 /* LOAD ORDERS */
 
 function loadOrders(){
 
-onSnapshot(
-collection(db,"orders"),
-(snapshot)=>{
+  onSnapshot(
 
-```
-  const container =
-    document.getElementById("orders");
+    collection(db,"orders"),
 
-  let total = 0;
-  let pending = 0;
-  let approved = 0;
+    (snapshot)=>{
 
-  container.innerHTML = "";
+      const container =
+        document.getElementById("orders");
 
-  snapshot.forEach((doc)=>{
+      let total = 0;
+      let pending = 0;
+      let approved = 0;
 
-    const order = doc.data();
+      container.innerHTML = "";
 
-    total++;
+      snapshot.forEach((doc)=>{
 
-    if(order.status === "approved"){
-      approved++;
-    }else{
-      pending++;
+        const order = doc.data();
+
+        total++;
+
+        if(order.status === "approved"){
+          approved++;
+        }else{
+          pending++;
+        }
+
+        container.innerHTML += `
+
+          <div class="order">
+
+            <b>
+              ${order.from}
+              →
+              ${order.to}
+            </b>
+
+            <br>
+
+            User:
+            ${order.email || "Unknown"}
+
+            <br>
+
+            Amount:
+            ${order.amount}
+
+            <br>
+
+            Status:
+            ${order.status || "pending"}
+
+            <br>
+
+            Date:
+            ${order.createdAt || "-"}
+
+          </div>
+
+        `;
+
+      });
+
+      document.getElementById(
+        "totalOrders"
+      ).innerText = total;
+
+      document.getElementById(
+        "pendingOrders"
+      ).innerText = pending;
+
+      document.getElementById(
+        "approvedOrders"
+      ).innerText = approved;
+
     }
 
-    container.innerHTML += `
-      <div class="order">
-
-        <b>
-          ${order.from}
-          →
-          ${order.to}
-        </b>
-
-        <br>
-
-        User:
-        ${order.email || "Unknown"}
-
-        <br>
-
-        Amount:
-        ${order.amount}
-
-        <br>
-
-        Status:
-        ${order.status || "pending"}
-
-        <br>
-
-        Date:
-        ${order.createdAt || "-"}
-
-      </div>
-    `;
-
-  });
-
-  const totalEl =
-    document.getElementById("totalOrders");
-
-  const pendingEl =
-    document.getElementById("pendingOrders");
-
-  const approvedEl =
-    document.getElementById("approvedOrders");
-
-  if(totalEl) totalEl.innerText = total;
-  if(pendingEl) pendingEl.innerText = pending;
-  if(approvedEl) approvedEl.innerText = approved;
+  );
 
 }
-```
 
-);
+/* BUTTON EVENTS */
 
-}
+document
+  .getElementById("loginBtn")
+  .addEventListener("click", login);
+
+document
+  .getElementById("submitBtn")
+  .addEventListener("click", createOrder);
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener("click", logout);
 
 </script>
 
