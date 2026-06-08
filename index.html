@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Exchange</title>
+<title>Zero Exchange V4</title>
 
 <style>
 *{
@@ -63,6 +63,8 @@ padding:15px 35px;
 border-radius:10px;
 font-weight:bold;
 text-decoration:none;
+border:none;
+cursor:pointer;
 }
 
 .stats{
@@ -91,10 +93,6 @@ padding:25px;
 border-radius:15px;
 }
 
-.exchange-box h2{
-margin-bottom:20px;
-}
-
 input,select{
 width:100%;
 padding:15px;
@@ -111,11 +109,6 @@ padding:25px;
 margin-top:40px;
 border-top:1px solid #222;
 color:#999;
-}
-button.btn{
-border:none;
-cursor:pointer;
-font-size:18px;
 }
 </style>
 </head>
@@ -135,20 +128,11 @@ font-size:18px;
 
 <section class="hero">
 <h1>Exchange Crypto & Fiat Instantly</h1>
-
-<p>
-USDT ↔ TRY
-<br>
-TRY ↔ IRR
-<br>
-Fast • Secure • Simple
-</p>
-
-<a href="#" class="btn">Start Exchange</a>
+<p>USDT ↔ TRY • TRY ↔ IRR • Fast • Secure • Simple</p>
+<button class="btn" onclick="saveOrder()">Start Exchange</button>
 </section>
 
 <section class="stats">
-
 <div class="card">
 <h2>50K+</h2>
 <p>Users</p>
@@ -163,11 +147,9 @@ Fast • Secure • Simple
 <h2>24/7</h2>
 <p>Support</p>
 </div>
-
 </section>
 
 <section class="exchange-box">
-
 <h2>Quick Exchange</h2>
 
 <select id="fromCurrency">
@@ -184,21 +166,23 @@ Fast • Secure • Simple
 <option>IRR</option>
 </select>
 
-<button class="btn" onclick="saveOrder()">
-Calculate
-</button>
-
+<button class="btn" onclick="saveOrder()">Calculate</button>
 </section>
 
 <footer>
 © 2026 Zero Exchange. All Rights Reserved.
 </footer>
+
 <script type="module">
+
+/* ================= FIREBASE ================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
   collection,
   addDoc,
+  updateDoc,
+  doc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -215,47 +199,82 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+/* ================= LOG SYSTEM ================= */
+async function addLog(action, data){
+  try{
+    await addDoc(collection(db,"logs"),{
+      action,
+      data,
+      time:new Date().toISOString()
+    });
+  }catch(e){
+    console.log("log error",e);
+  }
+}
 
+/* ================= TELEGRAM ================= */
+async function sendTelegram(msg){
+
+  fetch("https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id:"YOUR_CHAT_ID",
+      text:msg
+    })
+  });
+
+}
+
+/* ================= SAVE ORDER (V4 CORE) ================= */
 window.saveOrder = async function() {
 
-const fromCurrency =
-document.getElementById("fromCurrency").value;
+const fromCurrency = document.getElementById("fromCurrency").value;
+const toCurrency = document.getElementById("toCurrency").value;
+const amount = document.getElementById("amount").value;
 
-const toCurrency =
-document.getElementById("toCurrency").value;
-
-const amount =
-document.getElementById("amount").value;
-
-if (!amount) {
+if(!amount){
 alert("Amount required");
 return;
 }
 
-try {
+try{
 
-```
-await addDoc(collection(db, "orders"), {
+const docRef = await addDoc(collection(db,"orders"),{
   fromCurrency,
   toCurrency,
-  amount: Number(amount),
-  status: "pending",
-  createdAt: serverTimestamp()
+  amount:Number(amount),
+  status:"pending",
+  createdAt:serverTimestamp()
 });
 
+/* LOG */
+await addLog("NEW_ORDER",{
+  orderId:docRef.id,
+  fromCurrency,
+  toCurrency,
+  amount
+});
+
+/* TELEGRAM */
+await sendTelegram(
+`📦 New Order
+ID: ${docRef.id}
+${fromCurrency} → ${toCurrency}
+Amount: ${amount}`
+);
+
 alert("Order submitted successfully!");
+document.getElementById("amount").value="";
 
-document.getElementById("amount").value = "";
-```
-
-} catch (error) {
-
-```
-console.error(error);
+}catch(err){
+console.error(err);
 alert("Error saving order");
-```
+}
 
 }
-}
+
+</script>
+
+</body>
+</html>
