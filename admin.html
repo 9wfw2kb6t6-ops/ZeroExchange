@@ -68,7 +68,7 @@ alert("Button clicked");
 try {
 
 ```
-await updateDoc(doc(db, "orders", id), {
+await updateDoc(doc(db, "orders", "اینجا-شناسه-واقعی-سند"), {
   status: status
 });
 
@@ -103,6 +103,7 @@ const data = doc.data();
 
 ordersContainer.innerHTML += `
 <div class="order">
+<p><b>ID:</b> ${doc.id}</p>
 <p><b>From:</b> ${data.fromCurrency}</p>
 <p><b>To:</b> ${data.toCurrency}</p>
 <p><b>Amount:</b> ${data.amount}</p>
