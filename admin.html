@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zero Exchange Admin</title>
+
+<style>
+body{
+background:#0d1117;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+.order{
+background:#161b22;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+}
+
+.status{
+color:#f5b942;
+font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Zero Exchange Admin Panel</h1>
+
+<div id="orders"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBCrgsRmZLN6zSWjFf8wWYYoAEYTHCuvUw",
+authDomain: "zeroexchange.firebaseapp.com",
+projectId: "zeroexchange",
+storageBucket: "zeroexchange.firebasestorage.app",
+messagingSenderId: "751052526084",
+appId: "1:751052526084:web:1f4d51d45297567bbddb51",
+measurementId: "G-8P5XH8DT64"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const ordersContainer =
+document.getElementById("orders");
+
+const snapshot =
+await getDocs(collection(db,"orders"));
+
+snapshot.forEach(doc => {
+
+const data = doc.data();
+
+ordersContainer.innerHTML += `
+<div class="order">
+<p><b>From:</b> ${data.fromCurrency}</p>
+<p><b>To:</b> ${data.toCurrency}</p>
+<p><b>Amount:</b> ${data.amount}</p>
+<p class="status">
+${data.status || "pending"}
+</p>
+</div>
+`;
+
+});
+
+</script>
+
+</body>
+</html>
