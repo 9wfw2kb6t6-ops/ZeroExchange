@@ -1,140 +1,174 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zero Exchange Admin</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zero Exchange Admin V2</title>
 
 <style>
 body{
-background:#0d1117;
-color:white;
-font-family:Arial,sans-serif;
-padding:20px;
+  background:#0d1117;
+  color:white;
+  font-family:Arial;
+  padding:20px;
+}
+
+h1{margin-bottom:10px;}
+
+.stats{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:#161b22;
+  padding:10px;
+  border-radius:8px;
+  flex:1;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:15px;
+  border-radius:6px;
+  border:none;
 }
 
 .order{
-background:#161b22;
-padding:15px;
-margin-bottom:15px;
-border-radius:10px;
+  background:#161b22;
+  padding:15px;
+  margin-bottom:10px;
+  border-radius:10px;
 }
 
 .status{
-color:#f5b942;
-font-weight:bold;
+  font-weight:bold;
+}
+
+button{
+  margin-right:5px;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1>Zero Exchange Admin Panel</h1>
+<h1>🚀 Zero Exchange Admin V2</h1>
 
-<div id="orders">
-Loading orders...
+<div class="stats">
+  <div class="card">Total: <span id="total">0</span></div>
+  <div class="card">Pending: <span id="pending">0</span></div>
+  <div class="card">Approved: <span id="approved">0</span></div>
+  <div class="card">Rejected: <span id="rejected">0</span></div>
 </div>
+
+<input id="search" placeholder="Search by currency or ID..."/>
+
+<div id="orders">Loading...</div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
-getFirestore,
-collection,
-getDocs,
-doc,
-updateDoc
+  getFirestore,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyBCrgsRmZLN6zSWjFf8wWYYoAEYTHCuvUw",
-authDomain: "zeroexchange.firebaseapp.com",
-projectId: "zeroexchange",
-storageBucket: "zeroexchange.firebasestorage.app",
-messagingSenderId: "751052526084",
-appId: "1:751052526084:web:1f4d51d45297567bbddb51",
-measurementId: "G-8P5XH8DT64"
+  apiKey: "AIzaSyBCrgsRmZLN6zSWjFf8wWYYoAEYTHCuvUw",
+  authDomain: "zeroexchange.firebaseapp.com",
+  projectId: "zeroexchange",
+  storageBucket: "zeroexchange.firebasestorage.app",
+  messagingSenderId: "751052526084",
+  appId: "1:751052526084:web:1f4d51d45297567bbddb51",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-window.updateStatus = async function(id, status){
-
-alert("Button clicked");
-
-try {
-
-```
-await updateDoc(
-  doc(db, "orders", id),
-  {
-    status: status
-  }
-);
-
-alert("Update success");
-
-location.reload();
-```
-
-} catch(error){
-
-```
-alert("Error: " + error.message);
-
-console.error(error);
-```
-
-}
-
-}
-
 
 const ordersContainer = document.getElementById("orders");
-ordersContainer.innerHTML = "<h2>JavaScript Works</h2>";
-try {
+const searchInput = document.getElementById("search");
 
-const snapshot = await getDocs(collection(db,"orders"));
+let allOrders = [];
 
-ordersContainer.innerHTML =
-`<h3>Orders Found: ${snapshot.size}</h3>`;
+// 🔥 REALTIME DATA
+onSnapshot(collection(db,"orders"), (snapshot) => {
 
-snapshot.forEach((doc) => {
+  allOrders = [];
 
-const data = doc.data();
+  snapshot.forEach(docSnap => {
+    allOrders.push({ id: docSnap.id, ...docSnap.data() });
+  });
 
-ordersContainer.innerHTML += `
-<div class="order">
-<p><b>ID:</b> ${doc.id}</p>
-<p><b>From:</b> ${data.fromCurrency}</p>
-<p><b>To:</b> ${data.toCurrency}</p>
-<p><b>Amount:</b> ${data.amount}</p>
-<p class="status">${data.status || "pending"}</p>
-
-<button onclick="updateStatus('${doc.id}','approved')">
-Approve
-</button>
-
-<button onclick="updateStatus('${doc.id}','rejected')">
-Reject
-</button>
-
-</div>
-`;
-
+  render(allOrders);
 });
 
-} catch(error) {
+// 📊 STATS
+function updateStats(data){
+  let pending = 0, approved = 0, rejected = 0;
 
-ordersContainer.innerHTML =
-`<h3>Error: ${error.message}</h3>`;
+  data.forEach(o=>{
+    if(o.status === "approved") approved++;
+    else if(o.status === "rejected") rejected++;
+    else pending++;
+  });
 
-console.error(error);
-
+  document.getElementById("total").innerText = data.length;
+  document.getElementById("pending").innerText = pending;
+  document.getElementById("approved").innerText = approved;
+  document.getElementById("rejected").innerText = rejected;
 }
+
+// 🧠 RENDER
+function render(data){
+  ordersContainer.innerHTML = "";
+
+  updateStats(data);
+
+  data.forEach(o=>{
+    const div = document.createElement("div");
+    div.className = "order";
+
+    div.innerHTML = `
+      <p><b>ID:</b> ${o.id}</p>
+      <p><b>From:</b> ${o.fromCurrency}</p>
+      <p><b>To:</b> ${o.toCurrency}</p>
+      <p><b>Amount:</b> ${o.amount}</p>
+      <p class="status">${o.status || "pending"}</p>
+
+      <button onclick="updateStatus('${o.id}','approved')">Approve</button>
+      <button onclick="updateStatus('${o.id}','rejected')">Reject</button>
+    `;
+
+    ordersContainer.appendChild(div);
+  });
+}
+
+// ⚡ UPDATE STATUS
+window.updateStatus = async function(id, status){
+  await updateDoc(doc(db,"orders",id),{
+    status: status
+  });
+};
+
+// 🔍 SEARCH
+searchInput.addEventListener("input", (e)=>{
+  const val = e.target.value.toLowerCase();
+
+  const filtered = allOrders.filter(o =>
+    (o.fromCurrency || "").toLowerCase().includes(val) ||
+    (o.toCurrency || "").toLowerCase().includes(val) ||
+    (o.id || "").toLowerCase().includes(val)
+  );
+
+  render(filtered);
+});
 
 </script>
 
