@@ -1,45 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange Admin V2</title>
+<title>Zero Exchange Admin V3</title>
 
 <style>
 body{
+  margin:0;
+  font-family:Arial;
   background:#0d1117;
   color:white;
-  font-family:Arial;
-  padding:20px;
 }
 
-h1{margin-bottom:10px;}
+/* LOGIN */
+#loginBox{
+  display:flex;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+input{
+  padding:10px;
+  margin:5px;
+  border-radius:6px;
+  border:none;
+  width:200px;
+}
+
+button{
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* APP */
+#app{
+  display:none;
+  padding:20px;
+}
 
 .stats{
   display:flex;
   gap:10px;
-  margin-bottom:20px;
+  margin-bottom:15px;
 }
 
 .card{
   background:#161b22;
   padding:10px;
-  border-radius:8px;
   flex:1;
+  border-radius:8px;
   text-align:center;
-}
-
-input{
-  width:100%;
-  padding:10px;
-  margin-bottom:15px;
-  border-radius:6px;
-  border:none;
 }
 
 .order{
   background:#161b22;
-  padding:15px;
+  padding:12px;
   margin-bottom:10px;
   border-radius:10px;
 }
@@ -48,26 +68,45 @@ input{
   font-weight:bold;
 }
 
-button{
-  margin-right:5px;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
 }
+
 </style>
 </head>
 
 <body>
 
-<h1>🚀 Zero Exchange Admin V2</h1>
-
-<div class="stats">
-  <div class="card">Total: <span id="total">0</span></div>
-  <div class="card">Pending: <span id="pending">0</span></div>
-  <div class="card">Approved: <span id="approved">0</span></div>
-  <div class="card">Rejected: <span id="rejected">0</span></div>
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="email" placeholder="Email"/>
+  <input id="pass" type="password" placeholder="Password"/>
+  <button onclick="login()">Login</button>
 </div>
 
-<input id="search" placeholder="Search by currency or ID..."/>
+<!-- APP -->
+<div id="app">
 
-<div id="orders">Loading...</div>
+  <div class="topbar">
+    <h2>🚀 Zero Exchange V3</h2>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="stats">
+    <div class="card">Total<br><span id="total">0</span></div>
+    <div class="card">Pending<br><span id="pending">0</span></div>
+    <div class="card">Approved<br><span id="approved">0</span></div>
+    <div class="card">Rejected<br><span id="rejected">0</span></div>
+  </div>
+
+  <input id="search" placeholder="Search orders..."/>
+
+  <div id="orders">Loading...</div>
+</div>
 
 <script type="module">
 
@@ -80,6 +119,13 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBCrgsRmZLN6zSWjFf8wWYYoAEYTHCuvUw",
   authDomain: "zeroexchange.firebaseapp.com",
@@ -91,83 +137,108 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-const ordersContainer = document.getElementById("orders");
-const searchInput = document.getElementById("search");
+const auth = getAuth(app);
 
 let allOrders = [];
 
-// 🔥 REALTIME DATA
-onSnapshot(collection(db,"orders"), (snapshot) => {
+// ---------- AUTH ----------
+window.login = async function(){
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("pass").value;
 
-  allOrders = [];
+  await signInWithEmailAndPassword(auth, email, pass);
+};
 
-  snapshot.forEach(docSnap => {
-    allOrders.push({ id: docSnap.id, ...docSnap.data() });
-  });
+window.logout = async function(){
+  await signOut(auth);
+};
 
-  render(allOrders);
+onAuthStateChanged(auth, user=>{
+  if(user){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+    loadOrders();
+  } else {
+    document.getElementById("loginBox").style.display="flex";
+    document.getElementById("app").style.display="none";
+  }
 });
 
-// 📊 STATS
-function updateStats(data){
-  let pending = 0, approved = 0, rejected = 0;
+// ---------- REALTIME ----------
+function loadOrders(){
 
-  data.forEach(o=>{
-    if(o.status === "approved") approved++;
-    else if(o.status === "rejected") rejected++;
-    else pending++;
+  onSnapshot(collection(db,"orders"), (snapshot)=>{
+
+    allOrders = [];
+
+    snapshot.forEach(docSnap=>{
+      allOrders.push({id:docSnap.id, ...docSnap.data()});
+    });
+
+    render(allOrders);
   });
-
-  document.getElementById("total").innerText = data.length;
-  document.getElementById("pending").innerText = pending;
-  document.getElementById("approved").innerText = approved;
-  document.getElementById("rejected").innerText = rejected;
 }
 
-// 🧠 RENDER
-function render(data){
-  ordersContainer.innerHTML = "";
-
-  updateStats(data);
+// ---------- STATS ----------
+function stats(data){
+  let p=0,a=0,r=0;
 
   data.forEach(o=>{
-    const div = document.createElement("div");
-    div.className = "order";
+    if(o.status==="approved") a++;
+    else if(o.status==="rejected") r++;
+    else p++;
+  });
 
-    div.innerHTML = `
+  total.innerText=data.length;
+  pending.innerText=p;
+  approved.innerText=a;
+  rejected.innerText=r;
+}
+
+// ---------- RENDER ----------
+function render(data){
+
+  const box = document.getElementById("orders");
+  box.innerHTML="";
+
+  stats(data);
+
+  data.forEach(o=>{
+    const div=document.createElement("div");
+    div.className="order";
+
+    div.innerHTML=`
       <p><b>ID:</b> ${o.id}</p>
-      <p><b>From:</b> ${o.fromCurrency}</p>
-      <p><b>To:</b> ${o.toCurrency}</p>
-      <p><b>Amount:</b> ${o.amount}</p>
-      <p class="status">${o.status || "pending"}</p>
+      <p>${o.fromCurrency} → ${o.toCurrency}</p>
+      <p>Amount: ${o.amount}</p>
+      <p class="status">${o.status||"pending"}</p>
 
-      <button onclick="updateStatus('${o.id}','approved')">Approve</button>
-      <button onclick="updateStatus('${o.id}','rejected')">Reject</button>
+      <button onclick="update('${o.id}','approved')">Approve</button>
+      <button onclick="update('${o.id}','rejected')">Reject</button>
     `;
 
-    ordersContainer.appendChild(div);
+    box.appendChild(div);
   });
 }
 
-// ⚡ UPDATE STATUS
-window.updateStatus = async function(id, status){
+// ---------- UPDATE ----------
+window.update = async function(id,status){
   await updateDoc(doc(db,"orders",id),{
-    status: status
+    status:status
   });
 };
 
-// 🔍 SEARCH
-searchInput.addEventListener("input", (e)=>{
-  const val = e.target.value.toLowerCase();
+// ---------- SEARCH ----------
+search.addEventListener("input",(e)=>{
+  const v=e.target.value.toLowerCase();
 
-  const filtered = allOrders.filter(o =>
-    (o.fromCurrency || "").toLowerCase().includes(val) ||
-    (o.toCurrency || "").toLowerCase().includes(val) ||
-    (o.id || "").toLowerCase().includes(val)
+  const f=allOrders.filter(o=>
+    (o.id||"").toLowerCase().includes(v) ||
+    (o.fromCurrency||"").toLowerCase().includes(v) ||
+    (o.toCurrency||"").toLowerCase().includes(v)
   );
 
-  render(filtered);
+  render(f);
 });
 
 </script>
