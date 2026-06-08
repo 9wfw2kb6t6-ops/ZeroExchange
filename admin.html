@@ -68,11 +68,12 @@ alert("Button clicked");
 try {
 
 ```
+console.log("Updating document...");
 await updateDoc(doc(db, "orders", "7kpQzJTu2VF2k2dgzszZ"), {
   status: status
 });
-
-alert("Status updated");
+console.log("Update completed");
+alert("Update success");
 
 location.reload();
 ```
