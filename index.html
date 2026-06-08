@@ -9,7 +9,7 @@
 <title>Zero Exchange X</title>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
 rel="stylesheet"
 >
 
@@ -50,7 +50,7 @@ body{
 
   padding:20px 30px;
 
-  backdrop-filter:blur(15px);
+  backdrop-filter:blur(20px);
 
   background:rgba(255,255,255,0.03);
 
@@ -67,11 +67,12 @@ body{
 
 .logo{
 
-  font-size:28px;
+  font-size:30px;
 
-  font-weight:700;
+  font-weight:800;
 
-  background:linear-gradient(
+  background:
+  linear-gradient(
     90deg,
     #f5b942,
     #ffe39a
@@ -95,13 +96,17 @@ body{
 
 .balance{
 
-  background:rgba(255,255,255,0.04);
+  background:
+  rgba(255,255,255,0.04);
 
-  padding:10px 16px;
+  padding:12px 18px;
 
-  border-radius:12px;
+  border-radius:14px;
 
   font-size:14px;
+
+  border:
+  1px solid rgba(255,255,255,0.08);
 
 }
 
@@ -109,41 +114,39 @@ body{
 
   border:none;
 
-  padding:10px 16px;
+  padding:12px 18px;
 
-  border-radius:12px;
+  border-radius:14px;
 
   background:#ff4d4d;
 
   color:white;
 
-  font-weight:600;
+  font-weight:700;
 
   cursor:pointer;
 
 }
 
-/* HERO */
+/* MAIN */
 
-.hero{
+.main{
 
   padding:30px;
 
-  display:grid;
-
-  grid-template-columns:1.4fr 0.9fr;
-
-  gap:25px;
-
 }
+
+/* GLASS */
 
 .glass{
 
-  background:rgba(255,255,255,0.04);
+  background:
+  rgba(255,255,255,0.04);
 
-  border:1px solid rgba(255,255,255,0.08);
+  border:
+  1px solid rgba(255,255,255,0.08);
 
-  border-radius:26px;
+  border-radius:28px;
 
   backdrop-filter:blur(20px);
 
@@ -154,17 +157,28 @@ body{
 
 }
 
+/* HERO */
+
+.hero{
+
+  display:grid;
+
+  grid-template-columns:1.4fr 0.9fr;
+
+  gap:25px;
+
+}
+
 /* CHART */
 
 .chart-box{
-
-  width:100%;
 
   overflow:hidden;
 
   border-radius:22px;
 
-  border:1px solid rgba(255,255,255,0.06);
+  border:
+  1px solid rgba(255,255,255,0.08);
 
 }
 
@@ -176,7 +190,8 @@ body{
 
   display:grid;
 
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:
+  repeat(auto-fit,minmax(180px,1fr));
 
   gap:15px;
 
@@ -184,21 +199,23 @@ body{
 
 .coin{
 
-  background:rgba(255,255,255,0.04);
+  background:
+  rgba(255,255,255,0.04);
 
   padding:18px;
 
-  border-radius:18px;
+  border-radius:20px;
 
   transition:0.3s;
+
+  border:
+  1px solid rgba(255,255,255,0.05);
 
 }
 
 .coin:hover{
 
-  transform:translateY(-4px);
-
-  background:rgba(255,255,255,0.06);
+  transform:translateY(-5px);
 
 }
 
@@ -228,9 +245,9 @@ input,select{
 
   width:100%;
 
-  padding:14px;
+  padding:15px;
 
-  margin-top:12px;
+  margin-top:14px;
 
   border:none;
 
@@ -256,7 +273,8 @@ input,select{
 
   border-radius:16px;
 
-  background:linear-gradient(
+  background:
+  linear-gradient(
     90deg,
     #f5b942,
     #ffdd88
@@ -264,7 +282,7 @@ input,select{
 
   color:black;
 
-  font-weight:700;
+  font-weight:800;
 
   cursor:pointer;
 
@@ -288,7 +306,8 @@ input,select{
 
 .bank-card{
 
-  background:rgba(255,255,255,0.04);
+  background:
+  rgba(255,255,255,0.04);
 
   border-radius:20px;
 
@@ -341,7 +360,8 @@ input,select{
 
 .deposit-note{
 
-  background:rgba(245,185,66,0.12);
+  background:
+  rgba(245,185,66,0.12);
 
   padding:15px;
 
@@ -351,39 +371,177 @@ input,select{
 
 }
 
-/* ORDERS */
+/* WALLET */
 
-.orders{
+.wallet-box{
 
-  padding:0 30px 40px;
-
-}
-
-.orders h2{
-
-  margin-bottom:20px;
+  margin-top:30px;
 
 }
 
-.order-card{
+.wallet-top{
 
-  background:rgba(255,255,255,0.04);
+  display:flex;
 
-  border:1px solid rgba(255,255,255,0.06);
+  justify-content:space-between;
 
-  padding:20px;
+  align-items:center;
+
+}
+
+.add-wallet-btn{
+
+  border:none;
+
+  padding:12px 18px;
+
+  border-radius:14px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+.wallet-grid{
+
+  margin-top:20px;
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(260px,1fr));
+
+  gap:20px;
+
+}
+
+.wallet-card{
+
+  background:
+  rgba(255,255,255,0.04);
+
+  border:
+  1px solid rgba(255,255,255,0.08);
 
   border-radius:20px;
 
-  margin-bottom:15px;
+  padding:20px;
 
   transition:0.3s;
 
 }
 
-.order-card:hover{
+.wallet-card:hover{
 
-  transform:translateY(-4px);
+  transform:translateY(-5px);
+
+}
+
+.wallet-symbol{
+
+  font-size:28px;
+
+  font-weight:800;
+
+  color:#f5b942;
+
+}
+
+.wallet-network{
+
+  margin-top:8px;
+
+  color:#9ca3af;
+
+}
+
+.wallet-address{
+
+  margin-top:16px;
+
+  background:#0f172a;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  word-break:break-all;
+
+  font-size:13px;
+
+}
+
+.wallet-actions{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:18px;
+
+}
+
+.wallet-btn{
+
+  flex:1;
+
+  border:none;
+
+  padding:12px;
+
+  border-radius:12px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+.copy-btn{
+
+  background:#f5b942;
+
+  color:black;
+
+}
+
+.delete-btn{
+
+  background:#ff4d4d;
+
+  color:white;
+
+}
+
+/* ORDERS */
+
+.orders{
+
+  margin-top:30px;
+
+}
+
+.order-card{
+
+  background:
+  rgba(255,255,255,0.04);
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  padding:20px;
+
+  border-radius:20px;
+
+  margin-top:15px;
 
 }
 
@@ -417,9 +575,9 @@ input,select{
 
   text-align:center;
 
-  font-size:30px;
+  font-size:34px;
 
-  font-weight:700;
+  font-weight:800;
 
   margin-bottom:25px;
 
@@ -437,13 +595,14 @@ input,select{
 
   border-radius:16px;
 
-  background:linear-gradient(
+  background:
+  linear-gradient(
     90deg,
     #f5b942,
     #ffdf8f
   );
 
-  font-weight:700;
+  font-weight:800;
 
   cursor:pointer;
 
@@ -451,15 +610,9 @@ input,select{
 
 /* MOBILE */
 
-@media(max-width:900px){
+@media(max-width:950px){
 
   .hero{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .market-grid{
 
     grid-template-columns:1fr;
 
@@ -486,7 +639,7 @@ input,select{
   <div class="glass login-card">
 
     <div class="login-title">
-      Zero Exchange X
+      ZERO X
     </div>
 
     <input
@@ -514,7 +667,10 @@ input,select{
 
 <!-- APP -->
 
-<div id="app" style="display:none;">
+<div
+id="app"
+style="display:none;"
+>
 
   <!-- NAVBAR -->
 
@@ -527,7 +683,10 @@ input,select{
     <div class="nav-right">
 
       <div class="balance">
-        Balance: ₺845,000 TRY
+
+        Balance:
+        ₺845,000 TRY
+
       </div>
 
       <button
@@ -541,134 +700,162 @@ input,select{
 
   </div>
 
-  <!-- HERO -->
+  <div class="main">
 
-  <div class="hero">
+    <!-- HERO -->
 
-    <!-- LEFT -->
+    <div class="hero">
 
-    <div class="glass">
+      <!-- LEFT -->
 
-      <!-- CHART -->
+      <div class="glass">
 
-      <div class="chart-box">
+        <div class="chart-box">
 
-        <div id="tradingview_chart"></div>
+          <div
+            id="tradingview_chart"
+          ></div>
 
-      </div>
+        </div>
 
-      <!-- LIVE MARKET -->
-
-      <div
-        class="market-grid"
-        id="marketGrid"
-      ></div>
-
-    </div>
-
-    <!-- RIGHT -->
-
-    <div>
-
-      <!-- TRADE -->
-
-      <div class="glass trade-box">
-
-        <h2>Create Order</h2>
-
-        <select id="from">
-
-          <option>USDT</option>
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>TRY</option>
-
-        </select>
-
-        <input
-          id="amount"
-          type="number"
-          placeholder="Amount"
-        >
-
-        <select id="to">
-
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>USDT</option>
-          <option>TRY</option>
-
-        </select>
-
-        <button
-          class="trade-btn"
-          id="submitBtn"
-        >
-          Submit Order
-        </button>
+        <div
+          class="market-grid"
+          id="marketGrid"
+        ></div>
 
       </div>
 
-      <!-- BANK -->
+      <!-- RIGHT -->
 
-      <div class="glass bank-box">
+      <div>
 
-        <h2>
-          Turkish Bank Deposit
-        </h2>
+        <!-- TRADE -->
 
-        <br>
+        <div class="glass trade-box">
 
-        <div class="bank-card">
+          <h2>
+            Create Order
+          </h2>
 
-          <p>
-            Bank:
-            <b>Ziraat Bankası</b>
-          </p>
+          <select id="from">
+
+            <option>USDT</option>
+            <option>BTC</option>
+            <option>ETH</option>
+            <option>BNB</option>
+            <option>SOL</option>
+            <option>XRP</option>
+            <option>DOGE</option>
+            <option>TON</option>
+            <option>TRY</option>
+
+          </select>
+
+          <input
+            id="amount"
+            type="number"
+            placeholder="Amount"
+          >
+
+          <select id="to">
+
+            <option>BTC</option>
+            <option>ETH</option>
+            <option>USDT</option>
+            <option>BNB</option>
+            <option>SOL</option>
+            <option>XRP</option>
+            <option>DOGE</option>
+            <option>TON</option>
+            <option>TRY</option>
+
+          </select>
+
+          <button
+            class="trade-btn"
+            id="submitBtn"
+          >
+            Submit Order
+          </button>
+
+        </div>
+
+        <!-- BANK -->
+
+        <div class="glass bank-box">
+
+          <h2>
+            Turkish Bank Deposit
+          </h2>
 
           <br>
 
-          <p>
-            IBAN:
-          </p>
+          <div class="bank-card">
 
-          <div class="iban-box">
+            <p>
+              Bank:
+              <b>Ziraat Bankası</b>
+            </p>
 
-            <span id="ibanText">
-              TR12 0001 2000 0000 1234 5678 90
-            </span>
+            <br>
 
-            <button id="copyIban">
-              Copy
-            </button>
+            <p>
+              IBAN:
+            </p>
 
-          </div>
+            <div class="iban-box">
 
-          <br>
+              <span id="ibanText">
 
-          <p>
-            Account Name:
-            <b>Zero Exchange Teknoloji</b>
-          </p>
+TR12 0001 2000 0000 1234 5678 90
 
-          <br>
+              </span>
 
-          <p>
-            Network:
-            <b>FAST / EFT / Havale</b>
-          </p>
+              <button
+                id="copyIban"
+              >
+                Copy
+              </button>
 
-          <br>
+            </div>
 
-          <div class="deposit-note">
+            <br>
 
-            Minimum Deposit:
-            ₺100 TRY
+            <p>
 
-            <br><br>
+              Account Name:
 
-            Deposits are processed
-            automatically after transfer.
+              <b>
+                Zero Exchange Teknoloji
+              </b>
+
+            </p>
+
+            <br>
+
+            <p>
+
+              Network:
+
+              <b>
+                FAST / EFT / Havale
+              </b>
+
+            </p>
+
+            <br>
+
+            <div class="deposit-note">
+
+              Minimum Deposit:
+              ₺100 TRY
+
+              <br><br>
+
+              Deposits are processed
+              automatically.
+
+            </div>
 
           </div>
 
@@ -678,15 +865,43 @@ input,select{
 
     </div>
 
-  </div>
+    <!-- WALLETS -->
 
-  <!-- ORDERS -->
+    <div class="glass wallet-box">
 
-  <div class="orders">
+      <div class="wallet-top">
 
-    <h2>Recent Orders</h2>
+        <h2>
+          Multi Wallet System
+        </h2>
 
-    <div id="orders"></div>
+        <button
+          class="add-wallet-btn"
+          id="addWalletBtn"
+        >
+          + Add Wallet
+        </button>
+
+      </div>
+
+      <div
+        class="wallet-grid"
+        id="walletGrid"
+      ></div>
+
+    </div>
+
+    <!-- ORDERS -->
+
+    <div class="orders">
+
+      <h2>
+        Recent Orders
+      </h2>
+
+      <div id="orders"></div>
+
+    </div>
 
   </div>
 
@@ -757,151 +972,145 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* FIREBASE */
+
 const firebaseConfig = {
 
-  apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
+  apiKey:
+  "YOUR_API_KEY",
 
   authDomain:
-    "zero-exchange-v5.firebaseapp.com",
+  "YOUR_PROJECT.firebaseapp.com",
 
   projectId:
-    "zero-exchange-v5",
+  "YOUR_PROJECT",
 
   storageBucket:
-    "zero-exchange-v5.firebasestorage.app",
+  "YOUR_PROJECT.appspot.com",
 
   messagingSenderId:
-    "430232197516",
+  "000000000",
 
   appId:
-    "1:430232197516:web:8abcd54749b17acc791ea9",
-
-  measurementId:
-    "G-DNJ0V10CG2"
+  "YOUR_APP_ID"
 
 };
 
 const app =
-  initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const db =
-  getFirestore(app);
+getFirestore(app);
 
 const auth =
-  getAuth(app);
+getAuth(app);
 
-/* LIVE MARKET */
+/* MARKET */
 
 async function loadMarketPrices(){
 
   try{
 
-    const response = await fetch(
+    const response =
+    await fetch(
 
-      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,tether&vs_currencies=try&include_24hr_change=true"
+"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,the-open-network,tether&vs_currencies=try&include_24hr_change=true"
 
     );
 
-    const data = await response.json();
+    const data =
+    await response.json();
 
-    const marketGrid =
-      document.getElementById("marketGrid");
+    const market =
+    document.getElementById(
+      "marketGrid"
+    );
 
-    marketGrid.innerHTML = `
+    const coins = [
 
-      <div class="coin">
+      {
+        name:"BTC",
+        data:data.bitcoin
+      },
 
-        <h3>BTC/TRY</h3>
+      {
+        name:"ETH",
+        data:data.ethereum
+      },
 
-        <p>
-          ₺${Math.round(data.bitcoin.try).toLocaleString()}
-        </p>
+      {
+        name:"SOL",
+        data:data.solana
+      },
 
-        <br>
+      {
+        name:"BNB",
+        data:data.binancecoin
+      },
 
-        <span class="${
-          data.bitcoin.try_24h_change >= 0
-          ? "green"
-          : "red"
-        }">
+      {
+        name:"XRP",
+        data:data.ripple
+      },
 
-          ${data.bitcoin.try_24h_change.toFixed(2)}%
+      {
+        name:"DOGE",
+        data:data.dogecoin
+      },
 
-        </span>
+      {
+        name:"TON",
+        data:data["the-open-network"]
+      },
 
-      </div>
+      {
+        name:"USDT",
+        data:data.tether
+      }
 
-      <div class="coin">
+    ];
 
-        <h3>ETH/TRY</h3>
+    market.innerHTML = "";
 
-        <p>
-          ₺${Math.round(data.ethereum.try).toLocaleString()}
-        </p>
+    coins.forEach((coin)=>{
 
-        <br>
+      market.innerHTML += `
 
-        <span class="${
-          data.ethereum.try_24h_change >= 0
-          ? "green"
-          : "red"
-        }">
+        <div class="coin">
 
-          ${data.ethereum.try_24h_change.toFixed(2)}%
+          <h3>
+            ${coin.name}/TRY
+          </h3>
 
-        </span>
+          <p>
 
-      </div>
+            ₺${Math.round(
+              coin.data.try
+            ).toLocaleString()}
 
-      <div class="coin">
+          </p>
 
-        <h3>SOL/TRY</h3>
+          <br>
 
-        <p>
-          ₺${Math.round(data.solana.try).toLocaleString()}
-        </p>
+          <span class="${
+            coin.data.try_24h_change >=0
+            ? "green"
+            : "red"
+          }">
 
-        <br>
+            ${coin.data.try_24h_change.toFixed(2)}%
 
-        <span class="${
-          data.solana.try_24h_change >= 0
-          ? "green"
-          : "red"
-        }">
+          </span>
 
-          ${data.solana.try_24h_change.toFixed(2)}%
+        </div>
 
-        </span>
+      `;
 
-      </div>
-
-      <div class="coin">
-
-        <h3>USDT/TRY</h3>
-
-        <p>
-          ₺${data.tether.try.toFixed(2)}
-        </p>
-
-        <br>
-
-        <span class="${
-          data.tether.try_24h_change >= 0
-          ? "green"
-          : "red"
-        }">
-
-          ${data.tether.try_24h_change.toFixed(2)}%
-
-        </span>
-
-      </div>
-
-    `;
+    });
 
   }catch(error){
 
-    console.error(error);
+    console.log(error);
 
   }
 
@@ -912,25 +1121,24 @@ async function loadMarketPrices(){
 async function login(){
 
   const email =
-    document.getElementById("email")
-    .value
-    .trim();
+  document.getElementById(
+    "email"
+  ).value.trim();
 
   const password =
-    document.getElementById("password")
-    .value;
+  document.getElementById(
+    "password"
+  ).value;
 
   if(!email || !password){
 
-    alert("Enter email and password");
+    alert(
+      "Enter email/password"
+    );
+
     return;
 
   }
-
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  loginBtn.innerHTML = "Loading...";
 
   try{
 
@@ -943,8 +1151,6 @@ async function login(){
   }catch(error){
 
     alert(error.message);
-
-    loginBtn.innerHTML = "Login";
 
   }
 
@@ -962,40 +1168,50 @@ async function logout(){
 
 /* AUTH */
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(
+auth,
+(user)=>{
 
   if(user){
 
     document.getElementById(
       "loginBox"
-    ).style.display = "none";
+    ).style.display="none";
 
     document.getElementById(
       "app"
-    ).style.display = "block";
+    ).style.display="block";
 
     loadOrders();
 
   }
 
-});
+}
+);
 
 /* CREATE ORDER */
 
 async function createOrder(){
 
   const from =
-    document.getElementById("from").value;
+  document.getElementById(
+    "from"
+  ).value;
 
   const to =
-    document.getElementById("to").value;
+  document.getElementById(
+    "to"
+  ).value;
 
   const amount =
-    document.getElementById("amount").value;
+  document.getElementById(
+    "amount"
+  ).value;
 
   if(!amount){
 
     alert("Enter amount");
+
     return;
 
   }
@@ -1013,10 +1229,12 @@ async function createOrder(){
 
       status:"pending",
 
-      email:auth.currentUser.email,
+      email:
+      auth.currentUser.email,
 
       createdAt:
-      new Date().toLocaleString()
+      new Date()
+      .toLocaleString()
 
     }
 
@@ -1024,7 +1242,7 @@ async function createOrder(){
 
   document.getElementById(
     "amount"
-  ).value = "";
+  ).value="";
 
 }
 
@@ -1039,22 +1257,27 @@ function loadOrders(){
     (snapshot)=>{
 
       const orders =
-        document.getElementById("orders");
+      document.getElementById(
+        "orders"
+      );
 
-      orders.innerHTML = "";
+      orders.innerHTML="";
 
       snapshot.forEach((doc)=>{
 
-        const order = doc.data();
+        const order =
+        doc.data();
 
         orders.innerHTML += `
 
           <div class="order-card">
 
             <h3>
+
               ${order.from}
               →
               ${order.to}
+
             </h3>
 
             <br>
@@ -1093,74 +1316,217 @@ function loadOrders(){
 function copyIBAN(){
 
   const iban =
-    document.getElementById(
-      "ibanText"
-    ).innerText;
+  document.getElementById(
+    "ibanText"
+  ).innerText;
 
   navigator.clipboard.writeText(
     iban
   );
 
-  const copyBtn =
-    document.getElementById(
-      "copyIban"
-    );
-
-  copyBtn.innerHTML = "Copied";
-
-  setTimeout(()=>{
-
-    copyBtn.innerHTML = "Copy";
-
-  },2000);
+  alert("IBAN Copied");
 
 }
+
+/* WALLET SYSTEM */
+
+const wallets = [
+
+  {
+
+    coin:"USDT",
+
+    network:"TRC20",
+
+    address:
+"TFRmQx9mVvQ7xW3Q9h7xkK2dP5J8nL0ZQ"
+
+  },
+
+  {
+
+    coin:"BTC",
+
+    network:"Bitcoin",
+
+    address:
+"bc1q7z8x6v5n4m3l2k1j9h8g7f6d5s4a"
+
+  },
+
+  {
+
+    coin:"ETH",
+
+    network:"ERC20",
+
+    address:
+"0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+
+  }
+
+];
+
+function renderWallets(){
+
+  const walletGrid =
+  document.getElementById(
+    "walletGrid"
+  );
+
+  walletGrid.innerHTML="";
+
+  wallets.forEach((wallet,index)=>{
+
+    walletGrid.innerHTML += `
+
+      <div class="wallet-card">
+
+        <div class="wallet-symbol">
+
+          ${wallet.coin}
+
+        </div>
+
+        <div class="wallet-network">
+
+          ${wallet.network}
+
+        </div>
+
+        <div class="wallet-address">
+
+          ${wallet.address}
+
+        </div>
+
+        <div class="wallet-actions">
+
+          <button
+            class="wallet-btn copy-btn"
+            onclick="copyWallet(${index})"
+          >
+
+            Copy
+
+          </button>
+
+          <button
+            class="wallet-btn delete-btn"
+            onclick="deleteWallet(${index})"
+          >
+
+            Delete
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+window.copyWallet=(index)=>{
+
+  navigator.clipboard.writeText(
+    wallets[index].address
+  );
+
+  alert("Wallet copied");
+
+};
+
+window.deleteWallet=(index)=>{
+
+  wallets.splice(index,1);
+
+  renderWallets();
+
+};
+
+document.getElementById(
+"addWalletBtn"
+).addEventListener(
+"click",
+()=>{
+
+  const coin =
+  prompt("Coin Symbol");
+
+  if(!coin) return;
+
+  const network =
+  prompt("Network");
+
+  if(!network) return;
+
+  const address =
+  prompt("Wallet Address");
+
+  if(!address) return;
+
+  wallets.push({
+
+    coin,
+    network,
+    address
+
+  });
+
+  renderWallets();
+
+}
+);
 
 /* EVENTS */
 
 window.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
+"DOMContentLoaded",
+()=>{
+
+  loadMarketPrices();
+
+  setInterval(()=>{
 
     loadMarketPrices();
 
-    setInterval(()=>{
+  },30000);
 
-      loadMarketPrices();
+  renderWallets();
 
-    },30000);
+  document
+  .getElementById("loginBtn")
+  .addEventListener(
+    "click",
+    login
+  );
 
-    document
-      .getElementById("loginBtn")
-      .addEventListener(
-        "click",
-        login
-      );
+  document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    logout
+  );
 
-    document
-      .getElementById("logoutBtn")
-      .addEventListener(
-        "click",
-        logout
-      );
+  document
+  .getElementById("submitBtn")
+  .addEventListener(
+    "click",
+    createOrder
+  );
 
-    document
-      .getElementById("submitBtn")
-      .addEventListener(
-        "click",
-        createOrder
-      );
+  document
+  .getElementById("copyIban")
+  .addEventListener(
+    "click",
+    copyIBAN
+  );
 
-    document
-      .getElementById("copyIban")
-      .addEventListener(
-        "click",
-        copyIBAN
-      );
-
-  }
-
-);
+});
 
 </script>
 
