@@ -278,6 +278,79 @@ input,select{
 
 }
 
+/* BANK */
+
+.bank-box{
+
+  margin-top:25px;
+
+}
+
+.bank-card{
+
+  background:rgba(255,255,255,0.04);
+
+  border-radius:20px;
+
+  padding:20px;
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+}
+
+.iban-box{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:10px;
+
+}
+
+.iban-box span{
+
+  flex:1;
+
+  background:#0f172a;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  overflow:auto;
+
+}
+
+.iban-box button{
+
+  border:none;
+
+  padding:12px 18px;
+
+  border-radius:12px;
+
+  background:#f5b942;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+.deposit-note{
+
+  background:rgba(245,185,66,0.12);
+
+  padding:15px;
+
+  border-radius:14px;
+
+  color:#ffd87c;
+
+}
+
 /* ORDERS */
 
 .orders{
@@ -392,6 +465,12 @@ input,select{
 
   }
 
+  .iban-box{
+
+    flex-direction:column;
+
+  }
+
 }
 
 </style>
@@ -484,9 +563,9 @@ input,select{
 
         <div class="coin">
 
-          <h3>BTC/USDT</h3>
+          <h3>BTC/TRY</h3>
 
-          <p>$104,225</p>
+          <p>₺4,082,000</p>
 
           <br>
 
@@ -498,9 +577,9 @@ input,select{
 
         <div class="coin">
 
-          <h3>ETH/USDT</h3>
+          <h3>ETH/TRY</h3>
 
-          <p>$5,140</p>
+          <p>₺201,400</p>
 
           <br>
 
@@ -512,9 +591,9 @@ input,select{
 
         <div class="coin">
 
-          <h3>SOL/USDT</h3>
+          <h3>SOL/TRY</h3>
 
-          <p>$202</p>
+          <p>₺7,920</p>
 
           <br>
 
@@ -526,7 +605,7 @@ input,select{
 
         <div class="coin">
 
-          <h3>TRY/USDT</h3>
+          <h3>USDT/TRY</h3>
 
           <p>₺39.12</p>
 
@@ -542,42 +621,115 @@ input,select{
 
     </div>
 
-    <!-- TRADE -->
+    <!-- RIGHT -->
 
-    <div class="glass trade-box">
+    <div>
 
-      <h2>Create Order</h2>
+      <!-- TRADE -->
 
-      <select id="from">
+      <div class="glass trade-box">
 
-        <option>USDT</option>
-        <option>BTC</option>
-        <option>ETH</option>
-        <option>TRY</option>
+        <h2>Create Order</h2>
 
-      </select>
+        <select id="from">
 
-      <input
-        id="amount"
-        type="number"
-        placeholder="Amount"
-      >
+          <option>USDT</option>
+          <option>BTC</option>
+          <option>ETH</option>
+          <option>TRY</option>
 
-      <select id="to">
+        </select>
 
-        <option>BTC</option>
-        <option>ETH</option>
-        <option>USDT</option>
-        <option>TRY</option>
+        <input
+          id="amount"
+          type="number"
+          placeholder="Amount"
+        >
 
-      </select>
+        <select id="to">
 
-      <button
-        class="trade-btn"
-        id="submitBtn"
-      >
-        Submit Order
-      </button>
+          <option>BTC</option>
+          <option>ETH</option>
+          <option>USDT</option>
+          <option>TRY</option>
+
+        </select>
+
+        <button
+          class="trade-btn"
+          id="submitBtn"
+        >
+          Submit Order
+        </button>
+
+      </div>
+
+      <!-- BANK -->
+
+      <div class="glass bank-box">
+
+        <h2>
+          Turkish Bank Deposit
+        </h2>
+
+        <br>
+
+        <div class="bank-card">
+
+          <p>
+            Bank:
+            <b>Ziraat Bankası</b>
+          </p>
+
+          <br>
+
+          <p>
+            IBAN:
+          </p>
+
+          <div class="iban-box">
+
+            <span id="ibanText">
+              TR12 0001 2000 0000 1234 5678 90
+            </span>
+
+            <button id="copyIban">
+              Copy
+            </button>
+
+          </div>
+
+          <br>
+
+          <p>
+            Account Name:
+            <b>Zero Exchange Teknoloji</b>
+          </p>
+
+          <br>
+
+          <p>
+            Network:
+            <b>FAST / EFT / Havale</b>
+          </p>
+
+          <br>
+
+          <div class="deposit-note">
+
+            Minimum Deposit:
+            ₺100 TRY
+
+            <br><br>
+
+            Deposits are processed
+            automatically after transfer.
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
@@ -660,8 +812,6 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE CONFIG */
-
 const firebaseConfig = {
 
   apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
@@ -685,8 +835,6 @@ const firebaseConfig = {
     "G-DNJ0V10CG2"
 
 };
-
-/* INIT */
 
 const app =
   initializeApp(firebaseConfig);
@@ -878,53 +1026,67 @@ function loadOrders(){
 
 }
 
+/* COPY IBAN */
+
+function copyIBAN(){
+
+  const iban =
+    document.getElementById(
+      "ibanText"
+    ).innerText;
+
+  navigator.clipboard.writeText(
+    iban
+  );
+
+  const copyBtn =
+    document.getElementById(
+      "copyIban"
+    );
+
+  copyBtn.innerHTML = "Copied";
+
+  setTimeout(()=>{
+
+    copyBtn.innerHTML = "Copy";
+
+  },2000);
+
+}
+
 /* EVENTS */
 
 window.addEventListener(
   "DOMContentLoaded",
   ()=>{
 
-    const loginBtn =
-      document.getElementById(
-        "loginBtn"
-      );
-
-    const logoutBtn =
-      document.getElementById(
-        "logoutBtn"
-      );
-
-    const submitBtn =
-      document.getElementById(
-        "submitBtn"
-      );
-
-    if(loginBtn){
-
-      loginBtn.addEventListener(
+    document
+      .getElementById("loginBtn")
+      .addEventListener(
         "click",
         login
       );
 
-    }
-
-    if(logoutBtn){
-
-      logoutBtn.addEventListener(
+    document
+      .getElementById("logoutBtn")
+      .addEventListener(
         "click",
         logout
       );
 
-    }
-
-    if(submitBtn){
-
-      submitBtn.addEventListener(
+    document
+      .getElementById("submitBtn")
+      .addEventListener(
         "click",
         createOrder
       );
 
-    }
+    document
+      .getElementById("copyIban")
+      .addEventListener(
+        "click",
+        copyIBAN
+      );
 
   }
 
