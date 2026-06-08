@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
@@ -9,37 +10,46 @@
 body{
   background:#0d1117;
   color:white;
-  font-family:Arial;
+  font-family:Arial,sans-serif;
   padding:20px;
 }
 
 input,button,select{
   padding:10px;
   margin:5px;
-  width:200px;
+  width:220px;
+  border-radius:8px;
+  border:none;
+}
+
+button{
+  background:#f5b942;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .order{
   background:#161b22;
-  padding:10px;
-  margin:10px;
-  border-radius:8px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
 }
 </style>
+
 </head>
 
 <body>
 
-<h2>🚀 Zero Exchange</h2>
+<h2>🚀 Zero Exchange V5</h2>
 
-<!-- LOGIN -->
 <div id="loginBox">
-  <input id="email" placeholder="Email">
+  <input id="email" type="email" placeholder="Email">
+  <br>
   <input id="password" type="password" placeholder="Password">
+  <br>
   <button onclick="login()">Login</button>
 </div>
 
-<!-- APP -->
 <div id="app" style="display:none">
 
 <h3>Create Order</h3>
@@ -50,13 +60,19 @@ input,button,select{
   <option>IRR</option>
 </select>
 
-<input id="amount" placeholder="Amount">
+<br>
+
+<input id="amount" type="number" placeholder="Amount">
+
+<br>
 
 <select id="to">
   <option>TRY</option>
   <option>USDT</option>
   <option>IRR</option>
 </select>
+
+<br>
 
 <button onclick="createOrder()">Submit</button>
 
@@ -66,9 +82,14 @@ input,button,select{
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getFirestore, collection, addDoc, onSnapshot 
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -77,103 +98,139 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* 🔥 Firebase Config (خودت باید پر کنی) */
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_ID"
+  apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
+  authDomain: "zero-exchange-v5.firebaseapp.com",
+  projectId: "zero-exchange-v5",
+  storageBucket: "zero-exchange-v5.firebasestorage.app",
+  messagingSenderId: "430232197516",
+  appId: "1:430232197516:web:8abcd54749b17acc791ea9",
+  measurementId: "G-DNJ0V10CG2"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* =======================
-   🔐 LOGIN
-======================= */
 window.login = async () => {
 
-  const emailVal = document.getElementById("email").value;
-  const passVal = document.getElementById("password").value;
+  const emailVal =
+    document.getElementById("email").value.trim();
 
-  try {
-    await signInWithEmailAndPassword(auth, emailVal, passVal);
-    alert("Login success");
-  } catch (e) {
-    alert("Login error: " + e.message);
-  }
-};
+  const passVal =
+    document.getElementById("password").value;
 
-/* =======================
-   AUTH STATE
-======================= */
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    loadOrders();
-  }
-});
-
-/* =======================
-   CREATE ORDER
-======================= */
-window.createOrder = async () => {
-
-  const from = document.getElementById("from").value;
-  const to = document.getElementById("to").value;
-  const amount = document.getElementById("amount").value;
-
-  if (!amount) {
-    alert("Amount required");
+  if(!emailVal || !passVal){
+    alert("Email and password required");
     return;
   }
 
   try {
-    await addDoc(collection(db,"orders"),{
-      from,
-      to,
-      amount: Number(amount),
-      status:"pending",
-      time: Date.now()
-    });
 
-    alert("Order created!");
+    await signInWithEmailAndPassword(
+      auth,
+      emailVal,
+      passVal
+    );
 
-    document.getElementById("amount").value = "";
+    alert("Login success");
 
   } catch(e){
-    alert("Error: " + e.message);
+
+    alert("Login error: " + e.message);
+    console.error(e);
+
   }
+
 };
 
-/* =======================
-   LOAD ORDERS (REALTIME)
-======================= */
+onAuthStateChanged(auth,(user)=>{
+
+  if(user){
+
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+
+    loadOrders();
+
+  }
+
+});
+
+window.createOrder = async ()=>{
+
+  const from =
+    document.getElementById("from").value;
+
+  const to =
+    document.getElementById("to").value;
+
+  const amount =
+    document.getElementById("amount").value;
+
+  if(!amount){
+
+    alert("Amount required");
+    return;
+
+  }
+
+  try{
+
+    await addDoc(
+      collection(db,"orders"),
+      {
+        from,
+        to,
+        amount:Number(amount),
+        status:"pending",
+        createdAt:new Date().toISOString()
+      }
+    );
+
+    alert("Order created");
+
+    document.getElementById("amount").value="";
+
+  }catch(e){
+
+    alert("Error: " + e.message);
+    console.error(e);
+
+  }
+
+};
+
 function loadOrders(){
 
-  onSnapshot(collection(db,"orders"), (snap)=>{
+  onSnapshot(
+    collection(db,"orders"),
+    (snapshot)=>{
 
-    const container = document.getElementById("orders");
-    container.innerHTML = "";
+      const container =
+        document.getElementById("orders");
 
-    snap.forEach(doc => {
+      container.innerHTML="";
 
-      const o = doc.data();
+      snapshot.forEach((doc)=>{
 
-      container.innerHTML += `
-        <div class="order">
-          <b>${o.from} → ${o.to}</b><br>
-          Amount: ${o.amount}<br>
-          Status: ${o.status}
-        </div>
-      `;
+        const o = doc.data();
 
-    });
+        container.innerHTML += `
+          <div class="order">
+            <b>${o.from} → ${o.to}</b><br>
+            Amount: ${o.amount}<br>
+            Status: ${o.status}
+          </div>
+        `;
 
-  });
+      });
+
+    }
+  );
 
 }
+
 </script>
 
 </body>
