@@ -557,67 +557,12 @@ input,select{
 
       </div>
 
-      <!-- MARKET -->
+      <!-- LIVE MARKET -->
 
-      <div class="market-grid">
-
-        <div class="coin">
-
-          <h3>BTC/TRY</h3>
-
-          <p>₺4,082,000</p>
-
-          <br>
-
-          <span class="green">
-            +3.21%
-          </span>
-
-        </div>
-
-        <div class="coin">
-
-          <h3>ETH/TRY</h3>
-
-          <p>₺201,400</p>
-
-          <br>
-
-          <span class="green">
-            +2.08%
-          </span>
-
-        </div>
-
-        <div class="coin">
-
-          <h3>SOL/TRY</h3>
-
-          <p>₺7,920</p>
-
-          <br>
-
-          <span class="red">
-            -1.22%
-          </span>
-
-        </div>
-
-        <div class="coin">
-
-          <h3>USDT/TRY</h3>
-
-          <p>₺39.12</p>
-
-          <br>
-
-          <span class="green">
-            +0.42%
-          </span>
-
-        </div>
-
-      </div>
+      <div
+        class="market-grid"
+        id="marketGrid"
+      ></div>
 
     </div>
 
@@ -845,6 +790,123 @@ const db =
 const auth =
   getAuth(app);
 
+/* LIVE MARKET */
+
+async function loadMarketPrices(){
+
+  try{
+
+    const response = await fetch(
+
+      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,tether&vs_currencies=try&include_24hr_change=true"
+
+    );
+
+    const data = await response.json();
+
+    const marketGrid =
+      document.getElementById("marketGrid");
+
+    marketGrid.innerHTML = `
+
+      <div class="coin">
+
+        <h3>BTC/TRY</h3>
+
+        <p>
+          ₺${Math.round(data.bitcoin.try).toLocaleString()}
+        </p>
+
+        <br>
+
+        <span class="${
+          data.bitcoin.try_24h_change >= 0
+          ? "green"
+          : "red"
+        }">
+
+          ${data.bitcoin.try_24h_change.toFixed(2)}%
+
+        </span>
+
+      </div>
+
+      <div class="coin">
+
+        <h3>ETH/TRY</h3>
+
+        <p>
+          ₺${Math.round(data.ethereum.try).toLocaleString()}
+        </p>
+
+        <br>
+
+        <span class="${
+          data.ethereum.try_24h_change >= 0
+          ? "green"
+          : "red"
+        }">
+
+          ${data.ethereum.try_24h_change.toFixed(2)}%
+
+        </span>
+
+      </div>
+
+      <div class="coin">
+
+        <h3>SOL/TRY</h3>
+
+        <p>
+          ₺${Math.round(data.solana.try).toLocaleString()}
+        </p>
+
+        <br>
+
+        <span class="${
+          data.solana.try_24h_change >= 0
+          ? "green"
+          : "red"
+        }">
+
+          ${data.solana.try_24h_change.toFixed(2)}%
+
+        </span>
+
+      </div>
+
+      <div class="coin">
+
+        <h3>USDT/TRY</h3>
+
+        <p>
+          ₺${data.tether.try.toFixed(2)}
+        </p>
+
+        <br>
+
+        <span class="${
+          data.tether.try_24h_change >= 0
+          ? "green"
+          : "red"
+        }">
+
+          ${data.tether.try_24h_change.toFixed(2)}%
+
+        </span>
+
+      </div>
+
+    `;
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
 /* LOGIN */
 
 async function login(){
@@ -1059,6 +1121,14 @@ function copyIBAN(){
 window.addEventListener(
   "DOMContentLoaded",
   ()=>{
+
+    loadMarketPrices();
+
+    setInterval(()=>{
+
+      loadMarketPrices();
+
+    },30000);
 
     document
       .getElementById("loginBtn")
