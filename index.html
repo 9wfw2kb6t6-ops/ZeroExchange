@@ -788,18 +788,84 @@ function loadOrders(){
 
 /* EVENTS */
 
-document
-.getElementById("loginBtn")
-.addEventListener("click",login);
+window.addEventListener("DOMContentLoaded", ()=>{
 
-document
-.getElementById("logoutBtn")
-.addEventListener("click",logout);
+  const loginBtn =
+    document.getElementById("loginBtn");
 
-document
-.getElementById("submitBtn")
-.addEventListener("click",createOrder);
+  const logoutBtn =
+    document.getElementById("logoutBtn");
 
+  const submitBtn =
+    document.getElementById("submitBtn");
+
+  if(loginBtn){
+
+    loginBtn.addEventListener(
+      "click",
+      login
+    );
+
+  }
+
+  if(logoutBtn){
+
+    logoutBtn.addEventListener(
+      "click",
+      logout
+    );
+
+  }
+
+  if(submitBtn){
+
+    submitBtn.addEventListener(
+      "click",
+      createOrder
+    );
+
+  }
+
+});
+window.addEventListener("DOMContentLoaded", ()=>{
+
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  const logoutBtn =
+    document.getElementById("logoutBtn");
+
+  const submitBtn =
+    document.getElementById("submitBtn");
+
+  if(loginBtn){
+
+    loginBtn.addEventListener(
+      "click",
+      login
+    );
+
+  }
+
+  if(logoutBtn){
+
+    logoutBtn.addEventListener(
+      "click",
+      logout
+    );
+
+  }
+
+  if(submitBtn){
+
+    submitBtn.addEventListener(
+      "click",
+      createOrder
+    );
+
+  }
+
+});
 </script>
 
 </body>
