@@ -1,15 +1,20 @@
+<!--
+ZERO EXCHANGE V7
+FULL PROFESSIONAL SINGLE FILE
+-->
+
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zero Exchange V6</title>
+<title>Zero Exchange V7</title>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
 rel="stylesheet"
 />
 
@@ -39,15 +44,13 @@ body{
 
   color:white;
 
-  min-height:100vh;
-
   overflow-x:hidden;
 
 }
 
 /* LOGIN */
 
-#loginPage{
+.auth-page{
 
   position:fixed;
 
@@ -65,9 +68,9 @@ body{
 
 }
 
-.login-card{
+.auth-card{
 
-  width:360px;
+  width:380px;
 
   background:
   rgba(255,255,255,0.04);
@@ -75,21 +78,21 @@ body{
   border:
   1px solid rgba(255,255,255,0.08);
 
+  border-radius:30px;
+
   padding:35px;
 
-  border-radius:28px;
-
-  backdrop-filter:blur(18px);
+  backdrop-filter:blur(20px);
 
 }
 
 .logo{
 
-  font-size:34px;
+  text-align:center;
+
+  font-size:40px;
 
   font-weight:900;
-
-  text-align:center;
 
   margin-bottom:25px;
 
@@ -111,13 +114,13 @@ select{
 
   width:100%;
 
-  margin-top:14px;
+  padding:16px;
 
-  padding:15px;
+  margin-top:14px;
 
   border:none;
 
-  border-radius:14px;
+  border-radius:15px;
 
   background:#0f172a;
 
@@ -127,17 +130,7 @@ select{
 
 }
 
-button{
-
-  border:none;
-
-  cursor:pointer;
-
-  transition:0.25s;
-
-}
-
-.primary-btn{
+.auth-btn{
 
   width:100%;
 
@@ -145,7 +138,9 @@ button{
 
   padding:15px;
 
-  border-radius:14px;
+  border:none;
+
+  border-radius:16px;
 
   background:
   linear-gradient(
@@ -156,15 +151,21 @@ button{
 
   color:black;
 
-  font-weight:800;
+  font-weight:900;
 
-  font-size:15px;
+  cursor:pointer;
 
 }
 
-.primary-btn:hover{
+.switch-auth{
 
-  transform:translateY(-2px);
+  text-align:center;
+
+  margin-top:18px;
+
+  color:#94a3b8;
+
+  cursor:pointer;
 
 }
 
@@ -186,7 +187,15 @@ button{
 
   top:0;
 
-  z-index:1000;
+  z-index:999;
+
+  background:
+  rgba(2,6,23,0.9);
+
+  border-bottom:
+  1px solid rgba(255,255,255,0.06);
+
+  backdrop-filter:blur(18px);
 
   display:flex;
 
@@ -194,15 +203,7 @@ button{
 
   align-items:center;
 
-  padding:20px;
-
-  background:
-  rgba(2,6,23,0.85);
-
-  backdrop-filter:blur(18px);
-
-  border-bottom:
-  1px solid rgba(255,255,255,0.05);
+  padding:18px 20px;
 
 }
 
@@ -212,15 +213,15 @@ button{
 
   align-items:center;
 
-  gap:12px;
+  gap:14px;
 
 }
 
 .avatar{
 
-  width:45px;
+  width:46px;
 
-  height:45px;
+  height:46px;
 
   border-radius:50%;
 
@@ -237,33 +238,45 @@ button{
 
   align-items:center;
 
-  font-weight:900;
-
   color:black;
+
+  font-weight:900;
 
 }
 
-.header-title{
+.title{
 
-  font-size:22px;
+  font-size:24px;
 
-  font-weight:800;
+  font-weight:900;
+
+}
+
+.subtitle{
+
+  color:#94a3b8;
+
+  font-size:13px;
 
 }
 
 .logout-btn{
 
-  width:42px;
+  width:44px;
 
-  height:42px;
+  height:44px;
 
-  border-radius:12px;
+  border:none;
+
+  border-radius:14px;
 
   background:#ef4444;
 
   color:white;
 
-  font-size:17px;
+  font-size:18px;
+
+  cursor:pointer;
 
 }
 
@@ -283,7 +296,7 @@ button{
 
 }
 
-/* CARDS */
+/* CARD */
 
 .card{
 
@@ -293,13 +306,13 @@ button{
   border:
   1px solid rgba(255,255,255,0.06);
 
-  border-radius:24px;
+  border-radius:26px;
 
   padding:22px;
 
-  backdrop-filter:blur(14px);
+  margin-bottom:20px;
 
-  margin-bottom:18px;
+  backdrop-filter:blur(18px);
 
 }
 
@@ -315,9 +328,9 @@ button{
 
 .balance-sub{
 
-  color:#94a3b8;
+  margin-top:10px;
 
-  margin-top:8px;
+  color:#94a3b8;
 
 }
 
@@ -353,7 +366,7 @@ button{
 
   color:#f5b942;
 
-  font-size:22px;
+  font-size:24px;
 
   margin-bottom:10px;
 
@@ -369,7 +382,7 @@ button{
 
   align-items:center;
 
-  padding:16px 0;
+  padding:18px 0;
 
   border-bottom:
   1px solid rgba(255,255,255,0.06);
@@ -388,9 +401,9 @@ button{
 
 .coin-icon{
 
-  width:44px;
+  width:46px;
 
-  height:44px;
+  height:46px;
 
   border-radius:50%;
 
@@ -425,47 +438,41 @@ button{
   background:
   rgba(255,255,255,0.04);
 
-  border-radius:20px;
+  border-radius:22px;
 
   padding:18px;
 
-  margin-top:16px;
+  margin-top:18px;
 
 }
 
 .wallet-address{
 
-  margin-top:12px;
-
-  padding:12px;
-
-  border-radius:12px;
+  margin-top:14px;
 
   background:#0f172a;
 
-  font-size:13px;
+  padding:14px;
+
+  border-radius:14px;
 
   word-break:break-all;
 
-}
-
-/* TRADE */
-
-.trade-grid{
-
-  display:grid;
-
-  gap:14px;
+  font-size:13px;
 
 }
 
-.trade-btn{
+.copy-btn{
 
   width:100%;
 
-  padding:16px;
+  margin-top:15px;
 
-  border-radius:16px;
+  padding:14px;
+
+  border:none;
+
+  border-radius:14px;
 
   background:
   linear-gradient(
@@ -477,6 +484,65 @@ button{
   color:black;
 
   font-weight:900;
+
+  cursor:pointer;
+
+}
+
+/* DEPOSIT */
+
+.deposit-item{
+
+  margin-top:18px;
+
+}
+
+.deposit-label{
+
+  color:#94a3b8;
+
+  margin-bottom:8px;
+
+}
+
+.deposit-box{
+
+  background:#0f172a;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  word-break:break-all;
+
+}
+
+/* TRADE */
+
+.trade-btn{
+
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:16px;
+
+  margin-top:18px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  color:black;
+
+  font-weight:900;
+
+  cursor:pointer;
 
 }
 
@@ -513,6 +579,8 @@ button{
 
   background:none;
 
+  border:none;
+
   color:#94a3b8;
 
   display:flex;
@@ -539,8 +607,6 @@ button{
 
 }
 
-/* RESPONSIVE */
-
 @media(max-width:650px){
 
   .actions{
@@ -560,9 +626,12 @@ button{
 
 <!-- LOGIN -->
 
-<div id="loginPage">
+<div
+class="auth-page"
+id="authPage"
+>
 
-  <div class="login-card">
+  <div class="auth-card">
 
     <div class="logo">
       ZERO X
@@ -581,11 +650,18 @@ button{
     >
 
     <button
-      class="primary-btn"
+      class="auth-btn"
       id="loginBtn"
     >
       Login
     </button>
+
+    <div
+      class="switch-auth"
+      id="registerBtn"
+    >
+      Create Account
+    </div>
 
   </div>
 
@@ -607,16 +683,11 @@ button{
 
       <div>
 
-        <div class="header-title">
+        <div class="title">
           Zero Exchange
         </div>
 
-        <div
-          style="
-          color:#94a3b8;
-          font-size:13px;
-          "
-        >
+        <div class="subtitle">
           Professional Crypto Exchange
         </div>
 
@@ -642,11 +713,7 @@ button{
 
     <div class="card">
 
-      <div
-        style="
-        color:#94a3b8;
-        "
-      >
+      <div style="color:#94a3b8">
         Total Balance
       </div>
 
@@ -655,7 +722,7 @@ button{
       </div>
 
       <div class="balance-sub">
-        ≈ 0.54 USDT
+        ≈ $2,981
       </div>
 
       <div class="actions">
@@ -677,7 +744,7 @@ button{
 
         <div class="action">
           <i class="fa-solid fa-chart-line"></i>
-          <div>Markets</div>
+          <div>Trade</div>
         </div>
 
       </div>
@@ -686,11 +753,11 @@ button{
 
     <div class="card">
 
-      <h3>
-        Trending Coins
-      </h3>
+      <h2>
+        Live Markets
+      </h2>
 
-      <div id="marketList"></div>
+      <div id="markets"></div>
 
     </div>
 
@@ -713,26 +780,7 @@ button{
         placeholder="Search Coin"
       >
 
-      <div id="allMarkets"></div>
-
-    </div>
-
-  </div>
-
-  <!-- WALLET -->
-
-  <div
-    class="page"
-    id="walletPage"
-  >
-
-    <div class="card">
-
-      <h2>
-        Multi Wallet
-      </h2>
-
-      <div id="wallets"></div>
+      <div id="markets2"></div>
 
     </div>
 
@@ -751,42 +799,38 @@ button{
         Quick Trade
       </h2>
 
-      <div class="trade-grid">
+      <select id="fromCoin">
 
-        <select id="fromCoin">
+        <option>USDT</option>
+        <option>BTC</option>
+        <option>ETH</option>
+        <option>BNB</option>
+        <option>TON</option>
 
-          <option>USDT</option>
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>BNB</option>
-          <option>TON</option>
+      </select>
 
-        </select>
+      <input
+        type="number"
+        id="amount"
+        placeholder="Amount"
+      >
 
-        <input
-          type="number"
-          id="amount"
-          placeholder="Amount"
-        >
+      <select id="toCoin">
 
-        <select id="toCoin">
+        <option>BTC</option>
+        <option>ETH</option>
+        <option>USDT</option>
+        <option>BNB</option>
+        <option>TON</option>
 
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>USDT</option>
-          <option>BNB</option>
-          <option>TON</option>
+      </select>
 
-        </select>
-
-        <button
-          class="trade-btn"
-          id="tradeBtn"
-        >
-          Create Order
-        </button>
-
-      </div>
+      <button
+        class="trade-btn"
+        id="tradeBtn"
+      >
+        Create Order
+      </button>
 
     </div>
 
@@ -795,6 +839,92 @@ button{
       <div
         id="tradingview_chart"
       ></div>
+
+    </div>
+
+  </div>
+
+  <!-- WALLET -->
+
+  <div
+    class="page"
+    id="walletPage"
+  >
+
+    <div class="card">
+
+      <h2>
+        Multi Wallets
+      </h2>
+
+      <!-- USDT -->
+
+      <div class="wallet-card">
+
+        <h3>
+          USDT (TRC20)
+        </h3>
+
+        <div class="wallet-address">
+TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
+        </div>
+
+        <button
+          class="copy-btn"
+          onclick="copyWallet(
+'TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg'
+          )"
+        >
+          Copy
+        </button>
+
+      </div>
+
+      <!-- BTC -->
+
+      <div class="wallet-card">
+
+        <h3>
+          Bitcoin
+        </h3>
+
+        <div class="wallet-address">
+bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw
+        </div>
+
+        <button
+          class="copy-btn"
+          onclick="copyWallet(
+'bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw'
+          )"
+        >
+          Copy
+        </button>
+
+      </div>
+
+      <!-- ETH -->
+
+      <div class="wallet-card">
+
+        <h3>
+          Ethereum
+        </h3>
+
+        <div class="wallet-address">
+0x84496f0996ea96871DED409428D060dB00cb9136
+        </div>
+
+        <button
+          class="copy-btn"
+          onclick="copyWallet(
+'0x84496f0996ea96871DED409428D060dB00cb9136'
+          )"
+        >
+          Copy
+        </button>
+
+      </div>
 
     </div>
 
@@ -810,27 +940,76 @@ button{
     <div class="card">
 
       <h2>
-        Account Settings
+        Bank Deposit
+      </h2>
+
+      <div class="deposit-item">
+
+        <div class="deposit-label">
+          Turkish IBAN
+        </div>
+
+        <div class="deposit-box">
+TR42 0001 0090 1098 8248 3050 01
+        </div>
+
+      </div>
+
+      <div class="deposit-item">
+
+        <div class="deposit-label">
+          Iranian Card
+        </div>
+
+        <div class="deposit-box">
+5859831204847882
+        </div>
+
+      </div>
+
+      <div class="deposit-item">
+
+        <div class="deposit-label">
+          Iranian Sheba
+        </div>
+
+        <div class="deposit-box">
+IR300180000000004613967414
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>
+        Security
       </h2>
 
       <br>
 
-      <div>Email Verification</div>
+      <div>
+        Google Authenticator
+      </div>
+
       <br>
 
-      <div>Google Authenticator</div>
+      <div>
+        KYC Verification
+      </div>
+
       <br>
 
-      <div>KYC Verification</div>
-      <br>
-
-      <div>Security Settings</div>
+      <div>
+        Withdrawal Security
+      </div>
 
     </div>
 
   </div>
 
-  <!-- NAVIGATION -->
+  <!-- NAV -->
 
   <div class="bottom-nav">
 
@@ -926,21 +1105,32 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
   getAuth,
+
   signInWithEmailAndPassword,
+
+  createUserWithEmailAndPassword,
+
   onAuthStateChanged,
+
   signOut
+
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
+
   getFirestore,
+
   collection,
+
   addDoc
+
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* FIREBASE */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -990,7 +1180,7 @@ async function login(){
   if(!email || !password){
 
     alert(
-      "Enter Email & Password"
+      "Enter email/password"
     );
 
     return;
@@ -1000,9 +1190,57 @@ async function login(){
   try{
 
     await signInWithEmailAndPassword(
+
       auth,
       email,
       password
+
+    );
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+}
+
+/* REGISTER */
+
+async function register(){
+
+  const email =
+  document.getElementById(
+    "email"
+  ).value.trim();
+
+  const password =
+  document.getElementById(
+    "password"
+  ).value;
+
+  if(!email || !password){
+
+    alert(
+      "Enter email/password"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await createUserWithEmailAndPassword(
+
+      auth,
+      email,
+      password
+
+    );
+
+    alert(
+      "Account Created"
     );
 
   }catch(error){
@@ -1022,7 +1260,7 @@ auth,
   if(user){
 
     document.getElementById(
-      "loginPage"
+      "authPage"
     ).style.display="none";
 
     document.getElementById(
@@ -1051,6 +1289,13 @@ document
 .addEventListener(
   "click",
   login
+);
+
+document
+.getElementById("registerBtn")
+.addEventListener(
+  "click",
+  register
 );
 
 document
@@ -1130,13 +1375,6 @@ const coins = [
   },
 
   {
-    name:"Tether",
-    symbol:"USDT",
-    price:"1.00",
-    change:"+0.1%"
-  },
-
-  {
     name:"BNB",
     symbol:"BNB",
     price:"620",
@@ -1146,22 +1384,29 @@ const coins = [
   {
     name:"TON",
     symbol:"TON",
-    price:"7.22",
+    price:"7.2",
     change:"+6.2%"
+  },
+
+  {
+    name:"Tether",
+    symbol:"USDT",
+    price:"1.00",
+    change:"+0.1%"
   }
 
 ];
 
 function renderMarkets(){
 
-  const market =
+  const market1 =
   document.getElementById(
-    "marketList"
+    "markets"
   );
 
-  const allMarkets =
+  const market2 =
   document.getElementById(
-    "allMarkets"
+    "markets2"
   );
 
   coins.forEach((coin)=>{
@@ -1219,9 +1464,9 @@ function renderMarkets(){
 
     `;
 
-    market.innerHTML += html;
+    market1.innerHTML += html;
 
-    allMarkets.innerHTML += html;
+    market2.innerHTML += html;
 
   });
 
@@ -1229,87 +1474,17 @@ function renderMarkets(){
 
 renderMarkets();
 
-/* WALLETS */
+/* COPY */
 
-const wallets = [
+window.copyWallet=(text)=>{
 
-  {
-
-    coin:"USDT",
-
-    network:"TRC20",
-
-    address:
-"TFRmQx9mVvQ7xW3Q9h7xkK2dP5J8nL0ZQ"
-
-  },
-
-  {
-
-    coin:"BTC",
-
-    network:"Bitcoin",
-
-    address:
-"bc1q7z8x6v5n4m3l2k1j9h8g7f6d5s4a"
-
-  },
-
-  {
-
-    coin:"ETH",
-
-    network:"ERC20",
-
-    address:
-"0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
-
-  }
-
-];
-
-function renderWallets(){
-
-  const walletsBox =
-  document.getElementById(
-    "wallets"
+  navigator.clipboard.writeText(
+    text
   );
 
-  wallets.forEach((wallet)=>{
+  alert("Copied");
 
-    walletsBox.innerHTML += `
-
-      <div class="wallet-card">
-
-        <h3>
-
-          ${wallet.coin}
-
-        </h3>
-
-        <br>
-
-        <div>
-
-          ${wallet.network}
-
-        </div>
-
-        <div class="wallet-address">
-
-          ${wallet.address}
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
-}
-
-renderWallets();
+};
 
 /* CREATE ORDER */
 
