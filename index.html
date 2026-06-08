@@ -1,6 +1,6 @@
 <!--
-ZERO EXCHANGE V7
-FULL PROFESSIONAL SINGLE FILE
+ZERO EXCHANGE V8
+REAL EXCHANGE LAYOUT
 -->
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ FULL PROFESSIONAL SINGLE FILE
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zero Exchange V7</title>
+<title>Zero Exchange V8</title>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -40,17 +40,17 @@ body{
     #0f172a
   );
 
-  font-family:'Inter',sans-serif;
-
   color:white;
+
+  font-family:'Inter',sans-serif;
 
   overflow-x:hidden;
 
 }
 
-/* LOGIN */
+/* AUTH */
 
-.auth-page{
+#authPage{
 
   position:fixed;
 
@@ -78,9 +78,9 @@ body{
   border:
   1px solid rgba(255,255,255,0.08);
 
-  border-radius:30px;
-
   padding:35px;
+
+  border-radius:30px;
 
   backdrop-filter:blur(20px);
 
@@ -90,7 +90,7 @@ body{
 
   text-align:center;
 
-  font-size:40px;
+  font-size:42px;
 
   font-weight:900;
 
@@ -157,11 +157,11 @@ select{
 
 }
 
-.switch-auth{
-
-  text-align:center;
+.switch-btn{
 
   margin-top:18px;
+
+  text-align:center;
 
   color:#94a3b8;
 
@@ -189,6 +189,8 @@ select{
 
   z-index:999;
 
+  padding:18px 20px;
+
   background:
   rgba(2,6,23,0.9);
 
@@ -202,8 +204,6 @@ select{
   justify-content:space-between;
 
   align-items:center;
-
-  padding:18px 20px;
 
 }
 
@@ -238,9 +238,9 @@ select{
 
   align-items:center;
 
-  color:black;
-
   font-weight:900;
+
+  color:black;
 
 }
 
@@ -252,7 +252,7 @@ select{
 
 }
 
-.subtitle{
+.sub{
 
   color:#94a3b8;
 
@@ -274,9 +274,9 @@ select{
 
   color:white;
 
-  font-size:18px;
-
   cursor:pointer;
+
+  font-size:18px;
 
 }
 
@@ -312,7 +312,7 @@ select{
 
   margin-bottom:20px;
 
-  backdrop-filter:blur(18px);
+  backdrop-filter:blur(16px);
 
 }
 
@@ -320,7 +320,7 @@ select{
 
 .balance{
 
-  font-size:42px;
+  font-size:44px;
 
   font-weight:900;
 
@@ -328,7 +328,7 @@ select{
 
 .balance-sub{
 
-  margin-top:10px;
+  margin-top:8px;
 
   color:#94a3b8;
 
@@ -372,9 +372,9 @@ select{
 
 }
 
-/* MARKET */
+/* MARKETS */
 
-.market-item{
+.market{
 
   display:flex;
 
@@ -389,7 +389,7 @@ select{
 
 }
 
-.coin-left{
+.coin{
 
   display:flex;
 
@@ -425,9 +425,56 @@ select{
 
 }
 
-.red{
+/* DEPOSIT */
 
-  color:#ef4444;
+.deposit-title{
+
+  font-size:22px;
+
+  font-weight:800;
+
+  margin-bottom:18px;
+
+}
+
+.deposit-box{
+
+  background:#0f172a;
+
+  padding:15px;
+
+  border-radius:14px;
+
+  margin-top:12px;
+
+  word-break:break-all;
+
+}
+
+.copy-btn{
+
+  width:100%;
+
+  margin-top:14px;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  color:black;
+
+  font-weight:900;
+
+  cursor:pointer;
 
 }
 
@@ -440,109 +487,33 @@ select{
 
   border-radius:22px;
 
-  padding:18px;
+  padding:20px;
 
-  margin-top:18px;
-
-}
-
-.wallet-address{
-
-  margin-top:14px;
-
-  background:#0f172a;
-
-  padding:14px;
-
-  border-radius:14px;
-
-  word-break:break-all;
-
-  font-size:13px;
+  margin-top:16px;
 
 }
 
-.copy-btn{
+.wallet-top{
 
-  width:100%;
+  display:flex;
 
-  margin-top:15px;
+  justify-content:space-between;
 
-  padding:14px;
-
-  border:none;
-
-  border-radius:14px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdf8f
-  );
-
-  color:black;
-
-  font-weight:900;
-
-  cursor:pointer;
+  align-items:center;
 
 }
 
-/* DEPOSIT */
+.wallet-badge{
 
-.deposit-item{
+  background:#22c55e;
 
-  margin-top:18px;
+  padding:7px 12px;
 
-}
+  border-radius:10px;
 
-.deposit-label{
+  font-size:12px;
 
-  color:#94a3b8;
-
-  margin-bottom:8px;
-
-}
-
-.deposit-box{
-
-  background:#0f172a;
-
-  padding:14px;
-
-  border-radius:14px;
-
-  word-break:break-all;
-
-}
-
-/* TRADE */
-
-.trade-btn{
-
-  width:100%;
-
-  padding:16px;
-
-  border:none;
-
-  border-radius:16px;
-
-  margin-top:18px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdf8f
-  );
-
-  color:black;
-
-  font-weight:900;
-
-  cursor:pointer;
+  font-weight:700;
 
 }
 
@@ -607,6 +578,33 @@ select{
 
 }
 
+.trade-btn{
+
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:16px;
+
+  margin-top:18px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  color:black;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
 @media(max-width:650px){
 
   .actions{
@@ -624,12 +622,9 @@ select{
 
 <body>
 
-<!-- LOGIN -->
+<!-- AUTH -->
 
-<div
-class="auth-page"
-id="authPage"
->
+<div id="authPage">
 
   <div class="auth-card">
 
@@ -657,7 +652,7 @@ id="authPage"
     </button>
 
     <div
-      class="switch-auth"
+      class="switch-btn"
       id="registerBtn"
     >
       Create Account
@@ -687,7 +682,7 @@ id="authPage"
           Zero Exchange
         </div>
 
-        <div class="subtitle">
+        <div class="sub">
           Professional Crypto Exchange
         </div>
 
@@ -704,11 +699,11 @@ id="authPage"
 
   </div>
 
-  <!-- DASHBOARD -->
+  <!-- HOME -->
 
   <div
     class="page active"
-    id="dashboardPage"
+    id="homePage"
   >
 
     <div class="card">
@@ -776,10 +771,6 @@ id="authPage"
         Markets
       </h2>
 
-      <input
-        placeholder="Search Coin"
-      >
-
       <div id="markets2"></div>
 
     </div>
@@ -844,6 +835,134 @@ id="authPage"
 
   </div>
 
+  <!-- DEPOSIT -->
+
+  <div
+    class="page"
+    id="depositPage"
+  >
+
+    <!-- TURKEY -->
+
+    <div class="card">
+
+      <div class="deposit-title">
+        🇹🇷 Turkish Bank Deposit
+      </div>
+
+      <div>
+        Ziraat Bank
+      </div>
+
+      <div class="deposit-box">
+TR42 0001 0090 1098 8248 3050 01
+      </div>
+
+      <button
+        class="copy-btn"
+        onclick="copyText(
+'TR42 0001 0090 1098 8248 3050 01'
+        )"
+      >
+        Copy IBAN
+      </button>
+
+    </div>
+
+    <!-- IRAN -->
+
+    <div class="card">
+
+      <div class="deposit-title">
+        🇮🇷 Iranian Rial Deposit
+      </div>
+
+      <div>
+        Tejarat Bank
+      </div>
+
+      <div class="deposit-box">
+5859831204847882
+      </div>
+
+      <button
+        class="copy-btn"
+        onclick="copyText(
+'5859831204847882'
+        )"
+      >
+        Copy Card Number
+      </button>
+
+      <div class="deposit-box">
+IR300180000000004613967414
+      </div>
+
+      <button
+        class="copy-btn"
+        onclick="copyText(
+'IR300180000000004613967414'
+        )"
+      >
+        Copy Sheba
+      </button>
+
+    </div>
+
+    <!-- CRYPTO -->
+
+    <div class="card">
+
+      <div class="deposit-title">
+        💰 Crypto Deposit
+      </div>
+
+      <select id="walletSelector">
+
+        <option>
+          USDT TRC20
+        </option>
+
+        <option>
+          BTC
+        </option>
+
+        <option>
+          ETH
+        </option>
+
+        <option>
+          TON
+        </option>
+
+        <option>
+          BNB
+        </option>
+
+        <option>
+          SOL
+        </option>
+
+      </select>
+
+      <div
+        class="deposit-box"
+        id="walletAddress"
+      >
+TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
+      </div>
+
+      <button
+        class="copy-btn"
+        id="copyWalletBtn"
+      >
+        Copy Wallet
+      </button>
+
+    </div>
+
+  </div>
+
   <!-- WALLET -->
 
   <div
@@ -854,155 +973,55 @@ id="authPage"
     <div class="card">
 
       <h2>
-        Multi Wallets
+        Wallet Balances
       </h2>
-
-      <!-- USDT -->
 
       <div class="wallet-card">
 
-        <h3>
-          USDT (TRC20)
-        </h3>
+        <div class="wallet-top">
 
-        <div class="wallet-address">
-TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
+          <div>
+            BTC
+          </div>
+
+          <div class="wallet-badge">
+            0.214 BTC
+          </div>
+
         </div>
 
-        <button
-          class="copy-btn"
-          onclick="copyWallet(
-'TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg'
-          )"
-        >
-          Copy
-        </button>
-
       </div>
-
-      <!-- BTC -->
 
       <div class="wallet-card">
 
-        <h3>
-          Bitcoin
-        </h3>
+        <div class="wallet-top">
 
-        <div class="wallet-address">
-bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw
+          <div>
+            USDT
+          </div>
+
+          <div class="wallet-badge">
+            1,204 USDT
+          </div>
+
         </div>
 
-        <button
-          class="copy-btn"
-          onclick="copyWallet(
-'bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw'
-          )"
-        >
-          Copy
-        </button>
-
       </div>
-
-      <!-- ETH -->
 
       <div class="wallet-card">
 
-        <h3>
-          Ethereum
-        </h3>
+        <div class="wallet-top">
 
-        <div class="wallet-address">
-0x84496f0996ea96871DED409428D060dB00cb9136
+          <div>
+            TON
+          </div>
+
+          <div class="wallet-badge">
+            504 TON
+          </div>
+
         </div>
 
-        <button
-          class="copy-btn"
-          onclick="copyWallet(
-'0x84496f0996ea96871DED409428D060dB00cb9136'
-          )"
-        >
-          Copy
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- PROFILE -->
-
-  <div
-    class="page"
-    id="profilePage"
-  >
-
-    <div class="card">
-
-      <h2>
-        Bank Deposit
-      </h2>
-
-      <div class="deposit-item">
-
-        <div class="deposit-label">
-          Turkish IBAN
-        </div>
-
-        <div class="deposit-box">
-TR42 0001 0090 1098 8248 3050 01
-        </div>
-
-      </div>
-
-      <div class="deposit-item">
-
-        <div class="deposit-label">
-          Iranian Card
-        </div>
-
-        <div class="deposit-box">
-5859831204847882
-        </div>
-
-      </div>
-
-      <div class="deposit-item">
-
-        <div class="deposit-label">
-          Iranian Sheba
-        </div>
-
-        <div class="deposit-box">
-IR300180000000004613967414
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="card">
-
-      <h2>
-        Security
-      </h2>
-
-      <br>
-
-      <div>
-        Google Authenticator
-      </div>
-
-      <br>
-
-      <div>
-        KYC Verification
-      </div>
-
-      <br>
-
-      <div>
-        Withdrawal Security
       </div>
 
     </div>
@@ -1015,7 +1034,7 @@ IR300180000000004613967414
 
     <button
       class="nav-btn active"
-      data-page="dashboardPage"
+      data-page="homePage"
     >
       <i class="fa-solid fa-house"></i>
       Home
@@ -1039,18 +1058,18 @@ IR300180000000004613967414
 
     <button
       class="nav-btn"
-      data-page="walletPage"
+      data-page="depositPage"
     >
-      <i class="fa-solid fa-wallet"></i>
-      Wallet
+      <i class="fa-solid fa-building-columns"></i>
+      Deposit
     </button>
 
     <button
       class="nav-btn"
-      data-page="profilePage"
+      data-page="walletPage"
     >
-      <i class="fa-solid fa-user"></i>
-      Profile
+      <i class="fa-solid fa-wallet"></i>
+      Wallet
     </button>
 
   </div>
@@ -1119,38 +1138,27 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
-
-  getFirestore,
-
-  collection,
-
-  addDoc
-
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* FIREBASE CONFIG */
+/* FIREBASE */
 
 const firebaseConfig = {
 
   apiKey:
-  "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
+  "YOUR_API_KEY",
 
   authDomain:
-  "zero-exchange-v5.firebaseapp.com",
+  "YOUR_PROJECT.firebaseapp.com",
 
   projectId:
-  "zero-exchange-v5",
+  "YOUR_PROJECT_ID",
 
   storageBucket:
-  "zero-exchange-v5.firebasestorage.app",
+  "YOUR_PROJECT.appspot.com",
 
   messagingSenderId:
-  "430232197516",
+  "YOUR_SENDER_ID",
 
   appId:
-  "1:430232197516:web:8abcd54749b17acc791ea9"
+  "YOUR_APP_ID"
 
 };
 
@@ -1159,9 +1167,6 @@ initializeApp(firebaseConfig);
 
 const auth =
 getAuth(app);
-
-const db =
-getFirestore(app);
 
 /* LOGIN */
 
@@ -1177,24 +1182,12 @@ async function login(){
     "password"
   ).value;
 
-  if(!email || !password){
-
-    alert(
-      "Enter email/password"
-    );
-
-    return;
-
-  }
-
   try{
 
     await signInWithEmailAndPassword(
-
       auth,
       email,
       password
-
     );
 
   }catch(error){
@@ -1219,29 +1212,15 @@ async function register(){
     "password"
   ).value;
 
-  if(!email || !password){
-
-    alert(
-      "Enter email/password"
-    );
-
-    return;
-
-  }
-
   try{
 
     await createUserWithEmailAndPassword(
-
       auth,
       email,
       password
-
     );
 
-    alert(
-      "Account Created"
-    );
+    alert("Account Created");
 
   }catch(error){
 
@@ -1413,9 +1392,9 @@ function renderMarkets(){
 
     const html = `
 
-      <div class="market-item">
+      <div class="market">
 
-        <div class="coin-left">
+        <div class="coin">
 
           <div class="coin-icon">
 
@@ -1476,7 +1455,7 @@ renderMarkets();
 
 /* COPY */
 
-window.copyWallet=(text)=>{
+window.copyText=(text)=>{
 
   navigator.clipboard.writeText(
     text
@@ -1486,66 +1465,65 @@ window.copyWallet=(text)=>{
 
 };
 
-/* CREATE ORDER */
+/* WALLET SELECTOR */
+
+const walletSelector =
+document.getElementById(
+  "walletSelector"
+);
+
+const walletAddress =
+document.getElementById(
+  "walletAddress"
+);
+
+const wallets = {
+
+  "USDT TRC20":
+"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
+
+  "BTC":
+"bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
+
+  "ETH":
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
+  "TON":
+"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP",
+
+  "BNB":
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
+  "SOL":
+"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ"
+
+};
+
+walletSelector.addEventListener(
+"change",
+()=>{
+
+  walletAddress.innerText =
+  wallets[
+    walletSelector.value
+  ];
+
+}
+);
 
 document
-.getElementById("tradeBtn")
+.getElementById(
+  "copyWalletBtn"
+)
 .addEventListener(
 "click",
-async()=>{
+()=>{
 
-  const from =
-  document.getElementById(
-    "fromCoin"
-  ).value;
+  navigator.clipboard.writeText(
+    walletAddress.innerText
+  );
 
-  const to =
-  document.getElementById(
-    "toCoin"
-  ).value;
-
-  const amount =
-  document.getElementById(
-    "amount"
-  ).value;
-
-  if(!amount){
-
-    alert("Enter amount");
-
-    return;
-
-  }
-
-  try{
-
-    await addDoc(
-
-      collection(db,"orders"),
-
-      {
-
-        from,
-        to,
-        amount,
-
-        createdAt:
-        new Date()
-        .toISOString()
-
-      }
-
-    );
-
-    alert(
-      "Order Created"
-    );
-
-  }catch(error){
-
-    alert(error.message);
-
-  }
+  alert("Wallet copied");
 
 }
 );
