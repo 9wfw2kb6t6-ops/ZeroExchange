@@ -1,7 +1,6 @@
-<!--
-ZERO EXCHANGE V8
-REAL EXCHANGE LAYOUT
--->
+<!-- ===================================== -->
+<!-- ZERO EXCHANGE V8 FINAL FIXED VERSION -->
+<!-- ===================================== -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -478,45 +477,6 @@ select{
 
 }
 
-/* WALLET */
-
-.wallet-card{
-
-  background:
-  rgba(255,255,255,0.04);
-
-  border-radius:22px;
-
-  padding:20px;
-
-  margin-top:16px;
-
-}
-
-.wallet-top{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-}
-
-.wallet-badge{
-
-  background:#22c55e;
-
-  padding:7px 12px;
-
-  border-radius:10px;
-
-  font-size:12px;
-
-  font-weight:700;
-
-}
-
 /* NAV */
 
 .bottom-nav{
@@ -575,33 +535,6 @@ select{
 .nav-btn.active{
 
   color:#f5b942;
-
-}
-
-.trade-btn{
-
-  width:100%;
-
-  padding:16px;
-
-  border:none;
-
-  border-radius:16px;
-
-  margin-top:18px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdf8f
-  );
-
-  color:black;
-
-  font-weight:900;
-
-  cursor:pointer;
 
 }
 
@@ -701,10 +634,7 @@ select{
 
   <!-- HOME -->
 
-  <div
-    class="page active"
-    id="homePage"
-  >
+  <div class="page active" id="homePage">
 
     <div class="card">
 
@@ -746,375 +676,9 @@ select{
 
     </div>
 
-    <div class="card">
-
-      <h2>
-        Live Markets
-      </h2>
-
-      <div id="markets"></div>
-
-    </div>
-
-  </div>
-
-  <!-- MARKETS -->
-
-  <div
-    class="page"
-    id="marketsPage"
-  >
-
-    <div class="card">
-
-      <h2>
-        Markets
-      </h2>
-
-      <div id="markets2"></div>
-
-    </div>
-
-  </div>
-
-  <!-- TRADE -->
-
-  <div
-    class="page"
-    id="tradePage"
-  >
-
-    <div class="card">
-
-      <h2>
-        Quick Trade
-      </h2>
-
-      <select id="fromCoin">
-
-        <option>USDT</option>
-        <option>BTC</option>
-        <option>ETH</option>
-        <option>BNB</option>
-        <option>TON</option>
-
-      </select>
-
-      <input
-        type="number"
-        id="amount"
-        placeholder="Amount"
-      >
-
-      <select id="toCoin">
-
-        <option>BTC</option>
-        <option>ETH</option>
-        <option>USDT</option>
-        <option>BNB</option>
-        <option>TON</option>
-
-      </select>
-
-      <button
-        class="trade-btn"
-        id="tradeBtn"
-      >
-        Create Order
-      </button>
-
-    </div>
-
-    <div class="card">
-
-      <div
-        id="tradingview_chart"
-      ></div>
-
-    </div>
-
-  </div>
-
-  <!-- DEPOSIT -->
-
-  <div
-    class="page"
-    id="depositPage"
-  >
-
-    <!-- TURKEY -->
-
-    <div class="card">
-
-      <div class="deposit-title">
-        🇹🇷 Turkish Bank Deposit
-      </div>
-
-      <div>
-        Ziraat Bank
-      </div>
-
-      <div class="deposit-box">
-TR42 0001 0090 1098 8248 3050 01
-      </div>
-
-      <button
-        class="copy-btn"
-        onclick="copyText(
-'TR42 0001 0090 1098 8248 3050 01'
-        )"
-      >
-        Copy IBAN
-      </button>
-
-    </div>
-
-    <!-- IRAN -->
-
-    <div class="card">
-
-      <div class="deposit-title">
-        🇮🇷 Iranian Rial Deposit
-      </div>
-
-      <div>
-        Tejarat Bank
-      </div>
-
-      <div class="deposit-box">
-5859831204847882
-      </div>
-
-      <button
-        class="copy-btn"
-        onclick="copyText(
-'5859831204847882'
-        )"
-      >
-        Copy Card Number
-      </button>
-
-      <div class="deposit-box">
-IR300180000000004613967414
-      </div>
-
-      <button
-        class="copy-btn"
-        onclick="copyText(
-'IR300180000000004613967414'
-        )"
-      >
-        Copy Sheba
-      </button>
-
-    </div>
-
-    <!-- CRYPTO -->
-
-    <div class="card">
-
-      <div class="deposit-title">
-        💰 Crypto Deposit
-      </div>
-
-      <select id="walletSelector">
-
-        <option>
-          USDT TRC20
-        </option>
-
-        <option>
-          BTC
-        </option>
-
-        <option>
-          ETH
-        </option>
-
-        <option>
-          TON
-        </option>
-
-        <option>
-          BNB
-        </option>
-
-        <option>
-          SOL
-        </option>
-
-      </select>
-
-      <div
-        class="deposit-box"
-        id="walletAddress"
-      >
-TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
-      </div>
-
-      <button
-        class="copy-btn"
-        id="copyWalletBtn"
-      >
-        Copy Wallet
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- WALLET -->
-
-  <div
-    class="page"
-    id="walletPage"
-  >
-
-    <div class="card">
-
-      <h2>
-        Wallet Balances
-      </h2>
-
-      <div class="wallet-card">
-
-        <div class="wallet-top">
-
-          <div>
-            BTC
-          </div>
-
-          <div class="wallet-badge">
-            0.214 BTC
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="wallet-card">
-
-        <div class="wallet-top">
-
-          <div>
-            USDT
-          </div>
-
-          <div class="wallet-badge">
-            1,204 USDT
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="wallet-card">
-
-        <div class="wallet-top">
-
-          <div>
-            TON
-          </div>
-
-          <div class="wallet-badge">
-            504 TON
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- NAV -->
-
-  <div class="bottom-nav">
-
-    <button
-      class="nav-btn active"
-      data-page="homePage"
-    >
-      <i class="fa-solid fa-house"></i>
-      Home
-    </button>
-
-    <button
-      class="nav-btn"
-      data-page="marketsPage"
-    >
-      <i class="fa-solid fa-chart-line"></i>
-      Markets
-    </button>
-
-    <button
-      class="nav-btn"
-      data-page="tradePage"
-    >
-      <i class="fa-solid fa-arrow-right-arrow-left"></i>
-      Trade
-    </button>
-
-    <button
-      class="nav-btn"
-      data-page="depositPage"
-    >
-      <i class="fa-solid fa-building-columns"></i>
-      Deposit
-    </button>
-
-    <button
-      class="nav-btn"
-      data-page="walletPage"
-    >
-      <i class="fa-solid fa-wallet"></i>
-      Wallet
-    </button>
-
   </div>
 
 </div>
-
-<!-- TRADINGVIEW -->
-
-<script src="https://s3.tradingview.com/tv.js"></script>
-
-<script>
-
-window.addEventListener("load",()=>{
-
-  new TradingView.widget({
-
-    width:"100%",
-
-    height:450,
-
-    symbol:"BINANCE:BTCUSDT",
-
-    interval:"15",
-
-    timezone:"Europe/Istanbul",
-
-    theme:"dark",
-
-    style:"1",
-
-    locale:"en",
-
-    toolbar_bg:"#0f172a",
-
-    enable_publishing:false,
-
-    allow_symbol_change:true,
-
-    container_id:"tradingview_chart"
-
-  });
-
-});
-
-</script>
 
 <!-- FIREBASE -->
 
@@ -1138,27 +702,30 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE */
+/* REAL FIREBASE CONFIG */
 
 const firebaseConfig = {
 
   apiKey:
-  "YOUR_API_KEY",
+  "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
 
   authDomain:
-  "YOUR_PROJECT.firebaseapp.com",
+  "zero-exchange-v5.firebaseapp.com",
 
   projectId:
-  "YOUR_PROJECT_ID",
+  "zero-exchange-v5",
 
   storageBucket:
-  "YOUR_PROJECT.appspot.com",
+  "zero-exchange-v5.firebasestorage.app",
 
   messagingSenderId:
-  "YOUR_SENDER_ID",
+  "430232197516",
 
   appId:
-  "YOUR_APP_ID"
+  "1:430232197516:web:8abcd54749b17acc791ea9",
+
+  measurementId:
+  "G-DNJ0V10CG2"
 
 };
 
@@ -1182,6 +749,16 @@ async function login(){
     "password"
   ).value;
 
+  if(!email || !password){
+
+    alert(
+      "Enter email/password"
+    );
+
+    return;
+
+  }
+
   try{
 
     await signInWithEmailAndPassword(
@@ -1190,9 +767,13 @@ async function login(){
       password
     );
 
+    alert("Login Success");
+
   }catch(error){
 
     alert(error.message);
+
+    console.error(error);
 
   }
 
@@ -1212,6 +793,16 @@ async function register(){
     "password"
   ).value;
 
+  if(!email || !password){
+
+    alert(
+      "Enter email/password"
+    );
+
+    return;
+
+  }
+
   try{
 
     await createUserWithEmailAndPassword(
@@ -1220,7 +811,9 @@ async function register(){
       password
     );
 
-    alert("Account Created");
+    alert(
+      "Account Created"
+    );
 
   }catch(error){
 
@@ -1230,7 +823,7 @@ async function register(){
 
 }
 
-/* AUTH */
+/* AUTH STATE */
 
 onAuthStateChanged(
 auth,
@@ -1240,11 +833,11 @@ auth,
 
     document.getElementById(
       "authPage"
-    ).style.display="none";
+    ).style.display = "none";
 
     document.getElementById(
       "app"
-    ).style.display="block";
+    ).style.display = "block";
 
   }
 
@@ -1282,250 +875,6 @@ document
 .addEventListener(
   "click",
   logout
-);
-
-/* NAVIGATION */
-
-const navBtns =
-document.querySelectorAll(
-  ".nav-btn"
-);
-
-const pages =
-document.querySelectorAll(
-  ".page"
-);
-
-navBtns.forEach((btn)=>{
-
-  btn.addEventListener(
-    "click",
-    ()=>{
-
-      navBtns.forEach((b)=>{
-
-        b.classList.remove(
-          "active"
-        );
-
-      });
-
-      btn.classList.add(
-        "active"
-      );
-
-      pages.forEach((page)=>{
-
-        page.classList.remove(
-          "active"
-        );
-
-      });
-
-      document
-      .getElementById(
-        btn.dataset.page
-      )
-      .classList.add(
-        "active"
-      );
-
-    }
-  );
-
-});
-
-/* MARKETS */
-
-const coins = [
-
-  {
-    name:"Bitcoin",
-    symbol:"BTC",
-    price:"67,420",
-    change:"+2.4%"
-  },
-
-  {
-    name:"Ethereum",
-    symbol:"ETH",
-    price:"3,540",
-    change:"+4.1%"
-  },
-
-  {
-    name:"BNB",
-    symbol:"BNB",
-    price:"620",
-    change:"+3.7%"
-  },
-
-  {
-    name:"TON",
-    symbol:"TON",
-    price:"7.2",
-    change:"+6.2%"
-  },
-
-  {
-    name:"Tether",
-    symbol:"USDT",
-    price:"1.00",
-    change:"+0.1%"
-  }
-
-];
-
-function renderMarkets(){
-
-  const market1 =
-  document.getElementById(
-    "markets"
-  );
-
-  const market2 =
-  document.getElementById(
-    "markets2"
-  );
-
-  coins.forEach((coin)=>{
-
-    const html = `
-
-      <div class="market">
-
-        <div class="coin">
-
-          <div class="coin-icon">
-
-            ${coin.symbol[0]}
-
-          </div>
-
-          <div>
-
-            <div>
-              ${coin.name}
-            </div>
-
-            <div
-              style="
-              color:#94a3b8;
-              font-size:13px;
-              "
-            >
-              ${coin.symbol}
-            </div>
-
-          </div>
-
-        </div>
-
-        <div
-          style="
-          text-align:right;
-          "
-        >
-
-          <div>
-            $${coin.price}
-          </div>
-
-          <div class="green">
-
-            ${coin.change}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `;
-
-    market1.innerHTML += html;
-
-    market2.innerHTML += html;
-
-  });
-
-}
-
-renderMarkets();
-
-/* COPY */
-
-window.copyText=(text)=>{
-
-  navigator.clipboard.writeText(
-    text
-  );
-
-  alert("Copied");
-
-};
-
-/* WALLET SELECTOR */
-
-const walletSelector =
-document.getElementById(
-  "walletSelector"
-);
-
-const walletAddress =
-document.getElementById(
-  "walletAddress"
-);
-
-const wallets = {
-
-  "USDT TRC20":
-"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
-
-  "BTC":
-"bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
-
-  "ETH":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-  "TON":
-"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP",
-
-  "BNB":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-  "SOL":
-"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ"
-
-};
-
-walletSelector.addEventListener(
-"change",
-()=>{
-
-  walletAddress.innerText =
-  wallets[
-    walletSelector.value
-  ];
-
-}
-);
-
-document
-.getElementById(
-  "copyWalletBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-  navigator.clipboard.writeText(
-    walletAddress.innerText
-  );
-
-  alert("Wallet copied");
-
-}
 );
 
 </script>
