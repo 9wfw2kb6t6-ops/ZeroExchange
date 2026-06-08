@@ -68,11 +68,13 @@ alert("Button clicked");
 try {
 
 ```
-console.log("Updating document...");
-await updateDoc(doc(db, "orders", "7kpQzJTu2VF2k2dgzszZ"), {
-  status: status
-});
-console.log("Update completed");
+await updateDoc(
+  doc(db, "orders", id),
+  {
+    status: status
+  }
+);
+
 alert("Update success");
 
 location.reload();
@@ -82,12 +84,14 @@ location.reload();
 
 ```
 alert("Error: " + error.message);
+
 console.error(error);
 ```
 
 }
 
 }
+
 
 const ordersContainer = document.getElementById("orders");
 ordersContainer.innerHTML = "<h2>JavaScript Works</h2>";
