@@ -32,7 +32,129 @@ body{
 
   min-height:100vh;
 
-  overflow-x:hidden;
+}
+
+/* LOGIN */
+
+#loginBox{
+
+  position:fixed;
+
+  inset:0;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  background:#020617;
+
+  z-index:9999;
+
+}
+
+.login-card{
+
+  width:360px;
+
+  background:
+  rgba(255,255,255,0.04);
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  border-radius:26px;
+
+  padding:30px;
+
+  backdrop-filter:blur(20px);
+
+}
+
+.login-title{
+
+  text-align:center;
+
+  font-size:34px;
+
+  font-weight:800;
+
+  margin-bottom:25px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffe39a
+  );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+}
+
+input,select{
+
+  width:100%;
+
+  padding:15px;
+
+  margin-top:14px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:#0f172a;
+
+  color:white;
+
+  font-size:15px;
+
+}
+
+.login-btn,
+.trade-btn,
+.wallet-btn,
+.add-wallet-btn,
+.copy-btn{
+
+  border:none;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  background:
+  linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  color:black;
+
+}
+
+.login-btn{
+
+  width:100%;
+
+  margin-top:18px;
+
+}
+
+/* APP */
+
+#app{
+
+  display:none;
 
 }
 
@@ -50,12 +172,13 @@ body{
 
   padding:20px 30px;
 
-  backdrop-filter:blur(20px);
-
-  background:rgba(255,255,255,0.03);
+  background:
+  rgba(255,255,255,0.03);
 
   border-bottom:
   1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(20px);
 
   position:sticky;
 
@@ -81,32 +204,6 @@ body{
   -webkit-background-clip:text;
 
   -webkit-text-fill-color:transparent;
-
-}
-
-.nav-right{
-
-  display:flex;
-
-  gap:15px;
-
-  align-items:center;
-
-}
-
-.balance{
-
-  background:
-  rgba(255,255,255,0.04);
-
-  padding:12px 18px;
-
-  border-radius:14px;
-
-  font-size:14px;
-
-  border:
-  1px solid rgba(255,255,255,0.08);
 
 }
 
@@ -136,8 +233,6 @@ body{
 
 }
 
-/* GLASS */
-
 .glass{
 
   background:
@@ -146,14 +241,11 @@ body{
   border:
   1px solid rgba(255,255,255,0.08);
 
-  border-radius:28px;
-
-  backdrop-filter:blur(20px);
+  border-radius:26px;
 
   padding:25px;
 
-  box-shadow:
-  0 0 40px rgba(0,0,0,0.3);
+  backdrop-filter:blur(20px);
 
 }
 
@@ -175,10 +267,7 @@ body{
 
   overflow:hidden;
 
-  border-radius:22px;
-
-  border:
-  1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
 
 }
 
@@ -202,26 +291,12 @@ body{
   background:
   rgba(255,255,255,0.04);
 
-  padding:18px;
+  border:
+  1px solid rgba(255,255,255,0.06);
 
   border-radius:20px;
 
-  transition:0.3s;
-
-  border:
-  1px solid rgba(255,255,255,0.05);
-
-}
-
-.coin:hover{
-
-  transform:translateY(-5px);
-
-}
-
-.coin h3{
-
-  margin-bottom:10px;
+  padding:18px;
 
 }
 
@@ -233,88 +308,11 @@ body{
   color:#ff647c;
 }
 
-/* TRADE */
-
-.trade-box h2{
-
-  margin-bottom:20px;
-
-}
-
-input,select{
-
-  width:100%;
-
-  padding:15px;
-
-  margin-top:14px;
-
-  border:none;
-
-  border-radius:14px;
-
-  background:#0f172a;
-
-  color:white;
-
-  font-size:15px;
-
-}
-
-.trade-btn{
-
-  width:100%;
-
-  margin-top:18px;
-
-  padding:15px;
-
-  border:none;
-
-  border-radius:16px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdd88
-  );
-
-  color:black;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-  transition:0.3s;
-
-}
-
-.trade-btn:hover{
-
-  transform:scale(1.02);
-
-}
-
 /* BANK */
 
 .bank-box{
 
   margin-top:25px;
-
-}
-
-.bank-card{
-
-  background:
-  rgba(255,255,255,0.04);
-
-  border-radius:20px;
-
-  padding:20px;
-
-  border:
-  1px solid rgba(255,255,255,0.08);
 
 }
 
@@ -328,7 +326,7 @@ input,select{
 
 }
 
-.iban-box span{
+.iban-text{
 
   flex:1;
 
@@ -338,36 +336,7 @@ input,select{
 
   border-radius:12px;
 
-  overflow:auto;
-
-}
-
-.iban-box button{
-
-  border:none;
-
-  padding:12px 18px;
-
-  border-radius:12px;
-
-  background:#f5b942;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-}
-
-.deposit-note{
-
-  background:
-  rgba(245,185,66,0.12);
-
-  padding:15px;
-
-  border-radius:14px;
-
-  color:#ffd87c;
+  word-break:break-all;
 
 }
 
@@ -389,27 +358,6 @@ input,select{
 
 }
 
-.add-wallet-btn{
-
-  border:none;
-
-  padding:12px 18px;
-
-  border-radius:14px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdf8f
-  );
-
-  font-weight:700;
-
-  cursor:pointer;
-
-}
-
 .wallet-grid{
 
   margin-top:20px;
@@ -417,7 +365,7 @@ input,select{
   display:grid;
 
   grid-template-columns:
-  repeat(auto-fit,minmax(260px,1fr));
+  repeat(auto-fit,minmax(250px,1fr));
 
   gap:20px;
 
@@ -429,19 +377,11 @@ input,select{
   rgba(255,255,255,0.04);
 
   border:
-  1px solid rgba(255,255,255,0.08);
+  1px solid rgba(255,255,255,0.06);
 
   border-radius:20px;
 
   padding:20px;
-
-  transition:0.3s;
-
-}
-
-.wallet-card:hover{
-
-  transform:translateY(-5px);
 
 }
 
@@ -465,7 +405,7 @@ input,select{
 
 .wallet-address{
 
-  margin-top:16px;
+  margin-top:14px;
 
   background:#0f172a;
 
@@ -481,35 +421,11 @@ input,select{
 
 .wallet-actions{
 
+  margin-top:16px;
+
   display:flex;
 
   gap:10px;
-
-  margin-top:18px;
-
-}
-
-.wallet-btn{
-
-  flex:1;
-
-  border:none;
-
-  padding:12px;
-
-  border-radius:12px;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-}
-
-.copy-btn{
-
-  background:#f5b942;
-
-  color:black;
 
 }
 
@@ -535,76 +451,13 @@ input,select{
   rgba(255,255,255,0.04);
 
   border:
-  1px solid rgba(255,255,255,0.08);
-
-  padding:20px;
+  1px solid rgba(255,255,255,0.06);
 
   border-radius:20px;
 
+  padding:20px;
+
   margin-top:15px;
-
-}
-
-/* LOGIN */
-
-#loginBox{
-
-  position:fixed;
-
-  inset:0;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  background:#020617;
-
-  z-index:9999;
-
-}
-
-.login-card{
-
-  width:360px;
-
-}
-
-.login-title{
-
-  text-align:center;
-
-  font-size:34px;
-
-  font-weight:800;
-
-  margin-bottom:25px;
-
-}
-
-.login-btn{
-
-  width:100%;
-
-  margin-top:18px;
-
-  padding:15px;
-
-  border:none;
-
-  border-radius:16px;
-
-  background:
-  linear-gradient(
-    90deg,
-    #f5b942,
-    #ffdf8f
-  );
-
-  font-weight:800;
-
-  cursor:pointer;
 
 }
 
@@ -636,7 +489,7 @@ input,select{
 
 <div id="loginBox">
 
-  <div class="glass login-card">
+  <div class="login-card">
 
     <div class="login-title">
       ZERO X
@@ -667,10 +520,7 @@ input,select{
 
 <!-- APP -->
 
-<div
-id="app"
-style="display:none;"
->
+<div id="app">
 
   <!-- NAVBAR -->
 
@@ -680,23 +530,12 @@ style="display:none;"
       ZERO X
     </div>
 
-    <div class="nav-right">
-
-      <div class="balance">
-
-        Balance:
-        ₺845,000 TRY
-
-      </div>
-
-      <button
-        class="logout-btn"
-        id="logoutBtn"
-      >
-        Logout
-      </button>
-
-    </div>
+    <button
+      class="logout-btn"
+      id="logoutBtn"
+    >
+      Logout
+    </button>
 
   </div>
 
@@ -731,7 +570,7 @@ style="display:none;"
 
         <!-- TRADE -->
 
-        <div class="glass trade-box">
+        <div class="glass">
 
           <h2>
             Create Order
@@ -743,9 +582,6 @@ style="display:none;"
             <option>BTC</option>
             <option>ETH</option>
             <option>BNB</option>
-            <option>SOL</option>
-            <option>XRP</option>
-            <option>DOGE</option>
             <option>TON</option>
             <option>TRY</option>
 
@@ -763,9 +599,6 @@ style="display:none;"
             <option>ETH</option>
             <option>USDT</option>
             <option>BNB</option>
-            <option>SOL</option>
-            <option>XRP</option>
-            <option>DOGE</option>
             <option>TON</option>
             <option>TRY</option>
 
@@ -774,6 +607,7 @@ style="display:none;"
           <button
             class="trade-btn"
             id="submitBtn"
+            style="width:100%;margin-top:16px;"
           >
             Submit Order
           </button>
@@ -790,72 +624,30 @@ style="display:none;"
 
           <br>
 
-          <div class="bank-card">
+          <p>
+            Bank:
+            <b>Ziraat Bankası</b>
+          </p>
 
-            <p>
-              Bank:
-              <b>Ziraat Bankası</b>
-            </p>
+          <br>
 
-            <br>
+          <div class="iban-box">
 
-            <p>
-              IBAN:
-            </p>
-
-            <div class="iban-box">
-
-              <span id="ibanText">
+            <div
+              class="iban-text"
+              id="ibanText"
+            >
 
 TR12 0001 2000 0000 1234 5678 90
 
-              </span>
-
-              <button
-                id="copyIban"
-              >
-                Copy
-              </button>
-
             </div>
 
-            <br>
-
-            <p>
-
-              Account Name:
-
-              <b>
-                Zero Exchange Teknoloji
-              </b>
-
-            </p>
-
-            <br>
-
-            <p>
-
-              Network:
-
-              <b>
-                FAST / EFT / Havale
-              </b>
-
-            </p>
-
-            <br>
-
-            <div class="deposit-note">
-
-              Minimum Deposit:
-              ₺100 TRY
-
-              <br><br>
-
-              Deposits are processed
-              automatically.
-
-            </div>
+            <button
+              class="copy-btn"
+              id="copyIban"
+            >
+              Copy
+            </button>
 
           </div>
 
@@ -865,7 +657,7 @@ TR12 0001 2000 0000 1234 5678 90
 
     </div>
 
-    <!-- WALLETS -->
+    <!-- WALLET -->
 
     <div class="glass wallet-box">
 
@@ -972,27 +764,30 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
   apiKey:
-  "YOUR_API_KEY",
+  "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
 
   authDomain:
-  "YOUR_PROJECT.firebaseapp.com",
+  "zero-exchange-v5.firebaseapp.com",
 
   projectId:
-  "YOUR_PROJECT",
+  "zero-exchange-v5",
 
   storageBucket:
-  "YOUR_PROJECT.appspot.com",
+  "zero-exchange-v5.firebasestorage.app",
 
   messagingSenderId:
-  "000000000",
+  "430232197516",
 
   appId:
-  "YOUR_APP_ID"
+  "1:430232197516:web:8abcd54749b17acc791ea9",
+
+  measurementId:
+  "G-DNJ0V10CG2"
 
 };
 
@@ -1004,117 +799,6 @@ getFirestore(app);
 
 const auth =
 getAuth(app);
-
-/* MARKET */
-
-async function loadMarketPrices(){
-
-  try{
-
-    const response =
-    await fetch(
-
-"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,the-open-network,tether&vs_currencies=try&include_24hr_change=true"
-
-    );
-
-    const data =
-    await response.json();
-
-    const market =
-    document.getElementById(
-      "marketGrid"
-    );
-
-    const coins = [
-
-      {
-        name:"BTC",
-        data:data.bitcoin
-      },
-
-      {
-        name:"ETH",
-        data:data.ethereum
-      },
-
-      {
-        name:"SOL",
-        data:data.solana
-      },
-
-      {
-        name:"BNB",
-        data:data.binancecoin
-      },
-
-      {
-        name:"XRP",
-        data:data.ripple
-      },
-
-      {
-        name:"DOGE",
-        data:data.dogecoin
-      },
-
-      {
-        name:"TON",
-        data:data["the-open-network"]
-      },
-
-      {
-        name:"USDT",
-        data:data.tether
-      }
-
-    ];
-
-    market.innerHTML = "";
-
-    coins.forEach((coin)=>{
-
-      market.innerHTML += `
-
-        <div class="coin">
-
-          <h3>
-            ${coin.name}/TRY
-          </h3>
-
-          <p>
-
-            ₺${Math.round(
-              coin.data.try
-            ).toLocaleString()}
-
-          </p>
-
-          <br>
-
-          <span class="${
-            coin.data.try_24h_change >=0
-            ? "green"
-            : "red"
-          }">
-
-            ${coin.data.try_24h_change.toFixed(2)}%
-
-          </span>
-
-        </div>
-
-      `;
-
-    });
-
-  }catch(error){
-
-    console.log(error);
-
-  }
-
-}
 
 /* LOGIN */
 
@@ -1189,6 +873,104 @@ auth,
 }
 );
 
+/* MARKET */
+
+async function loadMarketPrices(){
+
+  try{
+
+    const response =
+    await fetch(
+
+"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,the-open-network,tether&vs_currencies=try&include_24hr_change=true"
+
+    );
+
+    const data =
+    await response.json();
+
+    const market =
+    document.getElementById(
+      "marketGrid"
+    );
+
+    const coins = [
+
+      {
+        name:"BTC",
+        data:data.bitcoin
+      },
+
+      {
+        name:"ETH",
+        data:data.ethereum
+      },
+
+      {
+        name:"BNB",
+        data:data.binancecoin
+      },
+
+      {
+        name:"TON",
+        data:data["the-open-network"]
+      },
+
+      {
+        name:"USDT",
+        data:data.tether
+      }
+
+    ];
+
+    market.innerHTML="";
+
+    coins.forEach((coin)=>{
+
+      market.innerHTML += `
+
+        <div class="coin">
+
+          <h3>
+            ${coin.name}/TRY
+          </h3>
+
+          <br>
+
+          <p>
+
+            ₺${Math.round(
+              coin.data.try
+            ).toLocaleString()}
+
+          </p>
+
+          <br>
+
+          <span class="${
+            coin.data.try_24h_change >=0
+            ? "green"
+            : "red"
+          }">
+
+            ${coin.data.try_24h_change.toFixed(2)}%
+
+          </span>
+
+        </div>
+
+      `;
+
+    });
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
 /* CREATE ORDER */
 
 async function createOrder(){
@@ -1216,33 +998,43 @@ async function createOrder(){
 
   }
 
-  await addDoc(
+  try{
 
-    collection(db,"orders"),
+    await addDoc(
 
-    {
+      collection(db,"orders"),
 
-      from,
-      to,
+      {
 
-      amount:Number(amount),
+        from,
+        to,
 
-      status:"pending",
+        amount:Number(amount),
 
-      email:
-      auth.currentUser.email,
+        status:"pending",
 
-      createdAt:
-      new Date()
-      .toLocaleString()
+        email:
+        auth.currentUser.email,
 
-    }
+        createdAt:
+        new Date()
+        .toLocaleString()
 
-  );
+      }
 
-  document.getElementById(
-    "amount"
-  ).value="";
+    );
+
+    document.getElementById(
+      "amount"
+    ).value="";
+
+    alert("Order Created");
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
 
 }
 
@@ -1328,7 +1120,7 @@ function copyIBAN(){
 
 }
 
-/* WALLET SYSTEM */
+/* WALLET */
 
 const wallets = [
 
@@ -1403,7 +1195,7 @@ function renderWallets(){
         <div class="wallet-actions">
 
           <button
-            class="wallet-btn copy-btn"
+            class="wallet-btn"
             onclick="copyWallet(${index})"
           >
 
