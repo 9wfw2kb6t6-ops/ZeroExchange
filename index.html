@@ -1,71 +1,389 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zero Exchange V5</title>
+<title>Zero Exchange X</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+rel="stylesheet"
+>
 
 <style>
 
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
 body{
-  background:#0d1117;
+
+  font-family:'Inter',sans-serif;
+
+  background:
+  radial-gradient(circle at top left,#1f2937,#0b0f19 45%),
+  #050816;
+
   color:white;
-  font-family:Arial,sans-serif;
-  padding:20px;
+
+  min-height:100vh;
+
+  overflow-x:hidden;
+
 }
 
-input,button,select{
-  padding:10px;
-  margin:5px;
-  width:220px;
-  border-radius:8px;
-  border:none;
+/* NAVBAR */
+
+.navbar{
+
+  width:100%;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:20px 40px;
+
+  backdrop-filter:blur(15px);
+
+  background:rgba(255,255,255,0.03);
+
+  border-bottom:1px solid rgba(255,255,255,0.06);
+
+  position:sticky;
+
+  top:0;
+
+  z-index:999;
+
 }
 
-button{
-  background:#f5b942;
-  cursor:pointer;
-  font-weight:bold;
+.logo{
+
+  font-size:28px;
+
+  font-weight:700;
+
+  background:linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
 }
 
-.order{
-  background:#161b22;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
+.nav-right{
+
+  display:flex;
+
+  gap:15px;
+
+  align-items:center;
+
+}
+
+.balance{
+
+  background:rgba(255,255,255,0.05);
+
+  padding:10px 16px;
+
+  border-radius:12px;
+
+  font-size:14px;
+
 }
 
 .logout-btn{
-  background:#dc3545;
-  color:white;
-  width:auto;
-}
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:20px;
-}
+  background:#ff4d4d;
 
-.stat-card{
-  background:#161b22;
-  padding:15px;
+  border:none;
+
+  padding:10px 16px;
+
   border-radius:12px;
+
+  color:white;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+}
+
+/* HERO */
+
+.hero{
+
+  padding:50px 30px;
+
+  display:grid;
+
+  grid-template-columns:1.3fr 1fr;
+
+  gap:25px;
+
+}
+
+.glass{
+
+  background:rgba(255,255,255,0.05);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(20px);
+
+  border-radius:24px;
+
+  padding:25px;
+
+  box-shadow:
+  0 0 30px rgba(0,0,0,0.3);
+
+}
+
+/* MARKET */
+
+.market-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:15px;
+
+  margin-top:20px;
+
+}
+
+.coin{
+
+  background:rgba(255,255,255,0.04);
+
+  padding:18px;
+
+  border-radius:18px;
+
+  transition:0.3s;
+
+}
+
+.coin:hover{
+
+  transform:translateY(-5px);
+
+  background:rgba(255,255,255,0.07);
+
+}
+
+.coin h3{
+
+  margin-bottom:10px;
+
+}
+
+.green{
+  color:#00ffae;
+}
+
+.red{
+  color:#ff5f7a;
+}
+
+/* ORDER PANEL */
+
+.trade-box h2{
+
+  margin-bottom:20px;
+
+}
+
+input,select{
+
+  width:100%;
+
+  margin-top:12px;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:#111827;
+
+  color:white;
+
+  font-size:15px;
+
+}
+
+.trade-btn{
+
+  width:100%;
+
+  margin-top:18px;
+
+  padding:15px;
+
+  border:none;
+
+  border-radius:16px;
+
+  background:linear-gradient(
+    90deg,
+    #f5b942,
+    #ffda7b
+  );
+
+  color:black;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+}
+
+.trade-btn:hover{
+
+  transform:scale(1.02);
+
+}
+
+/* ORDERS */
+
+.orders{
+
+  padding:0 30px 40px;
+
+}
+
+.orders h2{
+
+  margin-bottom:20px;
+
+}
+
+.order-card{
+
+  background:rgba(255,255,255,0.04);
+
+  border:1px solid rgba(255,255,255,0.06);
+
+  padding:20px;
+
+  border-radius:20px;
+
+  margin-bottom:15px;
+
+  transition:0.3s;
+
+}
+
+.order-card:hover{
+
+  transform:translateY(-3px);
+
+  background:rgba(255,255,255,0.06);
+
+}
+
+/* LOGIN */
+
+#loginBox{
+
+  position:absolute;
+
+  inset:0;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  background:#050816;
+
+}
+
+.login-card{
+
+  width:360px;
+
+  padding:35px;
+
+}
+
+.login-title{
+
+  font-size:28px;
+
+  font-weight:700;
+
+  margin-bottom:25px;
+
   text-align:center;
+
 }
 
-.stat-card h2{
-  color:#f5b942;
-  margin-bottom:5px;
+.login-btn{
+
+  width:100%;
+
+  margin-top:15px;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:16px;
+
+  background:linear-gradient(
+    90deg,
+    #f5b942,
+    #ffdf8f
+  );
+
+  font-weight:700;
+
+  cursor:pointer;
+
 }
 
-@media(max-width:700px){
+/* MOBILE */
 
-  .stats{
+@media(max-width:900px){
+
+  .hero{
+
     grid-template-columns:1fr;
+
+  }
+
+  .market-grid{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .navbar{
+
+    padding:18px;
+
   }
 
 }
@@ -76,105 +394,174 @@ button{
 
 <body>
 
-<h2>🚀 Zero Exchange V5</h2>
-
 <!-- LOGIN -->
 
 <div id="loginBox">
 
-  <input
-    id="email"
-    type="email"
-    placeholder="Email"
-  >
+  <div class="glass login-card">
 
-  <br>
+    <div class="login-title">
+      Zero Exchange X
+    </div>
 
-  <input
-    id="password"
-    type="password"
-    placeholder="Password"
-  >
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+    >
 
-  <br>
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+    >
 
-  <button id="loginBtn">
-    Login
-  </button>
+    <button
+      class="login-btn"
+      id="loginBtn"
+    >
+      Login
+    </button>
+
+  </div>
 
 </div>
 
 <!-- APP -->
 
-<div id="app" style="display:none">
+<div id="app" style="display:none;">
 
-  <button
-    class="logout-btn"
-    id="logoutBtn"
-  >
-    Logout
-  </button>
+  <!-- NAVBAR -->
 
-  <hr>
+  <div class="navbar">
 
-  <!-- STATS -->
-
-  <div class="stats">
-
-    <div class="stat-card">
-      <h2 id="totalOrders">0</h2>
-      <p>Total Orders</p>
+    <div class="logo">
+      ZERO X
     </div>
 
-    <div class="stat-card">
-      <h2 id="pendingOrders">0</h2>
-      <p>Pending</p>
-    </div>
+    <div class="nav-right">
 
-    <div class="stat-card">
-      <h2 id="approvedOrders">0</h2>
-      <p>Approved</p>
+      <div class="balance">
+        Balance: 24,580 USDT
+      </div>
+
+      <button
+        class="logout-btn"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
     </div>
 
   </div>
 
-  <!-- CREATE ORDER -->
+  <!-- HERO -->
 
-  <h3>Create Order</h3>
+  <div class="hero">
 
-  <select id="from">
-    <option>USDT</option>
-    <option>TRY</option>
-    <option>IRR</option>
-  </select>
+    <!-- MARKET -->
 
-  <br>
+    <div class="glass">
 
-  <input
-    id="amount"
-    type="number"
-    placeholder="Amount"
-  >
+      <h2>
+        Live Market
+      </h2>
 
-  <br>
+      <div class="market-grid">
 
-  <select id="to">
-    <option>TRY</option>
-    <option>USDT</option>
-    <option>IRR</option>
-  </select>
+        <div class="coin">
 
-  <br>
+          <h3>BTC/USDT</h3>
 
-  <button id="submitBtn">
-    Submit
-  </button>
+          <p>$104,225</p>
+
+          <span class="green">
+            +3.21%
+          </span>
+
+        </div>
+
+        <div class="coin">
+
+          <h3>ETH/USDT</h3>
+
+          <p>$5,140</p>
+
+          <span class="green">
+            +2.08%
+          </span>
+
+        </div>
+
+        <div class="coin">
+
+          <h3>SOL/USDT</h3>
+
+          <p>$202</p>
+
+          <span class="red">
+            -1.22%
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TRADE -->
+
+    <div class="glass trade-box">
+
+      <h2>
+        Create Order
+      </h2>
+
+      <select id="from">
+
+        <option>USDT</option>
+        <option>BTC</option>
+        <option>ETH</option>
+
+      </select>
+
+      <input
+        id="amount"
+        type="number"
+        placeholder="Amount"
+      >
+
+      <select id="to">
+
+        <option>BTC</option>
+        <option>ETH</option>
+        <option>USDT</option>
+
+      </select>
+
+      <button
+        class="trade-btn"
+        id="submitBtn"
+      >
+        Submit Order
+      </button>
+
+    </div>
+
+  </div>
 
   <!-- ORDERS -->
 
-  <h3>Orders</h3>
+  <div class="orders">
 
-  <div id="orders"></div>
+    <h2>
+      Recent Orders
+    </h2>
+
+    <div id="orders"></div>
+
+  </div>
 
 </div>
 
@@ -205,58 +592,37 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
+  apiKey:"YOUR_API_KEY",
 
-  authDomain:
-    "zero-exchange-v5.firebaseapp.com",
+  authDomain:"YOUR_DOMAIN",
 
-  projectId:
-    "zero-exchange-v5",
+  projectId:"YOUR_PROJECT_ID",
 
-  storageBucket:
-    "zero-exchange-v5.firebasestorage.app",
+  storageBucket:"YOUR_BUCKET",
 
-  messagingSenderId:
-    "430232197516",
+  messagingSenderId:"YOUR_SENDER_ID",
 
-  appId:
-    "1:430232197516:web:8abcd54749b17acc791ea9",
-
-  measurementId:
-    "G-DNJ0V10CG2"
+  appId:"YOUR_APP_ID"
 
 };
 
 /* INIT */
 
-const firebaseApp =
-  initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const db =
-  getFirestore(firebaseApp);
+const db = getFirestore(app);
 
-const auth =
-  getAuth(firebaseApp);
+const auth = getAuth(app);
 
 /* LOGIN */
 
 async function login(){
 
   const email =
-    document.getElementById("email")
-    .value
-    .trim();
+  document.getElementById("email").value;
 
   const password =
-    document.getElementById("password")
-    .value;
-
-  if(!email || !password){
-
-    alert("Email and password required");
-    return;
-
-  }
+  document.getElementById("password").value;
 
   try{
 
@@ -266,15 +632,9 @@ async function login(){
       password
     );
 
-    alert("Login success");
-
   }catch(error){
 
-    alert(
-      "Login error: " + error.message
-    );
-
-    console.error(error);
+    alert(error.message);
 
   }
 
@@ -284,33 +644,25 @@ async function login(){
 
 async function logout(){
 
-  try{
+  await signOut(auth);
 
-    await signOut(auth);
-
-    alert("Logged out");
-
-    location.reload();
-
-  }catch(error){
-
-    alert(error.message);
-
-  }
+  location.reload();
 
 }
 
-/* AUTH STATE */
+/* AUTH */
 
 onAuthStateChanged(auth,(user)=>{
 
   if(user){
 
-    document.getElementById("loginBox")
-      .style.display = "none";
+    document.getElementById(
+      "loginBox"
+    ).style.display="none";
 
-    document.getElementById("app")
-      .style.display = "block";
+    document.getElementById(
+      "app"
+    ).style.display="block";
 
     loadOrders();
 
@@ -323,59 +675,45 @@ onAuthStateChanged(auth,(user)=>{
 async function createOrder(){
 
   const from =
-    document.getElementById("from").value;
+  document.getElementById("from").value;
 
   const to =
-    document.getElementById("to").value;
+  document.getElementById("to").value;
 
   const amount =
-    document.getElementById("amount").value;
+  document.getElementById("amount").value;
 
   if(!amount){
 
-    alert("Amount required");
+    alert("Enter amount");
     return;
 
   }
 
-  try{
+  await addDoc(
 
-    await addDoc(
-      collection(db,"orders"),
-      {
+    collection(db,"orders"),
 
-        uid: auth.currentUser.uid,
+    {
 
-        email: auth.currentUser.email,
+      from,
+      to,
+      amount:Number(amount),
 
-        from: from,
+      status:"pending",
 
-        to: to,
+      email:auth.currentUser.email,
 
-        amount: Number(amount),
+      createdAt:
+      new Date().toLocaleString()
 
-        status: "pending",
+    }
 
-        createdAt:
-          new Date().toISOString()
+  );
 
-      }
-    );
-
-    alert("Order created");
-
-    document.getElementById("amount")
-      .value = "";
-
-  }catch(error){
-
-    alert(
-      "Error: " + error.message
-    );
-
-    console.error(error);
-
-  }
+  document.getElementById(
+    "amount"
+  ).value="";
 
 }
 
@@ -389,56 +727,43 @@ function loadOrders(){
 
     (snapshot)=>{
 
-      const container =
-        document.getElementById("orders");
+      const orders =
+      document.getElementById("orders");
 
-      let total = 0;
-      let pending = 0;
-      let approved = 0;
-
-      container.innerHTML = "";
+      orders.innerHTML="";
 
       snapshot.forEach((doc)=>{
 
         const order = doc.data();
 
-        total++;
+        orders.innerHTML += `
 
-        if(order.status === "approved"){
-          approved++;
-        }else{
-          pending++;
-        }
+          <div class="order-card">
 
-        container.innerHTML += `
-
-          <div class="order">
-
-            <b>
+            <h3>
               ${order.from}
               →
               ${order.to}
-            </b>
-
-            <br>
-
-            User:
-            ${order.email || "Unknown"}
+            </h3>
 
             <br>
 
             Amount:
             ${order.amount}
 
-            <br>
+            <br><br>
+
+            User:
+            ${order.email}
+
+            <br><br>
 
             Status:
-            ${order.status || "pending"}
+            ${order.status}
 
-            <br>
+            <br><br>
 
-            Date:
-            ${order.createdAt || "-"}
+            ${order.createdAt}
 
           </div>
 
@@ -446,37 +771,25 @@ function loadOrders(){
 
       });
 
-      document.getElementById(
-        "totalOrders"
-      ).innerText = total;
-
-      document.getElementById(
-        "pendingOrders"
-      ).innerText = pending;
-
-      document.getElementById(
-        "approvedOrders"
-      ).innerText = approved;
-
     }
 
   );
 
 }
 
-/* BUTTON EVENTS */
+/* EVENTS */
 
 document
-  .getElementById("loginBtn")
-  .addEventListener("click", login);
+.getElementById("loginBtn")
+.addEventListener("click",login);
 
 document
-  .getElementById("submitBtn")
-  .addEventListener("click", createOrder);
+.getElementById("logoutBtn")
+.addEventListener("click",logout);
 
 document
-  .getElementById("logoutBtn")
-  .addEventListener("click", logout);
+.getElementById("submitBtn")
+.addEventListener("click",createOrder);
 
 </script>
 
