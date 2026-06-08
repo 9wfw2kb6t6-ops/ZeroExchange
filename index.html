@@ -312,69 +312,83 @@ window.createOrder = async ()=>{
 
 function loadOrders(){
 
-  onSnapshot(
-    collection(db,"orders"),
-    (snapshot)=>{
+onSnapshot(
+collection(db,"orders"),
+(snapshot)=>{
 
-      const container =
-        document.getElementById("orders");
-let total = 0;
-let pending = 0;
-let approved = 0;
-      container.innerHTML = "";
+```
+  const container =
+    document.getElementById("orders");
 
-      snapshot.forEach((total++;
+  let total = 0;
+  let pending = 0;
+  let approved = 0;
 
-if(o.status === "approved"){
-  approved++;
-}else{
-  pending++;
-}
+  container.innerHTML = "";
 
-        const order = doc.data();
-total++;
+  snapshot.forEach((doc)=>{
 
-if(o.status === "approved"){
-  approved++;
-}else{
-  pending++;
-}
-        container.innerHTML += `
-          <div class="order">
+    const order = doc.data();
 
-            <b>
-            ${order.from}
-            →
-            ${order.to}
-            </b>
+    total++;
 
-            <br>
-
-            User:
-            ${order.email || "Unknown"}
-
-            <br>
-
-            Amount:
-            ${order.amount}
-
-            <br>
-
-            Status:
-            ${order.status}
-
-            <br>
-
-            Date:
-            ${order.createdAt || "-"}
-
-          </div>
-        `;
-
-      });
-
+    if(order.status === "approved"){
+      approved++;
+    }else{
+      pending++;
     }
-  );
+
+    container.innerHTML += `
+      <div class="order">
+
+        <b>
+          ${order.from}
+          →
+          ${order.to}
+        </b>
+
+        <br>
+
+        User:
+        ${order.email || "Unknown"}
+
+        <br>
+
+        Amount:
+        ${order.amount}
+
+        <br>
+
+        Status:
+        ${order.status || "pending"}
+
+        <br>
+
+        Date:
+        ${order.createdAt || "-"}
+
+      </div>
+    `;
+
+  });
+
+  const totalEl =
+    document.getElementById("totalOrders");
+
+  const pendingEl =
+    document.getElementById("pendingOrders");
+
+  const approvedEl =
+    document.getElementById("approvedOrders");
+
+  if(totalEl) totalEl.innerText = total;
+  if(pendingEl) pendingEl.innerText = pending;
+  if(approvedEl) approvedEl.innerText = approved;
+
+}
+```
+
+);
 
 }
 
