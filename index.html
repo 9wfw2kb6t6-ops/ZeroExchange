@@ -26,8 +26,7 @@ body{
   font-family:'Inter',sans-serif;
 
   background:
-  radial-gradient(circle at top left,#1f2937,#0b0f19 45%),
-  #050816;
+  radial-gradient(circle at top,#1e293b,#020617 70%);
 
   color:white;
 
@@ -49,13 +48,14 @@ body{
 
   align-items:center;
 
-  padding:20px 40px;
+  padding:20px 30px;
 
   backdrop-filter:blur(15px);
 
   background:rgba(255,255,255,0.03);
 
-  border-bottom:1px solid rgba(255,255,255,0.06);
+  border-bottom:
+  1px solid rgba(255,255,255,0.08);
 
   position:sticky;
 
@@ -74,7 +74,7 @@ body{
   background:linear-gradient(
     90deg,
     #f5b942,
-    #ffdf8f
+    #ffe39a
   );
 
   -webkit-background-clip:text;
@@ -95,7 +95,7 @@ body{
 
 .balance{
 
-  background:rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.04);
 
   padding:10px 16px;
 
@@ -107,13 +107,13 @@ body{
 
 .logout-btn{
 
-  background:#ff4d4d;
-
   border:none;
 
   padding:10px 16px;
 
   border-radius:12px;
+
+  background:#ff4d4d;
 
   color:white;
 
@@ -127,11 +127,11 @@ body{
 
 .hero{
 
-  padding:50px 30px;
+  padding:30px;
 
   display:grid;
 
-  grid-template-columns:1.3fr 1fr;
+  grid-template-columns:1.4fr 0.9fr;
 
   gap:25px;
 
@@ -139,18 +139,32 @@ body{
 
 .glass{
 
-  background:rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.04);
 
   border:1px solid rgba(255,255,255,0.08);
 
-  backdrop-filter:blur(20px);
+  border-radius:26px;
 
-  border-radius:24px;
+  backdrop-filter:blur(20px);
 
   padding:25px;
 
   box-shadow:
-  0 0 30px rgba(0,0,0,0.3);
+  0 0 40px rgba(0,0,0,0.3);
+
+}
+
+/* CHART */
+
+.chart-box{
+
+  width:100%;
+
+  overflow:hidden;
+
+  border-radius:22px;
+
+  border:1px solid rgba(255,255,255,0.06);
 
 }
 
@@ -158,13 +172,13 @@ body{
 
 .market-grid{
 
+  margin-top:20px;
+
   display:grid;
 
   grid-template-columns:repeat(3,1fr);
 
   gap:15px;
-
-  margin-top:20px;
 
 }
 
@@ -182,9 +196,9 @@ body{
 
 .coin:hover{
 
-  transform:translateY(-5px);
+  transform:translateY(-4px);
 
-  background:rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.06);
 
 }
 
@@ -199,10 +213,10 @@ body{
 }
 
 .red{
-  color:#ff5f7a;
+  color:#ff647c;
 }
 
-/* ORDER PANEL */
+/* TRADE */
 
 .trade-box h2{
 
@@ -214,15 +228,15 @@ input,select{
 
   width:100%;
 
-  margin-top:12px;
-
   padding:14px;
+
+  margin-top:12px;
 
   border:none;
 
   border-radius:14px;
 
-  background:#111827;
+  background:#0f172a;
 
   color:white;
 
@@ -245,7 +259,7 @@ input,select{
   background:linear-gradient(
     90deg,
     #f5b942,
-    #ffda7b
+    #ffdd88
   );
 
   color:black;
@@ -296,9 +310,7 @@ input,select{
 
 .order-card:hover{
 
-  transform:translateY(-3px);
-
-  background:rgba(255,255,255,0.06);
+  transform:translateY(-4px);
 
 }
 
@@ -306,7 +318,7 @@ input,select{
 
 #loginBox{
 
-  position:absolute;
+  position:fixed;
 
   inset:0;
 
@@ -316,7 +328,9 @@ input,select{
 
   align-items:center;
 
-  background:#050816;
+  background:#020617;
+
+  z-index:9999;
 
 }
 
@@ -324,19 +338,17 @@ input,select{
 
   width:360px;
 
-  padding:35px;
-
 }
 
 .login-title{
 
-  font-size:28px;
+  text-align:center;
+
+  font-size:30px;
 
   font-weight:700;
 
   margin-bottom:25px;
-
-  text-align:center;
 
 }
 
@@ -344,9 +356,9 @@ input,select{
 
   width:100%;
 
-  margin-top:15px;
+  margin-top:18px;
 
-  padding:14px;
+  padding:15px;
 
   border:none;
 
@@ -377,12 +389,6 @@ input,select{
   .market-grid{
 
     grid-template-columns:1fr;
-
-  }
-
-  .navbar{
-
-    padding:18px;
 
   }
 
@@ -460,13 +466,19 @@ input,select{
 
   <div class="hero">
 
-    <!-- MARKET -->
+    <!-- LEFT -->
 
     <div class="glass">
 
-      <h2>
-        Live Market
-      </h2>
+      <!-- CHART -->
+
+      <div class="chart-box">
+
+        <div id="tradingview_chart"></div>
+
+      </div>
+
+      <!-- MARKET -->
 
       <div class="market-grid">
 
@@ -475,6 +487,8 @@ input,select{
           <h3>BTC/USDT</h3>
 
           <p>$104,225</p>
+
+          <br>
 
           <span class="green">
             +3.21%
@@ -488,6 +502,8 @@ input,select{
 
           <p>$5,140</p>
 
+          <br>
+
           <span class="green">
             +2.08%
           </span>
@@ -499,6 +515,8 @@ input,select{
           <h3>SOL/USDT</h3>
 
           <p>$202</p>
+
+          <br>
 
           <span class="red">
             -1.22%
@@ -514,9 +532,7 @@ input,select{
 
     <div class="glass trade-box">
 
-      <h2>
-        Create Order
-      </h2>
+      <h2>Create Order</h2>
 
       <select id="from">
 
@@ -555,9 +571,7 @@ input,select{
 
   <div class="orders">
 
-    <h2>
-      Recent Orders
-    </h2>
+    <h2>Recent Orders</h2>
 
     <div id="orders"></div>
 
@@ -565,9 +579,51 @@ input,select{
 
 </div>
 
-<script type="module">
+<!-- TRADINGVIEW -->
 
-/* FIREBASE */
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+
+window.addEventListener("load",()=>{
+
+  new TradingView.widget({
+
+    width:"100%",
+
+    height:420,
+
+    symbol:"BINANCE:BTCUSDT",
+
+    interval:"15",
+
+    timezone:"Etc/UTC",
+
+    theme:"dark",
+
+    style:"1",
+
+    locale:"en",
+
+    toolbar_bg:"#0f172a",
+
+    enable_publishing:false,
+
+    hide_side_toolbar:false,
+
+    allow_symbol_change:true,
+
+    container_id:"tradingview_chart"
+
+  });
+
+});
+
+</script>
+
+<!-- FIREBASE -->
+
+<script type="module">
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -588,7 +644,7 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* CONFIG */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -613,25 +669,37 @@ const firebaseConfig = {
     "G-DNJ0V10CG2"
 
 };
-};
 
 /* INIT */
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db =
+  getFirestore(app);
 
-const auth = getAuth(app);
+const auth =
+  getAuth(app);
 
 /* LOGIN */
 
 async function login(){
 
   const email =
-  document.getElementById("email").value;
+    document.getElementById("email")
+    .value
+    .trim();
 
   const password =
-  document.getElementById("password").value;
+    document.getElementById("password")
+    .value;
+
+  if(!email || !password){
+
+    alert("Enter email and password");
+    return;
+
+  }
 
   try{
 
@@ -667,11 +735,11 @@ onAuthStateChanged(auth,(user)=>{
 
     document.getElementById(
       "loginBox"
-    ).style.display="none";
+    ).style.display = "none";
 
     document.getElementById(
       "app"
-    ).style.display="block";
+    ).style.display = "block";
 
     loadOrders();
 
@@ -684,13 +752,13 @@ onAuthStateChanged(auth,(user)=>{
 async function createOrder(){
 
   const from =
-  document.getElementById("from").value;
+    document.getElementById("from").value;
 
   const to =
-  document.getElementById("to").value;
+    document.getElementById("to").value;
 
   const amount =
-  document.getElementById("amount").value;
+    document.getElementById("amount").value;
 
   if(!amount){
 
@@ -707,6 +775,7 @@ async function createOrder(){
 
       from,
       to,
+
       amount:Number(amount),
 
       status:"pending",
@@ -722,7 +791,7 @@ async function createOrder(){
 
   document.getElementById(
     "amount"
-  ).value="";
+  ).value = "";
 
 }
 
@@ -737,9 +806,9 @@ function loadOrders(){
     (snapshot)=>{
 
       const orders =
-      document.getElementById("orders");
+        document.getElementById("orders");
 
-      orders.innerHTML="";
+      orders.innerHTML = "";
 
       snapshot.forEach((doc)=>{
 
@@ -786,86 +855,58 @@ function loadOrders(){
 
 }
 
-/* EVENTS */
+/* BUTTON EVENTS */
 
-window.addEventListener("DOMContentLoaded", ()=>{
+window.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
 
-  const loginBtn =
-    document.getElementById("loginBtn");
+    const loginBtn =
+      document.getElementById(
+        "loginBtn"
+      );
 
-  const logoutBtn =
-    document.getElementById("logoutBtn");
+    const logoutBtn =
+      document.getElementById(
+        "logoutBtn"
+      );
 
-  const submitBtn =
-    document.getElementById("submitBtn");
+    const submitBtn =
+      document.getElementById(
+        "submitBtn"
+      );
 
-  if(loginBtn){
+    if(loginBtn){
 
-    loginBtn.addEventListener(
-      "click",
-      login
-    );
+      loginBtn.addEventListener(
+        "click",
+        login
+      );
 
-  }
+    }
 
-  if(logoutBtn){
+    if(logoutBtn){
 
-    logoutBtn.addEventListener(
-      "click",
-      logout
-    );
+      logoutBtn.addEventListener(
+        "click",
+        logout
+      );
 
-  }
+    }
 
-  if(submitBtn){
+    if(submitBtn){
 
-    submitBtn.addEventListener(
-      "click",
-      createOrder
-    );
+      submitBtn.addEventListener(
+        "click",
+        createOrder
+      );
 
-  }
-
-});
-window.addEventListener("DOMContentLoaded", ()=>{
-
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  const logoutBtn =
-    document.getElementById("logoutBtn");
-
-  const submitBtn =
-    document.getElementById("submitBtn");
-
-  if(loginBtn){
-
-    loginBtn.addEventListener(
-      "click",
-      login
-    );
+    }
 
   }
 
-  if(logoutBtn){
+);
 
-    logoutBtn.addEventListener(
-      "click",
-      logout
-    );
-
-  }
-
-  if(submitBtn){
-
-    submitBtn.addEventListener(
-      "click",
-      createOrder
-    );
-
-  }
-
-});
 </script>
 
 </body>
