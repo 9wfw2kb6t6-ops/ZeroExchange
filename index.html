@@ -40,6 +40,32 @@ button{
   color:white;
   width:auto;
 }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.stat-card{
+  background:#161b22;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat-card h2{
+  color:#f5b942;
+  margin-bottom:5px;
+}
+
+@media(max-width:700px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+}
 </style>
 
 </head>
@@ -63,7 +89,24 @@ Logout
 </button>
 
 <hr>
+<div class="stats">
 
+  <div class="stat-card">
+    <h2 id="totalOrders">0</h2>
+    <p>Total Orders</p>
+  </div>
+
+  <div class="stat-card">
+    <h2 id="pendingOrders">0</h2>
+    <p>Pending</p>
+  </div>
+
+  <div class="stat-card">
+    <h2 id="approvedOrders">0</h2>
+    <p>Approved</p>
+  </div>
+
+</div>
 <h3>Create Order</h3>
 
 <select id="from">
@@ -275,13 +318,27 @@ function loadOrders(){
 
       const container =
         document.getElementById("orders");
-
+let total = 0;
+let pending = 0;
+let approved = 0;
       container.innerHTML = "";
 
-      snapshot.forEach((doc)=>{
+      snapshot.forEach((total++;
+
+if(o.status === "approved"){
+  approved++;
+}else{
+  pending++;
+}
 
         const order = doc.data();
+total++;
 
+if(o.status === "approved"){
+  approved++;
+}else{
+  pending++;
+}
         container.innerHTML += `
           <div class="order">
 
