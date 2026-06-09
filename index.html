@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange REAL MVP</title>
+<title>Zero Exchange Level 2</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
 <style>
 body{
 margin:0;
-font-family:Arial;
-background:#0b1020;
+font-family:Inter;
+background:#020617;
 color:white;
 }
 
@@ -17,20 +20,11 @@ color:white;
 .page.active{display:block;}
 
 .card{
-background:#141b2d;
+background:rgba(255,255,255,0.05);
 padding:16px;
-border-radius:12px;
-margin-bottom:10px;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:8px;
-border:none;
-background:#0f172a;
-color:white;
+border-radius:16px;
+margin-bottom:12px;
+border:1px solid rgba(255,255,255,0.06);
 }
 
 button{
@@ -38,21 +32,36 @@ width:100%;
 padding:12px;
 margin-top:10px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#f5b942;
-font-weight:bold;
+font-weight:900;
 cursor:pointer;
 }
 
-.green{color:#22c55e;}
-.red{color:#ef4444;}
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:10px;
+border:none;
+background:#0f172a;
+color:white;
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAV -->
+<div class="card">
+<button onclick="nav('home')">Home</button>
+<button onclick="nav('admin')">Admin</button>
+<button onclick="nav('markets')">Markets</button>
+</div>
+
 <!-- HOME -->
-<div id="homePage" class="page active">
+<div id="home" class="page active">
+
 <div class="card">
 <h2>Balance</h2>
 <h1 id="balance">0</h1>
@@ -61,8 +70,9 @@ cursor:pointer;
 <div class="card">
 <button onclick="nav('deposit')">Deposit</button>
 <button onclick="nav('withdraw')">Withdraw</button>
-<button onclick="nav('markets')">Markets</button>
+<button onclick="nav('history')">History</button>
 </div>
+
 </div>
 
 <!-- DEPOSIT -->
@@ -78,7 +88,7 @@ cursor:pointer;
 
 <input id="damount" placeholder="Amount"/>
 
-<button onclick="deposit()">Submit</button>
+<button onclick="createDeposit()">Submit</button>
 </div>
 </div>
 
@@ -94,16 +104,32 @@ cursor:pointer;
 </select>
 
 <input id="wamount" placeholder="Amount"/>
-<input id="waddress" placeholder="Wallet"/>
+<input id="waddress" placeholder="Wallet Address"/>
 
-<button onclick="withdraw()">Submit</button>
+<button onclick="createWithdraw()">Submit</button>
+</div>
+</div>
+
+<!-- HISTORY -->
+<div id="history" class="page">
+<div class="card">
+<h3>Transactions</h3>
+<div id="tx"></div>
+</div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="page">
+<div class="card">
+<h2>Admin Panel</h2>
+<div id="adminTx"></div>
 </div>
 </div>
 
 <!-- MARKETS -->
 <div id="markets" class="page">
 <div class="card">
-<h3>Live Markets</h3>
+<h2>Live Markets</h2>
 <div id="marketBox">Loading...</div>
 </div>
 </div>
@@ -112,12 +138,14 @@ cursor:pointer;
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp
+getFirestore,
+doc,getDoc,setDoc,
+addDoc,collection,
+updateDoc,serverTimestamp,
+query,where,getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 /* FIREBASE */
 const firebaseConfig = {
@@ -132,7 +160,7 @@ const auth = getAuth(app);
 
 let user=null;
 
-/* USER INIT */
+/* INIT */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
 user=u;
@@ -141,10 +169,12 @@ const ref=doc(db,"users",u.uid);
 const snap=await getDoc(ref);
 
 if(!snap.exists()){
-await setDoc(ref,{balance:0});
+await setDoc(ref,{balance:0,role:"user"});
 }
 
 loadBalance();
+loadUserTx();
+loadAdmin();
 loadMarkets();
 });
 
@@ -152,11 +182,11 @@ loadMarkets();
 async function loadBalance(){
 const ref=doc(db,"users",user.uid);
 const snap=await getDoc(ref);
-document.getElementById("balance").innerText=snap.data().balance;
+document.getElementById("balance").innerText = snap.data().balance;
 }
 
-/* DEPOSIT */
-window.deposit=async function(){
+/* CREATE DEPOSIT */
+window.createDeposit = async function(){
 
 await addDoc(collection(db,"transactions"),{
 uid:user.uid,
@@ -170,8 +200,8 @@ createdAt:serverTimestamp()
 alert("Deposit sent");
 }
 
-/* WITHDRAW */
-window.withdraw=async function(){
+/* CREATE WITHDRAW */
+window.createWithdraw = async function(){
 
 await addDoc(collection(db,"transactions"),{
 uid:user.uid,
@@ -186,11 +216,88 @@ createdAt:serverTimestamp()
 alert("Withdraw sent");
 }
 
+/* USER TX */
+async function loadUserTx(){
+
+const q=query(collection(db,"transactions"),where("uid","==",user.uid));
+const snap=await getDocs(q);
+
+let html="";
+
+snap.forEach(d=>{
+const t=d.data();
+html+=`
+<div class="card">
+<b>${t.type}</b> - ${t.amount} ${t.coin}
+<br>Status: ${t.status}
+</div>
+`;
+});
+
+document.getElementById("tx").innerHTML=html;
+}
+
+/* ADMIN PANEL */
+async function loadAdmin(){
+
+const snap=await getDocs(collection(db,"transactions"));
+
+let html="";
+
+snap.forEach(d=>{
+const t=d.data();
+
+html+=`
+<div class="card">
+<b>${t.type.toUpperCase()}</b><br>
+${t.amount} ${t.coin}<br>
+Status: ${t.status}<br>
+
+<button onclick="approve('${d.id}',${t.amount},'${t.uid}','${t.type}')">Approve</button>
+<button onclick="reject('${d.id}')">Reject</button>
+</div>
+`;
+});
+
+document.getElementById("adminTx").innerHTML=html;
+}
+
+/* APPROVE ENGINE */
+window.approve = async function(id,amount,uid,type){
+
+const txRef=doc(db,"transactions",id);
+const userRef=doc(db,"users",uid);
+
+const userSnap=await getDoc(userRef);
+let bal=userSnap.data().balance;
+
+if(type==="deposit"){
+bal += amount;
+}
+
+if(type==="withdraw"){
+bal -= amount;
+}
+
+await updateDoc(userRef,{balance:bal});
+await updateDoc(txRef,{status:"approved"});
+
+alert("Approved");
+location.reload();
+}
+
+/* REJECT */
+window.reject = async function(id){
+const txRef=doc(db,"transactions",id);
+await updateDoc(txRef,{status:"rejected"});
+location.reload();
+}
+
 /* MARKETS */
 async function loadMarkets(){
 
-const res=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true");
-const d=await res.json();
+const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true");
+const d=await r.json();
 
 const coins=[
 ["BTC",d.bitcoin],
@@ -210,7 +317,7 @@ html+=`
 <div class="card">
 <b>${c[0]}</b><br>
 $${c[1].usd}
-<span class="${c[1].usd_24h_change>=0?'green':'red'}">
+<span style="color:${c[1].usd_24h_change>=0?'#22c55e':'#ef4444'}">
 (${c[1].usd_24h_change.toFixed(2)}%)
 </span>
 </div>
@@ -220,6 +327,7 @@ $${c[1].usd}
 document.getElementById("marketBox").innerHTML=html;
 }
 
+/* NAV */
 window.nav=(p)=>{
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(p).classList.add("active");
