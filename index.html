@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
+
 <title>Zero Exchange PRO</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
+rel="stylesheet"
+/>
 
 <style>
 
@@ -224,6 +233,7 @@ margin-top:14px;
 padding:12px;
 background:#0f172a;
 border-radius:14px;
+word-break:break-all;
 }
 
 </style>
@@ -347,6 +357,10 @@ Crypto Deposit
 
 <select id="depositCoin">
 
+<option value="USDT">
+USDT TRC20
+</option>
+
 <option value="BTC">
 BTC
 </option>
@@ -355,12 +369,16 @@ BTC
 ETH
 </option>
 
-<option value="USDT">
-USDT TRC20
-</option>
-
 <option value="TON">
 TON
+</option>
+
+<option value="BNB">
+BNB
+</option>
+
+<option value="SOL">
+SOL
 </option>
 
 </select>
@@ -382,6 +400,97 @@ Simulate Deposit
 </button>
 
 <div id="depositHistory"></div>
+
+</div>
+
+<!-- TURKISH BANK -->
+
+<div class="card">
+
+<h2>
+🇹🇷 Turkish Bank Deposit
+</h2>
+
+<div class="history">
+<div>Bank Name</div>
+<div class="small">
+Ziraat Bank
+</div>
+</div>
+
+<div class="history">
+<div>IBAN</div>
+<div class="small">
+TR42 0001 0090 1098 8248 3050 01
+</div>
+</div>
+
+<div class="history">
+<div>Account Name</div>
+<div class="small">
+NARIMAN2N ALIZADEH KORDMAHALEH
+</div>
+</div>
+
+<button
+onclick="
+navigator.clipboard.writeText(
+'TR420001009010988248305001'
+);
+alert('IBAN Copied');
+"
+>
+Copy IBAN
+</button>
+
+</div>
+
+<!-- IRANIAN BANK -->
+
+<div class="card">
+
+<h2>
+🇮🇷 Iranian Bank Deposit
+</h2>
+
+<div class="history">
+<div>Bank</div>
+<div class="small">
+TEJARAT
+</div>
+</div>
+
+<div class="history">
+<div>Card Number</div>
+<div class="small">
+5859831204847882
+</div>
+</div>
+
+<div class="history">
+<div>Sheba</div>
+<div class="small">
+IR300180000000004613967414
+</div>
+</div>
+
+<div class="history">
+<div>Owner Name</div>
+<div class="small">
+Nariman Alizadeh Kordmahaleh
+</div>
+</div>
+
+<button
+onclick="
+navigator.clipboard.writeText(
+'5859831204847882'
+);
+alert('Card Number Copied');
+"
+>
+Copy Card Number
+</button>
 
 </div>
 
@@ -580,7 +689,8 @@ const symbols = [
 "BTCUSDT",
 "ETHUSDT",
 "TONUSDT",
-"BNBUSDT"
+"BNBUSDT",
+"SOLUSDT"
 ];
 
 let html = "";
@@ -648,7 +758,9 @@ let wallet = {
 USDT:1000,
 BTC:0,
 ETH:0,
-TON:0
+TON:0,
+BNB:0,
+SOL:0
 
 };
 
@@ -690,17 +802,23 @@ wallet.USDT +
 
 const depositWallets = {
 
+USDT:
+"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
+
 BTC:
-"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+"bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
 
 ETH:
 "0x84496f0996ea96871DED409428D060dB00cb9136",
 
-USDT:
-"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
-
 TON:
-"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP"
+"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP",
+
+BNB:
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
+SOL:
+"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ"
 
 };
 
