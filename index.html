@@ -1,334 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V8</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-
+<title>Zero Exchange V1 REAL</title>
 <style>
-body{
-margin:0;
-font-family:Inter;
-background:#070b18;
-color:white;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:14px;
-background:#0f172a;
-position:sticky;
-top:0;
-}
-
-.page{display:none;padding:14px;}
-.active{display:block;}
-
-.card{
-background:rgba(255,255,255,0.05);
-padding:14px;
-border-radius:14px;
-margin-bottom:10px;
-border:1px solid rgba(255,255,255,0.06);
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:10px;
-background:#0b1224;
-color:white;
-border:none;
-}
-
-button{
-width:100%;
-padding:12px;
-margin-top:8px;
-border:none;
-border-radius:12px;
-background:#f5b942;
-font-weight:900;
-cursor:pointer;
-}
-
-.smallbtn{
-background:#ef4444;
-font-size:12px;
-padding:6px;
-margin-top:5px;
-}
+body{background:#0b1220;color:white;font-family:Arial;margin:0}
+.card{padding:14px;background:#111a2e;margin:10px;border-radius:12px}
+.price{font-size:32px;font-weight:bold}
 </style>
 </head>
-
 <body>
 
-<div class="topbar">
-<div><b>ZERO EXCHANGE V8</b></div>
-<div>REAL ENGINE+</div>
-</div>
-
-<!-- HOME -->
-<div id="home" class="page active">
 <div class="card">
-<h2>Portfolio</h2>
-<h1 id="balance">0 USDT</h1>
-
-<button onclick="nav('trade')">Trade</button>
-<button onclick="nav('book')">Order Book</button>
-<button onclick="nav('trades')">Trades</button>
-</div>
+<h2>LIVE BTC PRICE</h2>
+<div id="price" class="price">Loading...</div>
 </div>
 
-<!-- TRADE -->
-<div id="trade" class="page">
 <div class="card">
-<h3>Place Order</h3>
-
-<select id="side">
-<option value="buy">BUY</option>
-<option value="sell">SELL</option>
-</select>
-
-<input id="price" placeholder="Price"/>
-<input id="amount" placeholder="Amount"/>
-
-<button onclick="placeOrder()">Submit</button>
-</div>
+<h3>Wallet</h3>
+<div id="wallet">Loading...</div>
 </div>
 
-<!-- ORDER BOOK -->
-<div id="book" class="page">
-<div class="card">
-<h3>Order Book Depth</h3>
+<script>
+/* =========================
+   1. REAL MARKET DATA
+========================= */
+async function loadPrice(){
+const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
+const data = await res.json();
 
-<h4>BUY</h4>
-<div id="bids"></div>
-
-<h4>SELL</h4>
-<div id="asks"></div>
-</div>
-</div>
-
-<!-- TRADES -->
-<div id="trades" class="page">
-<div class="card">
-<h3>Trade Stream</h3>
-<div id="tradeBox"></div>
-</div>
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-doc,
-getDoc,
-setDoc,
-updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-/* FIREBASE */
-const app = initializeApp({
-apiKey:"YOUR_KEY",
-authDomain:"YOUR_DOMAIN",
-projectId:"YOUR_PROJECT"
-});
-
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-let user=null;
-
-/* INIT USER */
-onAuthStateChanged(auth, async (u)=>{
-if(!u) return;
-user=u;
-
-const ref=doc(db,"users",u.uid);
-const snap=await getDoc(ref);
-
-if(!snap.exists()){
-await setDoc(ref,{
-balance:1000,
-assets:{USDT:1000,BTC:0}
-});
+document.getElementById("price").innerText =
+"$ " + Number(data.price).toFixed(2);
 }
 
-loadWallet();
-start();
-});
-
-/* WALLET */
-async function loadWallet(){
-const d=(await getDoc(doc(db,"users",user.uid))).data();
-document.getElementById("balance").innerText =
-d.balance.toFixed(2)+" USDT";
-}
+setInterval(loadPrice, 2000);
+loadPrice();
 
 /* =========================
-   ORDER QUEUE SYSTEM
+   2. SIMPLE WALLET (MOCK)
 ========================= */
-let orderQueue = [];
-
-/* PLACE ORDER */
-window.placeOrder = async function(){
-
-const order = {
-uid:user.uid,
-side:side.value,
-price:Number(price.value),
-amount:Number(amount.value),
-filled:0,
-status:"open",
-ts:Date.now(),
-id:Math.random().toString(36).slice(2)
+let wallet = {
+USDT: 1000,
+BTC: 0
 };
 
-orderQueue.push(order);
-
-await addDoc(collection(db,"orders"),order);
-
+function renderWallet(){
+document.getElementById("wallet").innerHTML =
+`USDT: ${wallet.USDT} <br> BTC: ${wallet.BTC}`;
 }
 
-/* CANCEL ORDER */
-window.cancelOrder = async function(id){
-
-orderQueue = orderQueue.filter(o=>o.id!==id);
-
-}
-
-/* =========================
-   ENGINE V8 (QUEUE + MATCH)
-========================= */
-async function engine(){
-
-const snap = await getDocs(collection(db,"orders"));
-
-let buys=[];
-let sells=[];
-
-snap.forEach(d=>{
-let o=d.data();
-o.id=d.id;
-
-if(o.status==="cancelled") return;
-
-if(o.side==="buy") buys.push(o);
-if(o.side==="sell") sells.push(o);
-});
-
-/* SORT PRIORITY */
-buys.sort((a,b)=>b.price-a.price || a.ts-b.ts);
-sells.sort((a,b)=>a.price-b.price || a.ts-b.ts);
-
-/* DEPTH MAP */
-let bidLevels={}, askLevels={};
-
-for(let b of buys){
-bidLevels[b.price]=(bidLevels[b.price]||0)+(b.amount-b.filled);
-}
-
-for(let s of sells){
-askLevels[s.price]=(askLevels[s.price]||0)+(s.amount-s.filled);
-}
-
-document.getElementById("bids").innerHTML =
-Object.entries(bidLevels).map(([p,a])=>`🟢 ${p} | ${a.toFixed(2)}`).join("<br>");
-
-document.getElementById("asks").innerHTML =
-Object.entries(askLevels).map(([p,a])=>`🔴 ${p} | ${a.toFixed(2)}`).join("<br>");
-
-/* MATCH ENGINE */
-for(let buy of buys){
-for(let sell of sells){
-
-if(buy.price >= sell.price &&
-buy.filled < buy.amount &&
-sell.filled < sell.amount){
-
-let qty = Math.min(
-buy.amount - buy.filled,
-sell.amount - sell.filled
-);
-
-/* fill */
-buy.filled += qty;
-sell.filled += qty;
-
-/* trade */
-await addDoc(collection(db,"trades"),{
-buyId:buy.id,
-sellId:sell.id,
-price:sell.price,
-amount:qty,
-ts:Date.now()
-});
-
-/* wallet */
-await updateWallet(buy.uid,"buy",qty,buy.price);
-await updateWallet(sell.uid,"sell",qty,sell.price);
-
-/* update orders */
-await updateDoc(doc(db,"orders",buy.id),buy);
-await updateDoc(doc(db,"orders",sell.id),sell);
-
-}
-}
-}
-
-/* TRADE STREAM */
-const tSnap = await getDocs(collection(db,"trades"));
-
-document.getElementById("tradeBox").innerHTML =
-tSnap.docs.map(d=>{
-let t=d.data();
-return `⚡ ${t.amount} @ ${t.price}`;
-}).join("<br>");
-
-}
-
-/* WALLET */
-async function updateWallet(uid,side,amount,price){
-
-const ref=doc(db,"users",uid);
-const snap=await getDoc(ref);
-let u=snap.data();
-
-if(side==="buy"){
-u.balance -= amount;
-u.assets.BTC += amount/price;
-}
-
-if(side==="sell"){
-u.balance += amount;
-u.assets.BTC -= amount/price;
-}
-
-await updateDoc(ref,u);
-}
-
-/* LOOP */
-function start(){
-setInterval(engine,2000);
-}
-
-/* NAV */
-window.nav=(p)=>{
-document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-document.getElementById(p).classList.add("active");
-};
-
+renderWallet();
 </script>
 
 </body>
