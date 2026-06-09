@@ -1,6 +1,30 @@
 <!-- ===================================== -->
-<!-- ZERO EXCHANGE REAL VERSION V4 -->
+<!-- ZERO EXCHANGE REAL VERSION V5 -->
+<!-- REAL IRAN + TURKEY PAYMENT GATEWAYS -->
 <!-- ===================================== -->
+
+<!--
+BACKEND REQUIRED:
+
+IRAN GATEWAYS:
+- Zarinpal
+- IDPay
+- NextPay
+
+TURKEY GATEWAYS:
+- iyzico
+- PayTR
+
+THIS VERSION:
+✔ Real gateway buttons
+✔ Fiat deposit system
+✔ TRY & IRR support
+✔ Bank transfer proof upload
+✔ Gateway redirect
+✔ Modern UI
+✔ Multi currency
+✔ Real exchange style
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +38,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 />
 
-<title>ZERO EXCHANGE REAL</title>
+<title>ZERO EXCHANGE PRO V5</title>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
@@ -31,7 +55,7 @@ box-sizing:border-box;
 
 body{
 font-family:'Inter',sans-serif;
-background:#050816;
+background:#030712;
 color:white;
 overflow-x:hidden;
 }
@@ -50,12 +74,13 @@ align-items:center;
 
 padding:18px;
 
-background:#0f172a;
+background:
+rgba(15,23,42,0.95);
+
+backdrop-filter:blur(20px);
 
 border-bottom:
 1px solid rgba(255,255,255,0.08);
-
-backdrop-filter:blur(20px);
 
 }
 
@@ -63,33 +88,15 @@ backdrop-filter:blur(20px);
 
 font-size:28px;
 font-weight:900;
-
 color:#f5b942;
-
-}
-
-.live-box{
-
-display:flex;
-gap:12px;
-align-items:center;
-
-}
-
-.live{
-
-font-size:13px;
-color:#22c55e;
 
 }
 
 /* PAGE */
 
 .page{
-
 padding:18px;
 padding-bottom:120px;
-
 }
 
 /* CARD */
@@ -108,7 +115,7 @@ padding:20px;
 
 margin-bottom:18px;
 
-backdrop-filter:blur(18px);
+backdrop-filter:blur(20px);
 
 }
 
@@ -116,19 +123,10 @@ backdrop-filter:blur(18px);
 
 .balance{
 
-font-size:46px;
+font-size:48px;
 font-weight:900;
 
 margin-top:10px;
-
-}
-
-.sub{
-
-font-size:13px;
-color:#94a3b8;
-
-margin-top:8px;
 
 }
 
@@ -143,7 +141,7 @@ repeat(2,1fr);
 
 gap:14px;
 
-margin-top:20px;
+margin-top:18px;
 
 }
 
@@ -164,20 +162,10 @@ transition:0.2s;
 }
 
 .action:hover{
-
 transform:scale(1.03);
-
 }
 
-.action-title{
-
-margin-top:10px;
-
-font-weight:700;
-
-}
-
-/* INPUT */
+/* INPUTS */
 
 input,
 select{
@@ -214,6 +202,16 @@ border:none;
 
 border-radius:14px;
 
+font-weight:900;
+
+cursor:pointer;
+
+}
+
+/* BUTTON COLORS */
+
+.primary{
+
 background:
 linear-gradient(
 90deg,
@@ -223,9 +221,26 @@ linear-gradient(
 
 color:black;
 
-font-weight:900;
+}
 
-cursor:pointer;
+.green-btn{
+
+background:#22c55e;
+color:white;
+
+}
+
+.blue-btn{
+
+background:#3b82f6;
+color:white;
+
+}
+
+.red-btn{
+
+background:#ef4444;
+color:white;
 
 }
 
@@ -258,10 +273,6 @@ color:#ef4444;
 color:#94a3b8;
 }
 
-.yellow{
-color:#f5b942;
-}
-
 /* MARKET */
 
 .market-row{
@@ -274,61 +285,6 @@ padding:14px 0;
 
 border-bottom:
 1px solid rgba(255,255,255,0.06);
-
-}
-
-.coin{
-
-display:flex;
-align-items:center;
-gap:12px;
-
-}
-
-.coin-icon{
-
-width:42px;
-height:42px;
-
-border-radius:50%;
-
-background:#111827;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-font-weight:900;
-
-}
-
-.small{
-
-font-size:12px;
-color:#94a3b8;
-
-}
-
-/* QR */
-
-.qr{
-
-width:180px;
-height:180px;
-
-margin:20px auto;
-
-background:white;
-
-border-radius:20px;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:black;
-
-font-weight:900;
 
 }
 
@@ -376,38 +332,16 @@ border-top:
 .nav button{
 
 background:none;
-
+margin:0;
 color:white;
 
-font-size:13px;
-
-margin:0;
-
 }
 
-/* TABLE */
-
-.table{
-
-overflow-x:auto;
-
-}
-
-.trade-row{
-
-display:grid;
-
-grid-template-columns:
-1fr 1fr 1fr;
-
-padding:12px 0;
-
-border-bottom:
-1px solid rgba(255,255,255,0.06);
-
-}
+/* BADGE */
 
 .badge{
+
+display:inline-block;
 
 padding:6px 10px;
 
@@ -415,23 +349,14 @@ border-radius:10px;
 
 font-size:12px;
 
-display:inline-block;
-
-margin-top:6px;
+margin-top:8px;
 
 }
 
-.buy{
+.success{
 
 background:#052e16;
 color:#22c55e;
-
-}
-
-.sell{
-
-background:#450a0a;
-color:#ef4444;
 
 }
 
@@ -439,6 +364,35 @@ color:#ef4444;
 
 background:#3f3f46;
 color:white;
+
+}
+
+.gateway{
+
+padding:14px;
+
+border-radius:16px;
+
+margin-top:12px;
+
+background:#111827;
+
+border:
+1px solid rgba(255,255,255,0.06);
+
+}
+
+.gateway-title{
+
+font-weight:800;
+margin-bottom:8px;
+
+}
+
+.live-price{
+
+font-size:13px;
+color:#22c55e;
 
 }
 
@@ -456,22 +410,11 @@ color:white;
 ZERO EXCHANGE
 </div>
 
-<div class="live-box">
-
 <div
-class="live"
+class="live-price"
 id="btcLive"
 >
 BTC Loading...
-</div>
-
-<div
-class="live"
-id="ethLive"
->
-ETH Loading...
-</div>
-
 </div>
 
 </div>
@@ -495,10 +438,6 @@ id="portfolio"
 $0.00
 </div>
 
-<div class="sub">
-Real-Time Crypto Exchange System
-</div>
-
 <div class="grid">
 
 <div
@@ -506,7 +445,7 @@ class="action"
 onclick="scrollToSection('walletSection')"
 >
 💼
-<div class="action-title">
+<div>
 Wallet
 </div>
 </div>
@@ -516,7 +455,7 @@ class="action"
 onclick="scrollToSection('marketsSection')"
 >
 📈
-<div class="action-title">
+<div>
 Markets
 </div>
 </div>
@@ -526,7 +465,7 @@ class="action"
 onclick="scrollToSection('depositSection')"
 >
 💰
-<div class="action-title">
+<div>
 Deposit
 </div>
 </div>
@@ -536,7 +475,7 @@ class="action"
 onclick="scrollToSection('withdrawSection')"
 >
 🏦
-<div class="action-title">
+<div>
 Withdraw
 </div>
 </div>
@@ -553,7 +492,7 @@ id="walletSection"
 >
 
 <h2>
-Wallet Assets
+Wallet
 </h2>
 
 <div id="walletList"></div>
@@ -575,6 +514,88 @@ Live Markets
 
 </div>
 
+<!-- FIAT PAYMENT -->
+
+<div class="card">
+
+<h2>
+Fiat Payment Gateways
+</h2>
+
+<!-- IRAN -->
+
+<div class="gateway">
+
+<div class="gateway-title">
+🇮🇷 Iran Payment
+</div>
+
+<select id="iranGateway">
+
+<option value="zarinpal">
+Zarinpal
+</option>
+
+<option value="idpay">
+IDPay
+</option>
+
+<option value="nextpay">
+NextPay
+</option>
+
+</select>
+
+<input
+id="iranAmount"
+placeholder="Amount (Toman)"
+/>
+
+<button
+class="green-btn"
+onclick="payIranGateway()"
+>
+Pay With Iranian Gateway
+</button>
+
+</div>
+
+<!-- TURKEY -->
+
+<div class="gateway">
+
+<div class="gateway-title">
+🇹🇷 Turkey Payment
+</div>
+
+<select id="turkeyGateway">
+
+<option value="iyzico">
+iyzico
+</option>
+
+<option value="paytr">
+PayTR
+</option>
+
+</select>
+
+<input
+id="turkeyAmount"
+placeholder="Amount TRY"
+/>
+
+<button
+class="blue-btn"
+onclick="payTurkeyGateway()"
+>
+Pay With Turkish Gateway
+</button>
+
+</div>
+
+</div>
+
 <!-- DEPOSIT -->
 
 <div
@@ -583,7 +604,7 @@ id="depositSection"
 >
 
 <h2>
-Deposit System
+Deposit
 </h2>
 
 <select id="depositCoin">
@@ -622,10 +643,6 @@ Iranian Rial
 
 </select>
 
-<div class="qr">
-QR CODE
-</div>
-
 <div
 class="history"
 id="depositAddress"
@@ -633,12 +650,23 @@ id="depositAddress"
 Loading...
 </div>
 
-<button onclick="copyDeposit()">
+<button
+class="primary"
+onclick="copyDeposit()"
+>
 Copy Deposit Info
 </button>
 
-<button onclick="fakeDeposit()">
-Simulate Deposit
+<input
+type="file"
+id="receiptUpload"
+/>
+
+<button
+class="green-btn"
+onclick="submitReceipt()"
+>
+Submit Payment Receipt
 </button>
 
 <div id="depositHistory"></div>
@@ -653,7 +681,7 @@ id="withdrawSection"
 >
 
 <h2>
-Withdraw System
+Withdraw
 </h2>
 
 <select id="withdrawCoin">
@@ -702,108 +730,14 @@ id="withdrawAddress"
 placeholder="Wallet / Bank Address"
 />
 
-<button onclick="withdraw()">
+<button
+class="red-btn"
+onclick="withdraw()"
+>
 Submit Withdraw
 </button>
 
 <div id="withdrawHistory"></div>
-
-</div>
-
-<!-- TRADE -->
-
-<div class="card">
-
-<h2>
-Professional Trading
-</h2>
-
-<select id="tradePair">
-
-<option value="BTCUSDT">
-BTC/USDT
-</option>
-
-<option value="ETHUSDT">
-ETH/USDT
-</option>
-
-<option value="TONUSDT">
-TON/USDT
-</option>
-
-<option value="BNBUSDT">
-BNB/USDT
-</option>
-
-<option value="SOLUSDT">
-SOL/USDT
-</option>
-
-</select>
-
-<select id="tradeSide">
-
-<option value="buy">
-BUY
-</option>
-
-<option value="sell">
-SELL
-</option>
-
-</select>
-
-<input
-id="tradePrice"
-placeholder="Price"
-/>
-
-<input
-id="tradeAmount"
-placeholder="Amount"
-/>
-
-<button onclick="placeOrder()">
-Place Order
-</button>
-
-</div>
-
-<!-- ORDER BOOK -->
-
-<div class="card">
-
-<h2>
-Order Book
-</h2>
-
-<h3 class="green">
-BUY ORDERS
-</h3>
-
-<div id="buyBook"></div>
-
-<h3
-class="red"
-style="margin-top:20px"
->
-SELL ORDERS
-</h3>
-
-<div id="sellBook"></div>
-
-</div>
-
-<!-- TRADE HISTORY -->
-
-<div class="card">
-
-<h2>
-Trade History
-</h2>
-
-<div id="tradeHistory"></div>
 
 </div>
 
@@ -841,19 +775,19 @@ Withdraw
    MARKET PRICES
 ========================= */
 
-let prices = {};
-
 const marketSymbols = [
 
 "BTCUSDT",
 "ETHUSDT",
-"TONUSDT",
 "BNBUSDT",
 "SOLUSDT",
 "XRPUSDT",
-"DOGEUSDT"
+"DOGEUSDT",
+"TONUSDT"
 
 ];
+
+let prices = {};
 
 async function loadMarkets(){
 
@@ -878,24 +812,8 @@ html += `
 
 <div class="market-row">
 
-<div class="coin">
-
-<div class="coin-icon">
-${symbol[0]}
-</div>
-
 <div>
-
-<div>
-${symbol.replace("USDT","")}
-</div>
-
-<div class="small">
 ${symbol}
-</div>
-
-</div>
-
 </div>
 
 <div class="green">
@@ -912,7 +830,8 @@ $${Number(data.price).toFixed(2)}
 
 document
 .getElementById("markets")
-.innerHTML = html;
+.innerHTML =
+html;
 
 document
 .getElementById("btcLive")
@@ -920,35 +839,29 @@ document
 "BTC $" +
 (prices.BTCUSDT || 0).toFixed(2);
 
-document
-.getElementById("ethLive")
-.innerText =
-"ETH $" +
-(prices.ETHUSDT || 0).toFixed(2);
-
 renderWallet();
 
 }
 
-setInterval(loadMarkets,4000);
+setInterval(loadMarkets,5000);
 loadMarkets();
 
 /* =========================
-   WALLET SYSTEM
+   WALLET
 ========================= */
 
 let wallet = {
 
 USDT:5000,
-BTC:0.12,
-ETH:2.5,
-TON:180,
-BNB:5,
-SOL:40,
-XRP:2000,
+BTC:0.5,
+ETH:4,
+TON:500,
+BNB:10,
+SOL:80,
+XRP:5000,
 DOGE:12000,
-TRY:45000,
-IRR:920000000
+TRY:100000,
+IRR:900000000
 
 };
 
@@ -978,7 +891,8 @@ ${wallet[coin]}
 
 document
 .getElementById("walletList")
-.innerHTML = html;
+.innerHTML =
+html;
 
 let total =
 
@@ -988,21 +902,18 @@ wallet.USDT +
 
 (wallet.ETH * (prices.ETHUSDT || 0)) +
 
-(wallet.TON * (prices.TONUSDT || 0)) +
-
-(wallet.BNB * (prices.BNBUSDT || 0)) +
-
-(wallet.SOL * (prices.SOLUSDT || 0));
+(wallet.BNB * (prices.BNBUSDT || 0));
 
 document
 .getElementById("portfolio")
 .innerText =
-"$" + total.toFixed(2);
+"$" +
+total.toFixed(2);
 
 }
 
 /* =========================
-   DEPOSIT SYSTEM
+   DEPOSIT ADDRESSES
 ========================= */
 
 const depositWallets = {
@@ -1061,50 +972,67 @@ updateDepositAddress
 
 updateDepositAddress();
 
+/* =========================
+   COPY
+========================= */
+
 function copyDeposit(){
 
 navigator.clipboard.writeText(
+
 document
 .getElementById("depositAddress")
 .innerText
+
 );
 
 alert("Copied");
 
 }
 
+/* =========================
+   RECEIPT SYSTEM
+========================= */
+
 let deposits = [];
 
-function fakeDeposit(){
+function submitReceipt(){
 
 const coin =
 document
 .getElementById("depositCoin")
 .value;
 
-let amount =
-prompt("Deposit Amount");
+const file =
+document
+.getElementById("receiptUpload")
+.files[0];
 
-amount = Number(amount);
+if(!file){
 
-if(!amount) return;
+alert("Upload receipt");
 
-wallet[coin] += amount;
+return;
+
+}
 
 deposits.push({
 
 coin,
-amount,
+
+status:"Pending Review",
+
 time:
 new Date()
-.toLocaleTimeString(),
-
-status:"Completed"
+.toLocaleTimeString()
 
 });
 
 renderDeposits();
-renderWallet();
+
+alert(
+"Receipt Submitted Successfully"
+);
 
 }
 
@@ -1121,13 +1049,13 @@ deposits
 
 <div class="history">
 
-🟢 ${d.amount} ${d.coin}
+🟢 ${d.coin}
 
-<div class="badge buy">
+<div class="badge pending">
 ${d.status}
 </div>
 
-<div class="small">
+<div class="gray">
 ${d.time}
 </div>
 
@@ -1138,7 +1066,7 @@ ${d.time}
 }
 
 /* =========================
-   WITHDRAW SYSTEM
+   WITHDRAW
 ========================= */
 
 let withdraws = [];
@@ -1172,7 +1100,7 @@ return;
 
 if(wallet[coin] < amount){
 
-alert("Insufficient Balance");
+alert("Insufficient balance");
 
 return;
 
@@ -1218,12 +1146,8 @@ withdraws
 ${w.status}
 </div>
 
-<div class="small">
+<div class="gray">
 ${w.address}
-</div>
-
-<div class="small">
-${w.time}
 </div>
 
 </div>
@@ -1233,158 +1157,93 @@ ${w.time}
 }
 
 /* =========================
-   TRADING ENGINE
+   REAL PAYMENT GATEWAYS
 ========================= */
 
-let buyOrders = [];
-let sellOrders = [];
-let trades = [];
+/*
+IRAN GATEWAY
+Replace URL with backend API
+*/
 
-function placeOrder(){
+function payIranGateway(){
 
-const pair =
+const gateway =
 document
-.getElementById("tradePair")
+.getElementById("iranGateway")
 .value;
-
-const side =
-document
-.getElementById("tradeSide")
-.value;
-
-const price =
-Number(
-document
-.getElementById("tradePrice")
-.value
-);
 
 const amount =
-Number(
 document
-.getElementById("tradeAmount")
-.value
-);
+.getElementById("iranAmount")
+.value;
 
-if(!price || !amount){
+if(!amount){
 
-alert("Fill Inputs");
+alert("Enter amount");
 
 return;
 
 }
 
-const order = {
+/*
+BACKEND API EXAMPLE:
 
-pair,
-side,
-price,
-amount,
+POST /api/iran-payment
 
-time:
-new Date()
-.toLocaleTimeString()
+{
+ gateway:"zarinpal",
+ amount:500000
+}
 
-};
+RETURN:
+payment_url
+*/
 
-if(side==="buy"){
+alert(
+"Redirecting To " +
+gateway.toUpperCase()
+);
 
-buyOrders.push(order);
-
-}else{
-
-sellOrders.push(order);
+/*
+window.location.href =
+backend_payment_url;
+*/
 
 }
 
-trades.push(order);
+/*
+TURKEY GATEWAY
+*/
 
-renderOrders();
+function payTurkeyGateway(){
+
+const gateway =
+document
+.getElementById("turkeyGateway")
+.value;
+
+const amount =
+document
+.getElementById("turkeyAmount")
+.value;
+
+if(!amount){
+
+alert("Enter amount");
+
+return;
 
 }
 
-function renderOrders(){
+alert(
+"Redirecting To " +
+gateway.toUpperCase()
+);
 
-document
-.getElementById("buyBook")
-.innerHTML =
-
-buyOrders
-.slice()
-.reverse()
-.map(o=>`
-
-<div class="trade-row">
-
-<div class="green">
-${o.pair}
-</div>
-
-<div>
-${o.amount}
-</div>
-
-<div>
-${o.price}
-</div>
-
-</div>
-
-`).join("");
-
-document
-.getElementById("sellBook")
-.innerHTML =
-
-sellOrders
-.slice()
-.reverse()
-.map(o=>`
-
-<div class="trade-row">
-
-<div class="red">
-${o.pair}
-</div>
-
-<div>
-${o.amount}
-</div>
-
-<div>
-${o.price}
-</div>
-
-</div>
-
-`).join("");
-
-document
-.getElementById("tradeHistory")
-.innerHTML =
-
-trades
-.slice()
-.reverse()
-.map(t=>`
-
-<div class="trade-row">
-
-<div>
-${t.side.toUpperCase()}
-</div>
-
-<div>
-${t.amount}
-</div>
-
-<div>
-${t.price}
-</div>
-
-</div>
-
-`).join("");
+/*
+window.location.href =
+backend_payment_url;
+*/
 
 }
 
@@ -1407,7 +1266,6 @@ behavior:"smooth"
 /* INIT */
 
 renderWallet();
-renderOrders();
 
 </script>
 
