@@ -1,1473 +1,205 @@
-<!-- ===================================== -->
-<!-- ZERO EXCHANGE V11 ULTIMATE VERSION -->
-<!-- ===================================== -->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zero Exchange V12</title>
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
-
-<title>Zero Exchange</title>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-rel="stylesheet"
-/>
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
-
+margin:0;
 font-family:'Inter',sans-serif;
-
-background:
-linear-gradient(
-180deg,
-#020617,
-#08112b
-);
-
+background:linear-gradient(180deg,#020617,#08112b);
 color:white;
-
-overflow-x:hidden;
-
 }
 
-/* AUTH */
-
-#authPage{
-
-position:fixed;
-inset:0;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-background:#020617;
-
-z-index:99999;
-
-padding:20px;
-
-}
-
-.auth-card{
-
-width:100%;
-max-width:400px;
-
-background:
-rgba(255,255,255,0.04);
-
-border:
-1px solid rgba(255,255,255,0.08);
-
-padding:35px;
-
-border-radius:30px;
-
-backdrop-filter:blur(20px);
-
-}
-
-.logo{
-
-font-size:46px;
-font-weight:900;
-
-text-align:center;
-
-margin-bottom:28px;
-
-background:
-linear-gradient(
-90deg,
-#f5b942,
-#ffe08a
-);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-}
-
-input,
-select{
-
-width:100%;
-
-padding:16px;
-
-margin-top:14px;
-
-border:none;
-
-border-radius:16px;
-
-background:#0f172a;
-
-color:white;
-
-font-size:15px;
-
-outline:none;
-
-}
-
-.auth-btn{
-
-width:100%;
-
-padding:16px;
-
-margin-top:18px;
-
-border:none;
-
-border-radius:16px;
-
-background:
-linear-gradient(
-90deg,
-#f5b942,
-#ffe08a
-);
-
-font-weight:900;
-
-color:black;
-
-cursor:pointer;
-
-font-size:16px;
-
-}
-
-.switch-btn{
-
-margin-top:18px;
-
-text-align:center;
-
-color:#94a3b8;
-
-cursor:pointer;
-
-}
-
-/* APP */
-
-#app{
-
-display:none;
-
-padding-bottom:120px;
-
-}
-
-/* HEADER */
-
-.header{
-
-position:sticky;
-top:0;
-
-z-index:999;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:18px 20px;
-
-background:
-rgba(2,6,23,0.92);
-
-backdrop-filter:blur(18px);
-
-border-bottom:
-1px solid rgba(255,255,255,0.06);
-
-}
-
-.header-left{
-
-display:flex;
-align-items:center;
-gap:14px;
-
-}
-
-.avatar{
-
-width:54px;
-height:54px;
-
-border-radius:50%;
-
-background:
-linear-gradient(
-135deg,
-#f5b942,
-#ffe08a
-);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-font-size:24px;
-font-weight:900;
-
-color:black;
-
-}
-
-.title{
-
-font-size:30px;
-font-weight:900;
-
-}
-
-.sub{
-
-font-size:14px;
-color:#94a3b8;
-
-}
-
-.logout-btn{
-
-width:52px;
-height:52px;
-
-border:none;
-
-border-radius:18px;
-
-background:#ef4444;
-
-color:white;
-
-font-size:20px;
-
-cursor:pointer;
-
-}
-
-/* PAGE */
-
-.page{
-
-display:none;
-
-padding:20px;
-
-}
-
-.page.active{
-
-display:block;
-
-}
-
-/* CARD */
+.page{display:none;padding:20px;}
+.page.active{display:block;}
 
 .card{
-
-background:
-rgba(255,255,255,0.04);
-
-border:
-1px solid rgba(255,255,255,0.06);
-
-border-radius:30px;
-
-padding:24px;
-
-margin-bottom:20px;
-
-backdrop-filter:blur(18px);
-
-}
-
-/* BALANCE */
-
-.balance{
-
-font-size:62px;
-font-weight:900;
-
-margin-top:10px;
-
-}
-
-.balance-sub{
-
-margin-top:10px;
-
-font-size:18px;
-
-color:#94a3b8;
-
-}
-
-/* ACTIONS */
-
-.actions{
-
-display:grid;
-
-grid-template-columns:
-repeat(2,1fr);
-
-gap:16px;
-
-margin-top:24px;
-
-}
-
-.action{
-
-background:
-rgba(255,255,255,0.04);
-
-padding:28px 12px;
-
-border-radius:24px;
-
-text-align:center;
-
-cursor:pointer;
-
-transition:0.2s;
-
-}
-
-.action i{
-
-font-size:34px;
-
-margin-bottom:14px;
-
-color:#f5b942;
-
-}
-
-.action div{
-
-font-size:18px;
-
-}
-
-/* MARKET */
-
-.market{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:18px 0;
-
-border-bottom:
-1px solid rgba(255,255,255,0.05);
-
-}
-
-.coin{
-
-display:flex;
-align-items:center;
-gap:14px;
-
-}
-
-.coin-icon{
-
-width:50px;
-height:50px;
-
-border-radius:50%;
-
-background:#111827;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-font-weight:900;
-
-}
-
-.green{
-
-color:#22c55e;
-
-font-weight:700;
-
-}
-
-/* BOX */
-
-.wallet-box{
-
-background:#0f172a;
-
-padding:18px;
-
-border-radius:18px;
-
-margin-top:14px;
-
-word-break:break-all;
-
-}
-
-/* BUTTON */
-
-.main-btn{
-
-width:100%;
-
-padding:16px;
-
-border:none;
-
-border-radius:16px;
-
-margin-top:16px;
-
-background:
-linear-gradient(
-90deg,
-#f5b942,
-#ffe08a
-);
-
-font-weight:900;
-
-color:black;
-
-cursor:pointer;
-
-}
-
-/* NAV */
-
-.bottom-nav{
-
-position:fixed;
-
-bottom:0;
-left:0;
-
-width:100%;
-
-display:grid;
-
-grid-template-columns:
-repeat(5,1fr);
-
-padding:10px 0;
-
-background:
-rgba(2,6,23,0.96);
-
-border-top:
-1px solid rgba(255,255,255,0.06);
-
-backdrop-filter:blur(18px);
-
-z-index:9999;
-
-}
-
-.nav-btn{
-
-background:none;
-border:none;
-
-display:flex;
-flex-direction:column;
-
-align-items:center;
-
-gap:6px;
-
-color:#94a3b8;
-
-font-size:12px;
-
-cursor:pointer;
-
-}
-
-.nav-btn i{
-
-font-size:22px;
-
-}
-
-.nav-btn.active{
-
-color:#f5b942;
-
-}
-
-.qr{
-
-width:180px;
-height:180px;
-
-margin:20px auto;
-
-background:white;
-
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.06);
 border-radius:20px;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:black;
-
-font-weight:900;
-
+padding:20px;
+margin-bottom:15px;
 }
 
-.history-item{
-
-padding:16px 0;
-
-border-bottom:
-1px solid rgba(255,255,255,0.06);
-
+button{
+cursor:pointer;
 }
-
-.status{
-
-margin-top:8px;
-
-display:inline-block;
-
-padding:6px 12px;
-
-border-radius:10px;
-
-background:#14532d;
-
-color:#22c55e;
-
-font-size:13px;
-
-}
-
-.red{
-
-background:#450a0a;
-color:#ef4444;
-}
-
 </style>
-
 </head>
 
 <body>
 
-<!-- AUTH -->
-
-<div id="authPage">
-
-<div class="auth-card">
-
-<div class="logo">
-ZERO X
-</div>
-
-<input
-id="email"
-type="email"
-placeholder="Email"
-/>
-
-<input
-id="password"
-type="password"
-placeholder="Password"
-/>
-
-<button
-class="auth-btn"
-id="loginBtn"
->
-Login
-</button>
-
-<div
-class="switch-btn"
-id="registerBtn"
->
-Create Account
-</div>
-
-</div>
-
-</div>
-
-<!-- APP -->
-
-<div id="app">
-
-<!-- HEADER -->
-
-<div class="header">
-
-<div class="header-left">
-
-<div class="avatar">
-Z
-</div>
-
-<div>
-
-<div class="title">
-Zero Exchange
-</div>
-
-<div class="sub">
-Global Crypto Exchange
-</div>
-
-</div>
-
-</div>
-
-<button
-class="logout-btn"
-id="logoutBtn"
->
-<i class="fa-solid fa-right-from-bracket"></i>
-</button>
-
-</div>
-
 <!-- HOME -->
-
-<div
-class="page active"
-id="homePage"
->
-
+<div id="homePage" class="page active">
 <div class="card">
+<h2>Portfolio</h2>
+
+<div style="font-size:40px;font-weight:900">
+<span id="balance">Loading...</span>
+</div>
 
 <div style="color:#94a3b8">
-Portfolio Balance
+USD: <span id="usdBalance">-</span>
+</div>
 </div>
 
-<div class="balance">
-₺245,912
-</div>
-
-<div class="balance-sub">
-≈ $7,490 USD
-</div>
-
-<div class="actions">
-
-<div
-class="action"
-onclick="switchPage('walletPage')"
->
-<i class="fa-solid fa-wallet"></i>
-<div>Wallet</div>
-</div>
-
-<div
-class="action"
-onclick="switchPage('depositPage')"
->
-<i class="fa-solid fa-arrow-down"></i>
-<div>Deposit</div>
-</div>
-
-<div
-class="action"
-onclick="switchPage('withdrawPage')"
->
-<i class="fa-solid fa-arrow-up"></i>
-<div>Withdraw</div>
-</div>
-
-<div
-class="action"
-onclick="switchPage('marketsPage')"
->
-<i class="fa-solid fa-chart-line"></i>
-<div>Markets</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- MARKETS -->
-
-<div
-class="page"
-id="marketsPage"
->
-
-<div class="card">
-
-<h2 style="margin-bottom:20px">
-Live Markets
-</h2>
-
-<div id="markets"></div>
-
-</div>
-
-</div>
-
-<!-- WALLET -->
-
-<div
-class="page"
-id="walletPage"
->
-
-<div class="card">
-
-<h2>
-Assets
-</h2>
-
-<div class="wallet-box">
-BTC — 0.214 BTC ≈ $14,000
-</div>
-
-<div class="wallet-box">
-ETH — 1.82 ETH ≈ $6,200
-</div>
-
-<div class="wallet-box">
-USDT — 4,220 USDT
-</div>
-
-<div class="wallet-box">
-TON — 502 TON
-</div>
-
-<div class="wallet-box">
-BNB — 4.1 BNB
-</div>
-
-<div class="wallet-box">
-DOGE — 21,400 DOGE
-</div>
-
-<div class="wallet-box">
-XRP — 4,000 XRP
-</div>
-
-<div class="wallet-box">
-SOL — 48 SOL
-</div>
-
-</div>
-
+<button onclick="switchPage('depositPage')">Deposit</button>
+<button onclick="switchPage('withdrawPage')">Withdraw</button>
 </div>
 
 <!-- DEPOSIT -->
-
-<div
-class="page"
-id="depositPage"
->
-
+<div id="depositPage" class="page">
 <div class="card">
+<h2>Deposit Request</h2>
 
-<h2>
-💰 Crypto Deposit
-</h2>
-
-<select id="walletSelector">
-
-<option>USDT TRC20</option>
-<option>USDT ERC20</option>
-<option>USDT BEP20</option>
+<select id="depositCoin">
+<option>USDT</option>
 <option>BTC</option>
 <option>ETH</option>
-<option>TON</option>
-<option>BNB</option>
-<option>SOL</option>
-<option>XRP</option>
-<option>DOGE</option>
-<option>LTC</option>
-<option>TRX</option>
-
 </select>
 
-<div class="qr">
-QR CODE
+<input id="depositAmount" placeholder="Amount"/>
+
+<button onclick="createDeposit()">Submit Deposit Request</button>
 </div>
-
-<div
-class="wallet-box"
-id="walletAddress"
->
-TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
-</div>
-
-<button
-class="main-btn"
-id="copyWalletBtn"
->
-Copy Wallet Address
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>
-🇹🇷 Turkish Bank
-</h2>
-
-<div class="wallet-box">
-Bank: Ziraat Bank
-</div>
-
-<div class="wallet-box">
-IBAN:
-TR42 0001 0090 1098 8248 3050 01
-</div>
-
-<div class="wallet-box">
-Name:
-NARIMAN2N ALIZADEH KORDMAHALEH
-</div>
-
-<button
-class="main-btn"
-onclick="copyText('TR420001009010988248305001')"
->
-Copy IBAN
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>
-🇮🇷 Iranian Bank
-</h2>
-
-<div class="wallet-box">
-Bank: Tejarat
-</div>
-
-<div class="wallet-box">
-Card:
-5859831204847882
-</div>
-
-<div class="wallet-box">
-Sheba:
-IR300180000000004613967414
-</div>
-
-<button
-class="main-btn"
-onclick="copyText('5859831204847882')"
->
-Copy Card Number
-</button>
-
-</div>
-
 </div>
 
 <!-- WITHDRAW -->
-
-<div
-class="page"
-id="withdrawPage"
->
-
+<div id="withdrawPage" class="page">
 <div class="card">
+<h2>Withdraw Request</h2>
 
-<h2>
-Withdraw Crypto
-</h2>
-
-<select>
-
-<option>USDT TRC20</option>
+<select id="withdrawCoin">
+<option>USDT</option>
 <option>BTC</option>
 <option>ETH</option>
-<option>TON</option>
-<option>BNB</option>
-<option>SOL</option>
-
 </select>
 
-<input
-type="number"
-placeholder="Amount"
-/>
+<input id="withdrawAmount" placeholder="Amount"/>
+<input id="withdrawAddress" placeholder="Wallet Address"/>
 
-<input
-type="text"
-placeholder="Wallet Address"
-/>
-
-<button class="main-btn">
-Submit Withdraw
-</button>
-
+<button onclick="createWithdraw()">Submit Withdraw Request</button>
 </div>
-
-<div class="card">
-
-<h2>
-Withdrawal History
-</h2>
-
-<div class="history-item">
-USDT — 500
-<div class="status">
-Completed
-</div>
-</div>
-
-<div class="history-item">
-BTC — 0.01
-<div class="status red">
-Pending
-</div>
-</div>
-
-</div>
-
-</div>
-
-<!-- NAV -->
-
-<div class="bottom-nav">
-
-<button
-class="nav-btn active"
-data-page="homePage"
->
-<i class="fa-solid fa-house"></i>
-Home
-</button>
-
-<button
-class="nav-btn"
-data-page="marketsPage"
->
-<i class="fa-solid fa-chart-line"></i>
-Markets
-</button>
-
-<button
-class="nav-btn"
-data-page="walletPage"
->
-<i class="fa-solid fa-wallet"></i>
-Wallet
-</button>
-
-<button
-class="nav-btn"
-data-page="depositPage"
->
-<i class="fa-solid fa-building-columns"></i>
-Deposit
-</button>
-
-<button
-class="nav-btn"
-data-page="withdrawPage"
->
-<i class="fa-solid fa-arrow-up"></i>
-Withdraw
-</button>
-
-</div>
-
 </div>
 
 <!-- FIREBASE -->
-
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+getAuth,
+onAuthStateChanged,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+collection,
+addDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-getAuth,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-onAuthStateChanged,
-signOut
-
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-/* FIREBASE */
-
+/* CONFIG */
 const firebaseConfig = {
-
-apiKey:
-"AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
-
-authDomain:
-"zero-exchange-v5.firebaseapp.com",
-
-projectId:
-"zero-exchange-v5",
-
-storageBucket:
-"zero-exchange-v5.firebasestorage.app",
-
-messagingSenderId:
-"430232197516",
-
-appId:
-"1:430232197516:web:8abcd54749b17acc791ea9",
-
-measurementId:
-"G-DNJ0V10CG2"
-
+apiKey: "YOUR_KEY",
+authDomain: "YOUR_DOMAIN",
+projectId: "YOUR_PROJECT",
+appId: "YOUR_APP"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth =
-getAuth(app);
+let currentUser = null;
 
-/* LOGIN */
+/* AUTH LISTENER */
+onAuthStateChanged(auth, async (user)=>{
+if(!user) return;
 
-async function login(){
+currentUser = user;
 
-const email =
-document
-.getElementById("email")
-.value
-.trim();
+const ref = doc(db,"users",user.uid);
+const snap = await getDoc(ref);
 
-const password =
-document
-.getElementById("password")
-.value;
-
-if(!email || !password){
-
-alert("Enter Email & Password");
-
-return;
-
+if(!snap.exists()){
+await setDoc(ref,{
+balance: 0,
+createdAt: Date.now()
+});
 }
 
-try{
-
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-}catch(error){
-
-alert(error.message);
-
-}
-
-}
-
-/* REGISTER */
-
-async function register(){
-
-const email =
-document
-.getElementById("email")
-.value
-.trim();
-
-const password =
-document
-.getElementById("password")
-.value;
-
-try{
-
-await createUserWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-alert("Account Created");
-
-}catch(error){
-
-alert(error.message);
-
-}
-
-}
-
-/* AUTH */
-
-onAuthStateChanged(
-auth,
-(user)=>{
-
-if(user){
-
-document
-.getElementById("authPage")
-.style.display="none";
-
-document
-.getElementById("app")
-.style.display="block";
-
-}
-
-}
-);
-
-/* LOGOUT */
-
-async function logout(){
-
-await signOut(auth);
-
-location.reload();
-
-}
-
-/* EVENTS */
-
-document
-.getElementById("loginBtn")
-.addEventListener(
-"click",
-login
-);
-
-document
-.getElementById("registerBtn")
-.addEventListener(
-"click",
-register
-);
-
-document
-.getElementById("logoutBtn")
-.addEventListener(
-"click",
-logout
-);
-
-/* NAVIGATION */
-
-window.switchPage=(pageId)=>{
-
-document
-.querySelectorAll(".page")
-.forEach((page)=>{
-
-page.classList.remove(
-"active"
-);
-
+loadBalance();
 });
 
-document
-.getElementById(pageId)
-.classList.add(
-"active"
-);
+/* LOAD BALANCE (REAL SOURCE OF TRUTH) */
+async function loadBalance(){
+const ref = doc(db,"users",currentUser.uid);
+const snap = await getDoc(ref);
 
-document
-.querySelectorAll(".nav-btn")
-.forEach((btn)=>{
+const data = snap.data();
 
-btn.classList.remove(
-"active"
-);
-
-if(
-btn.dataset.page===pageId
-){
-
-btn.classList.add(
-"active"
-);
-
+document.getElementById("balance").innerText = data.balance + " USDT";
+document.getElementById("usdBalance").innerText = "$" + data.balance;
 }
 
+/* DEPOSIT REQUEST */
+window.createDeposit = async function(){
+
+const coin = document.getElementById("depositCoin").value;
+const amount = Number(document.getElementById("depositAmount").value);
+
+await addDoc(collection(db,"transactions"),{
+uid: currentUser.uid,
+type: "deposit",
+coin,
+amount,
+status: "pending",
+createdAt: serverTimestamp()
 });
 
-};
-
-document
-.querySelectorAll(".nav-btn")
-.forEach((btn)=>{
-
-btn.addEventListener(
-"click",
-()=>{
-
-switchPage(
-btn.dataset.page
-);
-
+alert("Deposit Request Sent");
 }
-);
 
+/* WITHDRAW REQUEST */
+window.createWithdraw = async function(){
+
+const coin = document.getElementById("withdrawCoin").value;
+const amount = Number(document.getElementById("withdrawAmount").value);
+const address = document.getElementById("withdrawAddress").value;
+
+if(!amount || !address) return alert("Fill all fields");
+
+await addDoc(collection(db,"transactions"),{
+uid: currentUser.uid,
+type: "withdraw",
+coin,
+amount,
+address,
+status: "pending",
+createdAt: serverTimestamp()
 });
 
-/* COPY */
-
-window.copyText=(text)=>{
-
-navigator.clipboard.writeText(
-text
-);
-
-alert("Copied");
-
-};
-
-/* WALLETS */
-
-const wallets={
-
-"USDT TRC20":
-"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
-
-"USDT ERC20":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-"USDT BEP20":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-"BTC":
-"bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
-
-"ETH":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-"TON":
-"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP",
-
-"BNB":
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-"SOL":
-"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ",
-
-"XRP":
-"rEXAMPLEADDRESS123",
-
-"DOGE":
-"DOGEEXAMPLE123",
-
-"LTC":
-"LTCEXAMPLE123",
-
-"TRX":
-"TRXEXAMPLE123"
-
-};
-
-const walletSelector=
-document.getElementById(
-"walletSelector"
-);
-
-const walletAddress=
-document.getElementById(
-"walletAddress"
-);
-
-walletSelector.addEventListener(
-"change",
-()=>{
-
-walletAddress.innerText=
-wallets[
-walletSelector.value
-];
-
-}
-);
-
-document
-.getElementById(
-"copyWalletBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-navigator.clipboard.writeText(
-walletAddress.innerText
-);
-
-alert(
-"Wallet Copied"
-);
-
-}
-);
-
-/* MARKETS */
-
-const marketData=[
-
-{
-name:"Bitcoin",
-symbol:"BTC",
-price:"67,210",
-change:"+3.2%"
-},
-
-{
-name:"Ethereum",
-symbol:"ETH",
-price:"3,420",
-change:"+4.1%"
-},
-
-{
-name:"Tether",
-symbol:"USDT",
-price:"1.00",
-change:"+0.01%"
-},
-
-{
-name:"TON",
-symbol:"TON",
-price:"7.4",
-change:"+8.3%"
-},
-
-{
-name:"BNB",
-symbol:"BNB",
-price:"612",
-change:"+2.5%"
-},
-
-{
-name:"DOGE",
-symbol:"DOGE",
-price:"0.16",
-change:"+9.1%"
-},
-
-{
-name:"XRP",
-symbol:"XRP",
-price:"0.58",
-change:"+5.2%"
+alert("Withdraw Request Sent");
 }
 
-];
+/* SIMPLE NAV */
+window.switchPage = function(id){
 
-const markets=
-document.getElementById(
-"markets"
-);
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 
-marketData.forEach((coin)=>{
-
-markets.innerHTML+=`
-
-<div class="market">
-
-<div class="coin">
-
-<div class="coin-icon">
-${coin.symbol[0]}
-</div>
-
-<div>
-
-<div>
-${coin.name}
-</div>
-
-<div
-style="
-color:#94a3b8;
-font-size:13px;
-"
->
-${coin.symbol}
-</div>
-
-</div>
-
-</div>
-
-<div
-style="
-text-align:right;
-"
->
-
-<div>
-$${coin.price}
-</div>
-
-<div class="green">
-${coin.change}
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
+}
 
 </script>
 
