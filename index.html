@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange</title>
+<title>Zero Exchange PRO</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
 
 <style>
 
@@ -16,7 +16,7 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Inter;
+font-family:'Inter',sans-serif;
 background:#060b18;
 color:white;
 overflow-x:hidden;
@@ -25,20 +25,26 @@ overflow-x:hidden;
 /* HEADER */
 
 .header{
-padding:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#0f172a;
 position:sticky;
 top:0;
 z-index:999;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px;
+background:#0f172a;
+border-bottom:1px solid rgba(255,255,255,0.06);
 }
 
 .logo{
-font-size:26px;
+font-size:28px;
 font-weight:900;
 color:#f5b942;
+}
+
+.market-live{
+font-size:14px;
+color:#22c55e;
 }
 
 /* PAGE */
@@ -53,8 +59,8 @@ padding-bottom:120px;
 .card{
 background:rgba(255,255,255,0.04);
 border:1px solid rgba(255,255,255,0.06);
-border-radius:20px;
-padding:18px;
+border-radius:24px;
+padding:20px;
 margin-bottom:18px;
 }
 
@@ -71,50 +77,66 @@ margin-top:10px;
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-top:16px;
+gap:14px;
+margin-top:18px;
 }
 
 .action{
 background:#111827;
-padding:20px;
+padding:24px;
 border-radius:18px;
 text-align:center;
 cursor:pointer;
+transition:0.2s;
+}
+
+.action:hover{
+transform:scale(1.02);
+}
+
+.action-title{
+margin-top:10px;
+font-weight:700;
 }
 
 /* INPUT */
 
-input,select{
+input,
+select{
 width:100%;
 padding:14px;
-margin-top:10px;
+margin-top:12px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#0f172a;
 color:white;
+font-size:15px;
+outline:none;
 }
 
 button{
 width:100%;
 padding:14px;
-margin-top:12px;
+margin-top:14px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#f5b942;
+color:black;
 font-weight:900;
 cursor:pointer;
 }
 
-/* ORDERBOOK */
+/* ROW */
 
-.order-row{
+.row{
 display:flex;
 justify-content:space-between;
-padding:8px 0;
-font-size:14px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,0.06);
 }
+
+/* COLORS */
 
 .green{
 color:#22c55e;
@@ -122,6 +144,10 @@ color:#22c55e;
 
 .red{
 color:#ef4444;
+}
+
+.gray{
+color:#94a3b8;
 }
 
 /* NAV */
@@ -135,18 +161,69 @@ display:grid;
 grid-template-columns:repeat(4,1fr);
 background:#0f172a;
 padding:10px 0;
+border-top:1px solid rgba(255,255,255,0.06);
 }
 
 .nav button{
 background:none;
-color:white;
 margin:0;
-padding:10px;
+color:white;
+font-size:14px;
+}
+
+/* QR */
+
+.qr{
+width:180px;
+height:180px;
+margin:20px auto;
+background:white;
+border-radius:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+color:black;
+font-weight:900;
+}
+
+/* MARKET */
+
+.market-row{
+display:flex;
+justify-content:space-between;
+padding:14px 0;
+border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.coin{
+display:flex;
+gap:12px;
+align-items:center;
+}
+
+.coin-icon{
+width:42px;
+height:42px;
+border-radius:50%;
+background:#111827;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:900;
 }
 
 .small{
 font-size:13px;
 color:#94a3b8;
+}
+
+/* HISTORY */
+
+.history{
+margin-top:14px;
+padding:12px;
+background:#0f172a;
+border-radius:14px;
 }
 
 </style>
@@ -157,13 +234,15 @@ color:#94a3b8;
 <!-- HEADER -->
 
 <div class="header">
+
 <div class="logo">
 ZERO EXCHANGE
 </div>
 
-<div id="livePrice">
-Loading...
+<div class="market-live" id="btcLive">
+BTC Loading...
 </div>
+
 </div>
 
 <!-- PAGE -->
@@ -174,7 +253,7 @@ Loading...
 
 <div class="card">
 
-<div class="small">
+<div class="gray">
 Portfolio Balance
 </div>
 
@@ -184,20 +263,32 @@ $1000.00
 
 <div class="grid">
 
-<div class="action">
+<div class="action" onclick="scrollToSection('walletSection')">
+💼
+<div class="action-title">
 Wallet
 </div>
+</div>
 
-<div class="action">
+<div class="action" onclick="scrollToSection('marketsSection')">
+📈
+<div class="action-title">
 Markets
 </div>
-
-<div class="action">
-Deposit
 </div>
 
-<div class="action">
+<div class="action" onclick="scrollToSection('depositSection')">
+💰
+<div class="action-title">
+Deposit
+</div>
+</div>
+
+<div class="action" onclick="scrollToSection('withdrawSection')">
+🏦
+<div class="action-title">
 Withdraw
+</div>
 </div>
 
 </div>
@@ -206,25 +297,137 @@ Withdraw
 
 <!-- WALLET -->
 
-<div class="card">
+<div class="card" id="walletSection">
 
 <h2>
 Wallet
 </h2>
 
-<div style="margin-top:16px">
-
-<div class="order-row">
+<div class="row">
 <div>USDT</div>
 <div id="usdtBalance">1000</div>
 </div>
 
-<div class="order-row">
+<div class="row">
 <div>BTC</div>
 <div id="btcBalance">0</div>
 </div>
 
+<div class="row">
+<div>ETH</div>
+<div id="ethBalance">0</div>
 </div>
+
+<div class="row">
+<div>TON</div>
+<div id="tonBalance">0</div>
+</div>
+
+</div>
+
+<!-- MARKETS -->
+
+<div class="card" id="marketsSection">
+
+<h2>
+Markets
+</h2>
+
+<div id="markets"></div>
+
+</div>
+
+<!-- DEPOSIT -->
+
+<div class="card" id="depositSection">
+
+<h2>
+Crypto Deposit
+</h2>
+
+<select id="depositCoin">
+
+<option value="BTC">
+BTC
+</option>
+
+<option value="ETH">
+ETH
+</option>
+
+<option value="USDT">
+USDT TRC20
+</option>
+
+<option value="TON">
+TON
+</option>
+
+</select>
+
+<div class="qr">
+QR CODE
+</div>
+
+<div class="history" id="depositAddress">
+Loading...
+</div>
+
+<button onclick="copyDeposit()">
+Copy Wallet Address
+</button>
+
+<button onclick="fakeDeposit()">
+Simulate Deposit
+</button>
+
+<div id="depositHistory"></div>
+
+</div>
+
+<!-- WITHDRAW -->
+
+<div class="card" id="withdrawSection">
+
+<h2>
+Withdraw
+</h2>
+
+<select id="withdrawCoin">
+
+<option value="USDT">
+USDT
+</option>
+
+<option value="BTC">
+BTC
+</option>
+
+<option value="ETH">
+ETH
+</option>
+
+<option value="TON">
+TON
+</option>
+
+</select>
+
+<input
+id="withdrawAmount"
+placeholder="Amount"
+/>
+
+<input
+id="withdrawAddress"
+placeholder="Wallet Address"
+/>
+
+<button onclick="withdraw()">
+Submit Withdraw
+</button>
+
+<div id="withdrawHistory"></div>
 
 </div>
 
@@ -233,10 +436,11 @@ Wallet
 <div class="card">
 
 <h2>
-Trade BTC/USDT
+BTC/USDT Trading
 </h2>
 
-<select id="side">
+<select id="tradeSide">
+
 <option value="buy">
 BUY
 </option>
@@ -244,15 +448,16 @@ BUY
 <option value="sell">
 SELL
 </option>
+
 </select>
 
 <input
-id="priceInput"
+id="tradePrice"
 placeholder="Limit Price"
 />
 
 <input
-id="amountInput"
+id="tradeAmount"
 placeholder="Amount USDT"
 />
 
@@ -270,29 +475,17 @@ Place Order
 Order Book
 </h2>
 
-<h3 class="green" style="margin-top:16px">
+<h3 class="green">
 BUY ORDERS
 </h3>
 
 <div id="buyBook"></div>
 
-<h3 class="red" style="margin-top:16px">
+<h3 class="red" style="margin-top:20px">
 SELL ORDERS
 </h3>
 
 <div id="sellBook"></div>
-
-</div>
-
-<!-- OPEN ORDERS -->
-
-<div class="card">
-
-<h2>
-Open Orders
-</h2>
-
-<div id="openOrders"></div>
 
 </div>
 
@@ -314,19 +507,19 @@ Trade History
 
 <div class="nav">
 
-<button>
+<button onclick="scrollTo(0,0)">
 Home
 </button>
 
-<button>
+<button onclick="scrollToSection('marketsSection')">
 Markets
 </button>
 
-<button>
+<button onclick="scrollToSection('walletSection')">
 Wallet
 </button>
 
-<button>
+<button onclick="scrollToSection('withdrawSection')">
 Trade
 </button>
 
@@ -335,12 +528,12 @@ Trade
 <script>
 
 /* =========================
-   LIVE MARKET PRICE
+   LIVE PRICES
 ========================= */
 
 let btcPrice = 0;
 
-async function loadPrice(){
+async function loadPrices(){
 
 try{
 
@@ -356,15 +549,17 @@ btcPrice =
 Number(data.price);
 
 document
-.getElementById("livePrice")
+.getElementById("btcLive")
 .innerText =
 "BTC $" +
 btcPrice.toFixed(2);
 
+loadMarkets();
+
 }catch(e){
 
 document
-.getElementById("livePrice")
+.getElementById("btcLive")
 .innerText =
 "Market Offline";
 
@@ -372,12 +567,77 @@ document
 
 }
 
-loadPrice();
+setInterval(loadPrices,3000);
+loadPrices();
 
-setInterval(
-loadPrice,
-3000
+/* =========================
+   MARKET LIST
+========================= */
+
+async function loadMarkets(){
+
+const symbols = [
+"BTCUSDT",
+"ETHUSDT",
+"TONUSDT",
+"BNBUSDT"
+];
+
+let html = "";
+
+for(let s of symbols){
+
+try{
+
+const res =
+await fetch(
+`https://api.binance.com/api/v3/ticker/price?symbol=${s}`
 );
+
+const d =
+await res.json();
+
+html += `
+
+<div class="market-row">
+
+<div class="coin">
+
+<div class="coin-icon">
+${s[0]}
+</div>
+
+<div>
+
+<div>
+${s.replace("USDT","")}
+</div>
+
+<div class="small">
+${s}
+</div>
+
+</div>
+
+</div>
+
+<div class="green">
+$${Number(d.price).toFixed(2)}
+</div>
+
+</div>
+
+`;
+
+}catch(e){}
+
+}
+
+document
+.getElementById("markets")
+.innerHTML = html;
+
+}
 
 /* =========================
    WALLET
@@ -386,7 +646,9 @@ loadPrice,
 let wallet = {
 
 USDT:1000,
-BTC:0
+BTC:0,
+ETH:0,
+TON:0
 
 };
 
@@ -403,6 +665,16 @@ document
 wallet.BTC.toFixed(6);
 
 document
+.getElementById("ethBalance")
+.innerText =
+wallet.ETH.toFixed(6);
+
+document
+.getElementById("tonBalance")
+.innerText =
+wallet.TON.toFixed(2);
+
+document
 .getElementById("portfolio")
 .innerText =
 "$" + (
@@ -413,35 +685,234 @@ wallet.USDT +
 }
 
 /* =========================
-   ORDER BOOK
+   DEPOSIT SYSTEM
+========================= */
+
+const depositWallets = {
+
+BTC:
+"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+
+ETH:
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
+USDT:
+"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
+
+TON:
+"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP"
+
+};
+
+function updateDepositAddress(){
+
+const coin =
+document
+.getElementById("depositCoin")
+.value;
+
+document
+.getElementById("depositAddress")
+.innerText =
+depositWallets[coin];
+
+}
+
+document
+.getElementById("depositCoin")
+.addEventListener(
+"change",
+updateDepositAddress
+);
+
+updateDepositAddress();
+
+function copyDeposit(){
+
+navigator.clipboard.writeText(
+document
+.getElementById("depositAddress")
+.innerText
+);
+
+alert("Wallet Copied");
+
+}
+
+let deposits = [];
+
+function fakeDeposit(){
+
+const coin =
+document
+.getElementById("depositCoin")
+.value;
+
+let amount =
+prompt("Deposit Amount");
+
+amount =
+Number(amount);
+
+if(!amount) return;
+
+wallet[coin] += amount;
+
+deposits.push({
+coin,
+amount,
+time:
+new Date()
+.toLocaleTimeString()
+});
+
+renderDeposits();
+renderWallet();
+
+}
+
+function renderDeposits(){
+
+document
+.getElementById("depositHistory")
+.innerHTML =
+
+deposits
+.slice()
+.reverse()
+.map(d=>`
+
+<div class="history">
+
+🟢 ${d.amount} ${d.coin}
+
+<div class="small">
+${d.time}
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+/* =========================
+   WITHDRAW
+========================= */
+
+let withdraws = [];
+
+function withdraw(){
+
+const coin =
+document
+.getElementById("withdrawCoin")
+.value;
+
+const amount =
+Number(
+document
+.getElementById("withdrawAmount")
+.value
+);
+
+const address =
+document
+.getElementById("withdrawAddress")
+.value;
+
+if(!amount || !address){
+
+alert("Fill all inputs");
+
+return;
+
+}
+
+if(wallet[coin] < amount){
+
+alert("Insufficient Balance");
+
+return;
+
+}
+
+wallet[coin] -= amount;
+
+withdraws.push({
+
+coin,
+amount,
+address,
+
+status:"Pending",
+
+time:
+new Date()
+.toLocaleTimeString()
+
+});
+
+renderWithdraws();
+renderWallet();
+
+}
+
+function renderWithdraws(){
+
+document
+.getElementById("withdrawHistory")
+.innerHTML =
+
+withdraws
+.slice()
+.reverse()
+.map(w=>`
+
+<div class="history">
+
+🔴 ${w.amount} ${w.coin}
+
+<div class="small">
+${w.status}
+</div>
+
+<div class="small">
+${w.time}
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+/* =========================
+   TRADING ENGINE
 ========================= */
 
 let buyOrders = [];
 let sellOrders = [];
 let trades = [];
 
-/* =========================
-   PLACE ORDER
-========================= */
-
 function placeOrder(){
 
-let side =
+const side =
 document
-.getElementById("side")
+.getElementById("tradeSide")
 .value;
 
-let price =
+const price =
 Number(
 document
-.getElementById("priceInput")
+.getElementById("tradePrice")
 .value
 );
 
-let amount =
+const amount =
 Number(
 document
-.getElementById("amountInput")
+.getElementById("tradeAmount")
 .value
 );
 
@@ -453,7 +924,7 @@ return;
 
 }
 
-let order = {
+const order = {
 
 id:
 Math.random()
@@ -463,40 +934,51 @@ Math.random()
 side,
 price,
 amount,
-filled:0,
-
-time:
-Date.now()
+filled:0
 
 };
 
-if(side==="buy")
-buyOrders.push(order);
+if(side==="buy"){
 
-if(side==="sell")
-sellOrders.push(order);
+if(wallet.USDT < amount){
 
-matchOrders();
+alert("Not enough USDT");
 
-render();
+return;
 
 }
 
-/* =========================
-   MATCH ENGINE
-========================= */
+buyOrders.push(order);
+
+}
+
+if(side==="sell"){
+
+const btcNeeded =
+amount / price;
+
+if(wallet.BTC < btcNeeded){
+
+alert("Not enough BTC");
+
+return;
+
+}
+
+sellOrders.push(order);
+
+}
+
+matchOrders();
+renderOrders();
+
+}
 
 function matchOrders(){
 
-buyOrders.sort(
-(a,b)=>
-b.price-a.price
-);
+buyOrders.sort((a,b)=>b.price-a.price);
 
-sellOrders.sort(
-(a,b)=>
-a.price-b.price
-);
+sellOrders.sort((a,b)=>a.price-b.price);
 
 for(let buy of buyOrders){
 
@@ -514,38 +996,21 @@ sell.filled < sell.amount
 
 let qty =
 Math.min(
-
 buy.amount-buy.filled,
-
 sell.amount-sell.filled
-
 );
 
-/* fill */
-
 buy.filled += qty;
-
 sell.filled += qty;
-
-/* fee */
-
-let fee =
-qty * 0.001;
-
-/* wallet */
 
 wallet.USDT -= qty;
 
 wallet.BTC +=
-(qty-fee) /
-sell.price;
-
-/* trade */
+qty / sell.price;
 
 trades.push({
 
 price:sell.price,
-
 amount:qty,
 
 time:
@@ -560,17 +1025,11 @@ new Date()
 
 }
 
-}
-
-/* =========================
-   RENDER
-========================= */
-
-function render(){
-
 renderWallet();
 
-/* BUY BOOK */
+}
+
+function renderOrders(){
 
 document
 .getElementById("buyBook")
@@ -578,7 +1037,7 @@ document
 
 buyOrders.map(o=>`
 
-<div class="order-row">
+<div class="row">
 
 <div class="green">
 ${o.price}
@@ -592,15 +1051,13 @@ ${(o.amount-o.filled).toFixed(2)}
 
 `).join("");
 
-/* SELL BOOK */
-
 document
 .getElementById("sellBook")
 .innerHTML =
 
 sellOrders.map(o=>`
 
-<div class="order-row">
+<div class="row">
 
 <div class="red">
 ${o.price}
@@ -614,43 +1071,16 @@ ${(o.amount-o.filled).toFixed(2)}
 
 `).join("");
 
-/* OPEN ORDERS */
-
-document
-.getElementById("openOrders")
-.innerHTML =
-
-[...buyOrders,...sellOrders]
-
-.map(o=>`
-
-<div class="order-row">
-
-<div>
-${o.side.toUpperCase()}
-</div>
-
-<div>
-${o.price}
-</div>
-
-<div>
-${(o.amount-o.filled).toFixed(2)}
-</div>
-
-</div>
-
-`).join("");
-
-/* TRADES */
-
 document
 .getElementById("tradeHistory")
 .innerHTML =
 
-trades.slice().reverse().map(t=>`
+trades
+.slice()
+.reverse()
+.map(t=>`
 
-<div class="order-row">
+<div class="row">
 
 <div>
 ⚡ ${t.amount}
@@ -660,7 +1090,7 @@ trades.slice().reverse().map(t=>`
 ${t.price}
 </div>
 
-<div>
+<div class="small">
 ${t.time}
 </div>
 
@@ -670,7 +1100,24 @@ ${t.time}
 
 }
 
-render();
+/* =========================
+   SCROLL
+========================= */
+
+function scrollToSection(id){
+
+document
+.getElementById(id)
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+/* INIT */
+
+renderWallet();
+renderOrders();
 
 </script>
 
