@@ -2,64 +2,42 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V12</title>
+<title>Zero Exchange V13 Core</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-font-family:'Inter',sans-serif;
-background:linear-gradient(180deg,#020617,#08112b);
+margin:0;
+font-family:Inter;
+background:#020617;
 color:white;
-overflow-x:hidden;
 }
 
-/* HEADER */
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 18px;
-position:sticky;
-top:0;
-background:rgba(2,6,23,0.9);
-backdrop-filter:blur(12px);
-border-bottom:1px solid rgba(255,255,255,0.06);
-}
-
-/* PAGE */
 .page{display:none;padding:20px;}
 .page.active{display:block;}
 
-/* CARD */
 .card{
 background:rgba(255,255,255,0.04);
+padding:18px;
+border-radius:18px;
+margin-bottom:12px;
 border:1px solid rgba(255,255,255,0.06);
-border-radius:22px;
-padding:20px;
-margin-bottom:16px;
-backdrop-filter:blur(10px);
 }
 
-/* BUTTON */
 button{
 width:100%;
 padding:14px;
-border:none;
-border-radius:14px;
 margin-top:10px;
-background:linear-gradient(90deg,#f5b942,#ffe08a);
-font-weight:900;
-color:black;
+border:none;
+border-radius:12px;
+background:#f5b942;
+font-weight:800;
 cursor:pointer;
 }
 
-/* INPUT */
 input,select{
 width:100%;
 padding:12px;
@@ -70,11 +48,10 @@ background:#0f172a;
 color:white;
 }
 
-/* MARKET */
 .market{
 display:flex;
 justify-content:space-between;
-padding:14px 0;
+padding:12px 0;
 border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
@@ -85,19 +62,14 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<div><b>Zero Exchange</b></div>
-<div>LIVE</div>
-</div>
-
 <!-- HOME -->
 <div id="homePage" class="page active">
 
 <div class="card">
-<div>Portfolio Balance</div>
-<div style="font-size:40px;font-weight:900">₺245,912</div>
-<div style="color:#94a3b8">≈ $7,490</div>
+<h2>Portfolio</h2>
+<div style="font-size:38px;font-weight:900">
+<span id="balance">0</span> USDT
+</div>
 </div>
 
 <div class="card">
@@ -110,102 +82,154 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 
 <!-- MARKETS -->
 <div id="marketsPage" class="page">
-
 <div class="card">
 <h2>Live Markets</h2>
 <div id="markets">Loading...</div>
 </div>
-
 </div>
 
 <!-- DEPOSIT -->
 <div id="depositPage" class="page">
-
 <div class="card">
-<h2>Deposit</h2>
+<h2>Deposit Request</h2>
 
-<select>
-<option>USDT TRC20</option>
-<option>BTC</option>
-<option>ETH</option>
-<option>TON</option>
-<option>BNB</option>
-</select>
-
-<input placeholder="Amount"/>
-
-<button>Send Deposit Request</button>
-</div>
-
-</div>
-
-<!-- WITHDRAW -->
-<div id="withdrawPage" class="page">
-
-<div class="card">
-<h2>Withdraw</h2>
-
-<select>
+<select id="dcoin">
 <option>USDT</option>
 <option>BTC</option>
 <option>ETH</option>
 </select>
 
-<input placeholder="Amount"/>
-<input placeholder="Wallet Address"/>
+<input id="damount" placeholder="Amount"/>
 
-<button>Submit Withdraw</button>
+<button onclick="deposit()">Submit Deposit</button>
+</div>
 </div>
 
+<!-- WITHDRAW -->
+<div id="withdrawPage" class="page">
+<div class="card">
+<h2>Withdraw Request</h2>
+
+<select id="wcoin">
+<option>USDT</option>
+<option>BTC</option>
+<option>ETH</option>
+</select>
+
+<input id="wamount" placeholder="Amount"/>
+<input id="waddress" placeholder="Wallet Address"/>
+
+<button onclick="withdraw()">Submit Withdraw</button>
+</div>
 </div>
 
-<script>
+<script type="module">
 
-/* NAV */
-function switchPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey:"YOUR_KEY",
+authDomain:"YOUR_DOMAIN",
+projectId:"YOUR_PROJECT",
+appId:"YOUR_APP"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let user=null;
+
+/* INIT USER */
+onAuthStateChanged(auth, async (u)=>{
+if(!u) return;
+
+user=u;
+
+const ref=doc(db,"users",u.uid);
+const snap=await getDoc(ref);
+
+if(!snap.exists()){
+await setDoc(ref,{balance:0});
 }
 
-/* SAFE LIVE MARKETS */
+loadBalance();
+loadMarkets();
+});
+
+/* BALANCE */
+async function loadBalance(){
+const ref=doc(db,"users",user.uid);
+const snap=await getDoc(ref);
+document.getElementById("balance").innerText = snap.data().balance;
+}
+
+/* DEPOSIT */
+window.deposit = async function(){
+
+await addDoc(collection(db,"transactions"),{
+uid:user.uid,
+type:"deposit",
+coin:dcoin.value,
+amount:Number(damount.value),
+status:"pending",
+createdAt:serverTimestamp()
+});
+
+alert("Deposit request sent");
+}
+
+/* WITHDRAW */
+window.withdraw = async function(){
+
+await addDoc(collection(db,"transactions"),{
+uid:user.uid,
+type:"withdraw",
+coin:wcoin.value,
+amount:Number(wamount.value),
+address:waddress.value,
+status:"pending",
+createdAt:serverTimestamp()
+});
+
+alert("Withdraw request sent");
+}
+
+/* MARKETS */
 async function loadMarkets(){
 
 try{
 
-const res = await fetch(
-"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true"
-);
-
+const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true");
 const data = await res.json();
 
-if(!data){
-document.getElementById("markets").innerHTML =
-"Market data unavailable";
-return;
-}
+if(!data) return;
 
-const coins = [
-{ name:"Bitcoin", symbol:"BTC", price:data?.bitcoin?.usd ?? 0, change:data?.bitcoin?.usd_24h_change ?? 0 },
-{ name:"Ethereum", symbol:"ETH", price:data?.ethereum?.usd ?? 0, change:data?.ethereum?.usd_24h_change ?? 0 },
-{ name:"Tether", symbol:"USDT", price:data?.tether?.usd ?? 1, change:data?.tether?.usd_24h_change ?? 0 },
-{ name:"TON", symbol:"TON", price:data?.toncoin?.usd ?? 0, change:data?.toncoin?.usd_24h_change ?? 0 },
-{ name:"BNB", symbol:"BNB", price:data?.binancecoin?.usd ?? 0, change:data?.binancecoin?.usd_24h_change ?? 0 },
-{ name:"DOGE", symbol:"DOGE", price:data?.dogecoin?.usd ?? 0, change:data?.dogecoin?.usd_24h_change ?? 0 },
-{ name:"XRP", symbol:"XRP", price:data?.ripple?.usd ?? 0, change:data?.ripple?.usd_24h_change ?? 0 },
-{ name:"SOL", symbol:"SOL", price:data?.solana?.usd ?? 0, change:data?.solana?.usd_24h_change ?? 0 }
+const coins=[
+{name:"BTC",price:data.bitcoin.usd,change:data.bitcoin.usd_24h_change},
+{name:"ETH",price:data.ethereum.usd,change:data.ethereum.usd_24h_change},
+{name:"USDT",price:data.tether.usd,change:data.tether.usd_24h_change},
+{name:"TON",price:data.toncoin.usd,change:data.toncoin.usd_24h_change},
+{name:"BNB",price:data.binancecoin.usd,change:data.binancecoin.usd_24h_change},
+{name:"DOGE",price:data.dogecoin.usd,change:data.dogecoin.usd_24h_change},
+{name:"XRP",price:data.ripple.usd,change:data.ripple.usd_24h_change},
+{name:"SOL",price:data.solana.usd,change:data.solana.usd_24h_change}
 ];
 
-let html = "";
+let html="";
 
 coins.forEach(c=>{
-html += `
+html+=`
 <div class="market">
+<div>${c.name}</div>
 <div>
-<b>${c.name}</b><br>
-<small>${c.symbol}</small>
-</div>
-
-<div style="text-align:right">
 <div>$${Number(c.price).toFixed(2)}</div>
 <div class="${c.change>=0?'green':'red'}">
 ${Number(c.change).toFixed(2)}%
@@ -215,22 +239,21 @@ ${Number(c.change).toFixed(2)}%
 `;
 });
 
-document.getElementById("markets").innerHTML = html;
+document.getElementById("markets").innerHTML=html;
 
-}catch(err){
-
-console.log(err);
-
-document.getElementById("markets").innerHTML =
-"⚠️ Failed to load markets";
-
+}catch(e){
+document.getElementById("markets").innerHTML="Market error";
 }
 
-}
-
-/* INIT */
-loadMarkets();
 setInterval(loadMarkets,5000);
+
+}
+
+/* NAV */
+window.switchPage=(p)=>{
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(p).classList.add("active");
+};
 
 </script>
 
