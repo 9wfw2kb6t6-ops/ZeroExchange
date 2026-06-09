@@ -1,5 +1,5 @@
 <!-- ===================================== -->
-<!-- ZERO EXCHANGE V9 FULL REAL VERSION -->
+<!-- ZERO EXCHANGE V10 FINAL FULL FIX -->
 <!-- ===================================== -->
 
 <!DOCTYPE html>
@@ -7,10 +7,14 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
 
-<title>Zero Exchange V9</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Zero Exchange</title>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -32,14 +36,14 @@ box-sizing:border-box;
 
 body{
 
+font-family:'Inter',sans-serif;
+
 background:
 linear-gradient(
 180deg,
 #020617,
-#071029
+#08112b
 );
-
-font-family:'Inter',sans-serif;
 
 color:white;
 
@@ -60,16 +64,19 @@ align-items:center;
 
 background:#020617;
 
-z-index:9999;
+z-index:99999;
+
+padding:20px;
 
 }
 
 .auth-card{
 
-width:380px;
+width:100%;
+max-width:400px;
 
 background:
-rgba(255,255,255,0.05);
+rgba(255,255,255,0.04);
 
 border:
 1px solid rgba(255,255,255,0.08);
@@ -89,7 +96,7 @@ font-weight:900;
 
 text-align:center;
 
-margin-bottom:30px;
+margin-bottom:28px;
 
 background:
 linear-gradient(
@@ -122,6 +129,8 @@ color:white;
 
 font-size:15px;
 
+outline:none;
+
 }
 
 .auth-btn{
@@ -149,13 +158,15 @@ color:black;
 
 cursor:pointer;
 
+font-size:16px;
+
 }
 
 .switch-btn{
 
-text-align:center;
-
 margin-top:18px;
+
+text-align:center;
 
 color:#94a3b8;
 
@@ -169,7 +180,7 @@ cursor:pointer;
 
 display:none;
 
-padding-bottom:110px;
+padding-bottom:120px;
 
 }
 
@@ -178,13 +189,12 @@ padding-bottom:110px;
 .header{
 
 position:sticky;
-
 top:0;
 
+z-index:999;
+
 display:flex;
-
 justify-content:space-between;
-
 align-items:center;
 
 padding:18px 20px;
@@ -197,24 +207,20 @@ backdrop-filter:blur(18px);
 border-bottom:
 1px solid rgba(255,255,255,0.06);
 
-z-index:999;
-
 }
 
 .header-left{
 
 display:flex;
-
 align-items:center;
-
 gap:14px;
 
 }
 
 .avatar{
 
-width:52px;
-height:52px;
+width:54px;
+height:54px;
 
 border-radius:50%;
 
@@ -246,19 +252,18 @@ font-weight:900;
 .sub{
 
 font-size:14px;
-
 color:#94a3b8;
 
 }
 
 .logout-btn{
 
-width:50px;
-height:50px;
+width:52px;
+height:52px;
 
 border:none;
 
-border-radius:16px;
+border-radius:18px;
 
 background:#ef4444;
 
@@ -296,13 +301,13 @@ rgba(255,255,255,0.04);
 border:
 1px solid rgba(255,255,255,0.06);
 
-border-radius:28px;
+border-radius:30px;
 
-padding:22px;
+padding:24px;
 
 margin-bottom:20px;
 
-backdrop-filter:blur(16px);
+backdrop-filter:blur(18px);
 
 }
 
@@ -310,10 +315,10 @@ backdrop-filter:blur(16px);
 
 .balance{
 
-font-size:60px;
+font-size:62px;
 font-weight:900;
 
-margin-top:12px;
+margin-top:10px;
 
 }
 
@@ -347,7 +352,7 @@ margin-top:24px;
 background:
 rgba(255,255,255,0.04);
 
-padding:30px 10px;
+padding:28px 12px;
 
 border-radius:24px;
 
@@ -369,9 +374,9 @@ transform:scale(1.02);
 
 font-size:34px;
 
-color:#f5b942;
-
 margin-bottom:14px;
+
+color:#f5b942;
 
 }
 
@@ -401,9 +406,7 @@ border-bottom:
 .coin{
 
 display:flex;
-
 align-items:center;
-
 gap:14px;
 
 }
@@ -433,7 +436,7 @@ font-weight:700;
 
 }
 
-/* WALLET */
+/* BOX */
 
 .wallet-box{
 
@@ -489,18 +492,18 @@ left:0;
 
 width:100%;
 
-background:
-rgba(2,6,23,0.96);
-
-border-top:
-1px solid rgba(255,255,255,0.06);
-
 display:grid;
 
 grid-template-columns:
 repeat(5,1fr);
 
 padding:10px 0;
+
+background:
+rgba(2,6,23,0.96);
+
+border-top:
+1px solid rgba(255,255,255,0.06);
 
 backdrop-filter:blur(18px);
 
@@ -514,7 +517,6 @@ background:none;
 border:none;
 
 display:flex;
-
 flex-direction:column;
 
 align-items:center;
@@ -525,11 +527,13 @@ color:#94a3b8;
 
 font-size:12px;
 
+cursor:pointer;
+
 }
 
 .nav-btn i{
 
-font-size:24px;
+font-size:22px;
 
 }
 
@@ -652,9 +656,7 @@ onclick="switchPage('walletPage')"
 
 <i class="fa-solid fa-wallet"></i>
 
-<div>
-Wallet
-</div>
+<div>Wallet</div>
 
 </div>
 
@@ -665,9 +667,7 @@ onclick="switchPage('depositPage')"
 
 <i class="fa-solid fa-arrow-down"></i>
 
-<div>
-Deposit
-</div>
+<div>Deposit</div>
 
 </div>
 
@@ -678,9 +678,7 @@ onclick="switchPage('withdrawPage')"
 
 <i class="fa-solid fa-arrow-up"></i>
 
-<div>
-Withdraw
-</div>
+<div>Withdraw</div>
 
 </div>
 
@@ -691,9 +689,7 @@ onclick="switchPage('marketsPage')"
 
 <i class="fa-solid fa-chart-line"></i>
 
-<div>
-Markets
-</div>
+<div>Markets</div>
 
 </div>
 
@@ -779,9 +775,7 @@ TR42 0001 0090 1098 8248 3050 01
 
 <button
 class="main-btn"
-onclick="copyText(
-'TR420001009010988248305001'
-)"
+onclick="copyText('TR420001009010988248305001')"
 >
 Copy IBAN
 </button>
@@ -810,9 +804,7 @@ IR300180000000004613967414
 
 <button
 class="main-btn"
-onclick="copyText(
-'5859831204847882'
-)"
+onclick="copyText('5859831204847882')"
 >
 Copy Card
 </button>
@@ -886,21 +878,10 @@ Withdraw
 
 <select>
 
-<option>
-USDT
-</option>
-
-<option>
-BTC
-</option>
-
-<option>
-ETH
-</option>
-
-<option>
-TON
-</option>
+<option>USDT</option>
+<option>BTC</option>
+<option>ETH</option>
+<option>TON</option>
 
 </select>
 
@@ -1007,12 +988,12 @@ signOut
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
 apiKey:
-"AAIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
+"AIzaSyDFXmpsyGrKxUlaRj_sP1gTaaUJdsdtLps",
 
 authDomain:
 "zero-exchange-v5.firebaseapp.com",
@@ -1045,14 +1026,25 @@ getAuth(app);
 async function login(){
 
 const email =
-document.getElementById(
-"email"
-).value.trim();
+document
+.getElementById("email")
+.value
+.trim();
 
 const password =
-document.getElementById(
-"password"
-).value;
+document
+.getElementById("password")
+.value;
+
+if(!email || !password){
+
+alert(
+"Enter email & password"
+);
+
+return;
+
+}
 
 try{
 
@@ -1064,7 +1056,11 @@ password
 
 }catch(error){
 
-alert(error.message);
+alert(
+error.message
+);
+
+console.error(error);
 
 }
 
@@ -1075,14 +1071,25 @@ alert(error.message);
 async function register(){
 
 const email =
-document.getElementById(
-"email"
-).value.trim();
+document
+.getElementById("email")
+.value
+.trim();
 
 const password =
-document.getElementById(
-"password"
-).value;
+document
+.getElementById("password")
+.value;
+
+if(!email || !password){
+
+alert(
+"Enter email & password"
+);
+
+return;
+
+}
 
 try{
 
@@ -1098,13 +1105,15 @@ alert(
 
 }catch(error){
 
-alert(error.message);
+alert(
+error.message
+);
 
 }
 
 }
 
-/* AUTH */
+/* AUTH STATE */
 
 onAuthStateChanged(
 auth,
@@ -1112,13 +1121,13 @@ auth,
 
 if(user){
 
-document.getElementById(
-"authPage"
-).style.display="none";
+document
+.getElementById("authPage")
+.style.display="none";
 
-document.getElementById(
-"app"
-).style.display="block";
+document
+.getElementById("app")
+.style.display="block";
 
 }
 
@@ -1158,7 +1167,7 @@ document
 logout
 );
 
-/* NAV */
+/* PAGE SWITCH */
 
 window.switchPage=(pageId)=>{
 
@@ -1174,7 +1183,9 @@ page.classList.remove(
 
 document
 .getElementById(pageId)
-.classList.add("active");
+.classList.add(
+"active"
+);
 
 document
 .querySelectorAll(".nav-btn")
@@ -1229,7 +1240,7 @@ alert("Copied");
 
 /* WALLETS */
 
-const wallets = {
+const wallets={
 
 "USDT TRC20":
 "TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
@@ -1251,12 +1262,12 @@ const wallets = {
 
 };
 
-const walletSelector =
+const walletSelector=
 document.getElementById(
 "walletSelector"
 );
 
-const walletAddress =
+const walletAddress=
 document.getElementById(
 "walletAddress"
 );
@@ -1265,7 +1276,7 @@ walletSelector.addEventListener(
 "change",
 ()=>{
 
-walletAddress.innerText =
+walletAddress.innerText=
 wallets[
 walletSelector.value
 ];
@@ -1285,14 +1296,16 @@ navigator.clipboard.writeText(
 walletAddress.innerText
 );
 
-alert("Wallet copied");
+alert(
+"Wallet Copied"
+);
 
 }
 );
 
 /* MARKETS */
 
-const marketData = [
+const marketData=[
 
 {
 name:"Bitcoin",
@@ -1331,14 +1344,14 @@ change:"+2.5%"
 
 ];
 
-const markets =
+const markets=
 document.getElementById(
 "markets"
 );
 
 marketData.forEach((coin)=>{
 
-markets.innerHTML += `
+markets.innerHTML+=`
 
 <div class="market">
 
