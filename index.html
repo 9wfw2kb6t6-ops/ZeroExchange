@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V4</title>
+<title>Zero Exchange V6</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -65,30 +65,14 @@ gap:10px;
 .market{
 display:flex;
 justify-content:space-between;
-padding:8px 0;
+padding:6px 0;
 border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.nav{
-position:fixed;
-bottom:0;
-width:100%;
-display:flex;
-justify-content:space-around;
-background:#0f172a;
-padding:10px;
-}
-
-.nav button{
-background:none;
-border:none;
-color:#94a3b8;
+.smallbtn{
+padding:6px;
 font-size:12px;
-font-weight:700;
-}
-
-.nav button.active{
-color:#f5b942;
+margin-top:4px;
 }
 </style>
 </head>
@@ -96,8 +80,8 @@ color:#f5b942;
 <body>
 
 <div class="topbar">
-<div><b>ZERO EXCHANGE V4</b></div>
-<div>LIVE ENGINE</div>
+<div><b>ZERO EXCHANGE V6</b></div>
+<div>ENGINE LIVE</div>
 </div>
 
 <!-- HOME -->
@@ -109,7 +93,8 @@ color:#f5b942;
 <div class="grid">
 <button onclick="nav('trade')">Trade</button>
 <button onclick="nav('wallet')">Wallet</button>
-<button onclick="nav('orderbook')">Order Book</button>
+<button onclick="nav('book')">Order Book</button>
+<button onclick="nav('trades')">Trades</button>
 </div>
 </div>
 </div>
@@ -140,24 +125,24 @@ color:#f5b942;
 </div>
 
 <!-- ORDER BOOK -->
-<div id="orderbook" class="page">
+<div id="book" class="page">
 <div class="card">
 <h3>Order Book</h3>
 
-<h4>BUY ORDERS</h4>
+<h4>BUY</h4>
 <div id="bids"></div>
 
-<h4>SELL ORDERS</h4>
+<h4>SELL</h4>
 <div id="asks"></div>
 </div>
 </div>
 
-<!-- NAV -->
-<div class="nav">
-<button onclick="nav('home')" class="active">Home</button>
-<button onclick="nav('trade')">Trade</button>
-<button onclick="nav('wallet')">Wallet</button>
-<button onclick="nav('orderbook')">Book</button>
+<!-- TRADES -->
+<div id="trades" class="page">
+<div class="card">
+<h3>Trades History</h3>
+<div id="tradeBox"></div>
+</div>
 </div>
 
 <script type="module">
@@ -165,15 +150,19 @@ color:#f5b942;
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
-doc,getDoc,setDoc,
-addDoc,collection,
+collection,
+addDoc,
+getDocs,
+doc,
+getDoc,
+setDoc,
 updateDoc,
 onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* 🔥 FIREBASE CONFIG */
+/* FIREBASE */
 const app = initializeApp({
 apiKey:"YOUR_KEY",
 authDomain:"YOUR_DOMAIN",
@@ -185,9 +174,7 @@ const auth = getAuth(app);
 
 let user=null;
 
-/* =========================
-   INIT USER
-========================= */
+/* INIT USER */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
 user=u;
@@ -198,17 +185,15 @@ const snap = await getDoc(ref);
 if(!snap.exists()){
 await setDoc(ref,{
 balance:1000,
-assets:{USDT:1000,BTC:0,ETH:0}
+assets:{USDT:1000,BTC:0}
 });
 }
 
 loadWallet();
-listenOrders();
+startEngine();
 });
 
-/* =========================
-   WALLET
-========================= */
+/* WALLET */
 async function loadWallet(){
 const snap = await getDoc(doc(db,"users",user.uid));
 const d = snap.data();
@@ -217,14 +202,10 @@ document.getElementById("balance").innerText =
 d.balance + " USDT";
 
 document.getElementById("assets").innerHTML =
-Object.entries(d.assets)
-.map(([k,v])=>`${k}: ${v}`)
-.join("<br>");
+Object.entries(d.assets).map(([k,v])=>`${k}: ${v}`).join("<br>");
 }
 
-/* =========================
-   PLACE ORDER
-========================= */
+/* PLACE ORDER */
 window.placeOrder = async function(){
 
 await addDoc(collection(db,"orders"),{
@@ -234,18 +215,18 @@ price:Number(price.value),
 amount:Number(amount.value),
 filled:0,
 status:"open",
-createdAt:Date.now()
+ts:Date.now()
 });
 
 alert("Order placed");
 }
 
 /* =========================
-   ORDER LISTENER + ENGINE
+   ENGINE V6 CORE
 ========================= */
-function listenOrders(){
+async function engine(){
 
-onSnapshot(collection(db,"orders"), async (snap)=>{
+const snap = await getDocs(collection(db,"orders"));
 
 let buys=[];
 let sells=[];
@@ -258,39 +239,47 @@ if(o.side==="buy") buys.push(o);
 if(o.side==="sell") sells.push(o);
 });
 
-/* SORT */
+/* sort price priority */
 buys.sort((a,b)=>b.price-a.price);
 sells.sort((a,b)=>a.price-b.price);
 
-/* ORDER BOOK UI */
+/* ORDER BOOK */
 document.getElementById("bids").innerHTML =
-buys.map(b=>`🟢 ${b.price} | ${b.amount}`).join("<br>");
+buys.map(b=>`🟢 ${b.price} | ${b.amount-b.filled}`).join("<br>");
 
 document.getElementById("asks").innerHTML =
-sells.map(s=>`🔴 ${s.price} | ${s.amount}`).join("<br>");
+sells.map(s=>`🔴 ${s.price} | ${s.amount-s.filled}`).join("<br>");
 
-/* =========================
-   MATCH ENGINE (AUTO)
-========================= */
+/* MATCH ENGINE */
 for(let buy of buys){
 for(let sell of sells){
 
-if(buy.price >= sell.price && buy.filled < buy.amount && sell.filled < sell.amount){
+if(buy.price >= sell.price &&
+buy.filled < buy.amount &&
+sell.filled < sell.amount){
 
 let qty = Math.min(
 buy.amount - buy.filled,
 sell.amount - sell.filled
 );
 
-/* update fills */
 buy.filled += qty;
 sell.filled += qty;
 
-/* USERS */
+/* TRADE */
+await addDoc(collection(db,"trades"),{
+buyId:buy.id,
+sellId:sell.id,
+price:sell.price,
+amount:qty,
+ts:Date.now()
+});
+
+/* UPDATE USERS */
 await updateWallet(buy.uid,"buy",qty,buy.price);
 await updateWallet(sell.uid,"sell",qty,sell.price);
 
-/* update orders */
+/* UPDATE ORDERS */
 await updateDoc(doc(db,"orders",buy.id),buy);
 await updateDoc(doc(db,"orders",sell.id),sell);
 
@@ -298,25 +287,29 @@ await updateDoc(doc(db,"orders",sell.id),sell);
 }
 }
 
-});
+/* TRADE HISTORY */
+const tradesSnap = await getDocs(collection(db,"trades"));
+
+document.getElementById("tradeBox").innerHTML =
+tradesSnap.docs.map(d=>{
+let t=d.data();
+return `⚡ ${t.amount} @ ${t.price}`;
+}).join("<br>");
+
 }
 
-/* =========================
-   WALLET ENGINE
-========================= */
+/* WALLET ENGINE */
 async function updateWallet(uid, side, amount, price){
 
 const ref = doc(db,"users",uid);
 const snap = await getDoc(ref);
 let u = snap.data();
 
-/* BUY */
 if(side==="buy"){
 u.balance -= amount;
 u.assets.BTC += amount/price;
 }
 
-/* SELL */
 if(side==="sell"){
 u.balance += amount;
 u.assets.BTC -= amount/price;
@@ -325,9 +318,12 @@ u.assets.BTC -= amount/price;
 await updateDoc(ref,u);
 }
 
-/* =========================
-   NAV
-========================= */
+/* RUN ENGINE */
+function startEngine(){
+setInterval(engine, 2000);
+}
+
+/* NAV */
 window.nav=(p)=>{
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(p).classList.add("active");
