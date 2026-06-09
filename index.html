@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V2</title>
+<title>Zero Exchange V3</title>
 
 <style>
 body{
@@ -20,7 +20,7 @@ background:#111a2e;
 border-radius:12px;
 }
 
-input,button{
+input,select,button{
 width:100%;
 padding:10px;
 margin-top:8px;
@@ -34,14 +34,9 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.price{
-font-size:30px;
-font-weight:bold;
-}
-
 .row{
-margin-top:10px;
 padding:8px;
+margin-top:6px;
 background:#0f172a;
 border-radius:8px;
 }
@@ -51,8 +46,8 @@ border-radius:8px;
 <body>
 
 <div class="card">
-<h2>LIVE BTC PRICE</h2>
-<div id="price" class="price">Loading...</div>
+<h2>BTC PRICE (LIVE)</h2>
+<div id="price">Loading...</div>
 </div>
 
 <div class="card">
@@ -69,17 +64,27 @@ border-radius:8px;
 </select>
 
 <input id="amount" placeholder="Amount (USDT)"/>
-<button onclick="placeOrder()">Submit Order</button>
+<button onclick="placeOrder()">Submit</button>
 </div>
 
 <div class="card">
-<h3>Orders</h3>
-<div id="orders"></div>
+<h3>ORDER BOOK</h3>
+
+<h4>BUY ORDERS</h4>
+<div id="buys"></div>
+
+<h4>SELL ORDERS</h4>
+<div id="sells"></div>
+</div>
+
+<div class="card">
+<h3>TRADES</h3>
+<div id="trades"></div>
 </div>
 
 <script>
 /* =========================
-   1. LIVE PRICE (REAL)
+   1. MARKET PRICE
 ========================= */
 let btcPrice = 0;
 
@@ -100,8 +105,8 @@ loadPrice();
    2. WALLET
 ========================= */
 let wallet = {
-USDT: 1000,
-BTC: 0
+USDT:1000,
+BTC:0
 };
 
 function renderWallet(){
@@ -112,10 +117,15 @@ document.getElementById("wallet").innerHTML =
 renderWallet();
 
 /* =========================
-   3. ORDERS (REAL LOGIC)
+   3. ORDER BOOK
 ========================= */
-let orders = [];
+let buyOrders = [];
+let sellOrders = [];
+let trades = [];
 
+/* =========================
+   4. PLACE ORDER
+========================= */
 function placeOrder(){
 
 let amount = Number(document.getElementById("amount").value);
@@ -124,50 +134,88 @@ let side = document.getElementById("side").value;
 if(!amount) return alert("Enter amount");
 
 let order = {
+id: Math.random().toString(36).slice(2),
 side,
 amount,
 price: btcPrice,
-time: Date.now()
+filled:0,
+time:Date.now()
 };
 
-orders.push(order);
+/* ADD TO BOOK */
+if(side==="buy") buyOrders.push(order);
+if(side==="sell") sellOrders.push(order);
 
-/* EXECUTION (simple real fill) */
-if(side === "buy"){
-let btc = amount / btcPrice;
-wallet.USDT -= amount;
-wallet.BTC += btc;
-}
-
-if(side === "sell"){
-let btc = amount / btcPrice;
-wallet.USDT += amount;
-wallet.BTC -= btc;
-}
-
-renderOrders();
-renderWallet();
+matchOrders();
+renderBook();
 }
 
 /* =========================
-   4. ORDER HISTORY
+   5. MATCH ENGINE (REAL LOGIC)
 ========================= */
-function renderOrders(){
+function matchOrders(){
 
-let html = "";
+/* sort */
+buyOrders.sort((a,b)=>b.price - a.price);
+sellOrders.sort((a,b)=>a.price - b.price);
 
-orders.slice().reverse().forEach(o=>{
-html += `
-<div class="row">
-${o.side.toUpperCase()}<br>
-Amount: ${o.amount}$<br>
-Price: ${o.price}
-</div>
-`;
+/* matching */
+for(let buy of buyOrders){
+for(let sell of sellOrders){
+
+if(buy.price >= sell.price && buy.filled < buy.amount && sell.filled < sell.amount){
+
+let qty = Math.min(
+buy.amount - buy.filled,
+sell.amount - sell.filled
+);
+
+/* fill */
+buy.filled += qty;
+sell.filled += qty;
+
+/* trade */
+trades.push({
+price: sell.price,
+amount: qty,
+time: Date.now()
 });
 
-document.getElementById("orders").innerHTML = html;
+/* wallet update */
+wallet.USDT -= qty;
+wallet.BTC += qty / sell.price;
+
+/* mark filled orders */
 }
+}
+}
+}
+
+/* =========================
+   6. RENDER ORDER BOOK
+========================= */
+function renderBook(){
+
+document.getElementById("buys").innerHTML =
+buyOrders.map(o=>
+`🟢 ${o.amount} USDT | filled ${o.filled}`
+).join("<br>");
+
+document.getElementById("sells").innerHTML =
+sellOrders.map(o=>
+`🔴 ${o.amount} USDT | filled ${o.filled}`
+).join("<br>");
+
+document.getElementById("trades").innerHTML =
+trades.slice().reverse().map(t=>
+`⚡ ${t.amount} @ ${t.price}`
+).join("<br>");
+
+renderWallet();
+}
+
+/* auto refresh book */
+setInterval(renderBook,2000);
 </script>
 
 </body>
