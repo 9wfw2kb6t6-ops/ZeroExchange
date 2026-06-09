@@ -2,7 +2,106 @@
 <!-- ZERO EXCHANGE REAL VERSION V6 -->
 <!-- REAL PAYMENT ACTIVE VERSION -->
 <!-- ===================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZERO EXCHANGE FIXED</title>
 
+<style>
+body{font-family:Arial;background:#0b1220;color:white;margin:0;padding:20px}
+button{padding:12px;border:none;border-radius:10px;cursor:pointer;margin-top:10px}
+.card{background:#111827;padding:15px;border-radius:15px;margin-bottom:15px}
+</style>
+</head>
+
+<body>
+
+<h2>ZERO EXCHANGE (FIXED VERSION)</h2>
+
+<div class="card">
+<h3>Wallet</h3>
+<div id="wallet">Loading...</div>
+<button onclick="loadWallet()">Refresh Wallet</button>
+</div>
+
+<div class="card">
+<h3>Deposit</h3>
+<input id="coin" placeholder="BTC / USDT / ETH"/>
+<button onclick="getAddress()">Get Address</button>
+<div id="address"></div>
+</div>
+
+<div class="card">
+<h3>Transfer</h3>
+<input id="from" placeholder="FROM (BTC)"/>
+<input id="to" placeholder="TO (USDT)"/>
+<input id="amount" placeholder="Amount"/>
+<button onclick="transfer()">Swap</button>
+<div id="result"></div>
+</div>
+
+<script>
+
+/* =========================
+   مهم‌ترین بخش
+========================= */
+const BASE_URL = "https://YOUR_REPLIT_URL"; 
+// 👆 اینو با لینک Replit خودت عوض کن
+
+/* =========================
+   WALLET
+========================= */
+async function loadWallet(){
+  const res = await fetch(BASE_URL + "/api/wallet");
+  const data = await res.json();
+
+  document.getElementById("wallet").innerText =
+    JSON.stringify(data, null, 2);
+}
+
+/* =========================
+   DEPOSIT ADDRESS
+========================= */
+async function getAddress(){
+  const coin = document.getElementById("coin").value;
+
+  const res = await fetch(BASE_URL + "/api/deposit-address?coin=" + coin);
+  const data = await res.json();
+
+  document.getElementById("address").innerText = data.address;
+}
+
+/* =========================
+   TRANSFER
+========================= */
+async function transfer(){
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+  const amount = document.getElementById("amount").value;
+
+  const res = await fetch(BASE_URL + "/api/wallet/transfer", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({from, to, amount})
+  });
+
+  const data = await res.json();
+
+  document.getElementById("result").innerText =
+    JSON.stringify(data, null, 2);
+
+  loadWallet();
+}
+
+/* auto load */
+loadWallet();
+
+</script>
+
+</body>
+</html>
 <!--
 IMPORTANT:
 
