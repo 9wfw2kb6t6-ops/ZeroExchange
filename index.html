@@ -843,18 +843,13 @@ loadMarkets();
    WALLET
 ========================= */
 
-let wallet = {
+let wallet = {};
 
-USDT:5000,
-BTC:0.4,
-ETH:3,
-TON:1000,
-BNB:8,
-SOL:50,
-TRY:100000,
-IRR:800000000
-
-};
+async function loadWallet() {
+  const res = await fetch("/api/wallet");
+  wallet = await res.json();
+  renderWallet();
+}
 
 function renderWallet(){
 
@@ -899,39 +894,19 @@ document
    DEPOSIT ADDRESSES
 ========================= */
 
-const depositWallets = {
+function updateDepositAddress(){
 
-USDT:
-"TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
+const coin =
+document
+.getElementById("depositCoin")
+.value;
 
-BTC:
-"bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
+document
+.getElementById("depositAddress")
+.innerText =
+depositWallets[coin];
 
-ETH:
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-TON:
-"UQD0VN0pXVlqLkkktfO8NmjaUkU3FMotFAre6vwWJlFCA6IP",
-
-BNB:
-"0x84496f0996ea96871DED409428D060dB00cb9136",
-
-SOL:
-"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ",
-
-TRY:
-`BANK: Ziraat Bank
-IBAN: TR42 0001 0090 1098 8248 3050 01
-NAME: NARIMAN2N ALIZADEH KORDMAHALEH`,
-
-IRR:
-`BANK: TEJARAT
-CARD: 5859831204847882
-SHEBA: IR300180000000004613967414
-NAME: Nariman Alizadeh Kordmahaleh`
-
-};
-
+}
 function updateDepositAddress(){
 
 const coin =
@@ -1154,21 +1129,10 @@ return;
 
 }
 
-wallet[coin] -= amount;
+
 
 withdraws.push({
 
-coin,
-amount,
-address,
-
-status:"Pending",
-
-time:
-new Date()
-.toLocaleTimeString()
-
-});
 
 renderWithdraws();
 renderWallet();
