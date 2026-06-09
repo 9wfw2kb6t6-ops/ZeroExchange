@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V7</title>
+<title>Zero Exchange V8</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -11,7 +11,7 @@
 body{
 margin:0;
 font-family:Inter;
-background:#0a0f1f;
+background:#070b18;
 color:white;
 }
 
@@ -56,26 +56,11 @@ font-weight:900;
 cursor:pointer;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-
-.market{
-display:flex;
-justify-content:space-between;
-padding:6px 0;
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.small{
-font-size:12px;
-color:#94a3b8;
-}
-
-.cancel{
+.smallbtn{
 background:#ef4444;
+font-size:12px;
+padding:6px;
+margin-top:5px;
 }
 </style>
 </head>
@@ -83,8 +68,8 @@ background:#ef4444;
 <body>
 
 <div class="topbar">
-<div><b>ZERO EXCHANGE V7</b></div>
-<div>REAL ENGINE</div>
+<div><b>ZERO EXCHANGE V8</b></div>
+<div>REAL ENGINE+</div>
 </div>
 
 <!-- HOME -->
@@ -93,20 +78,9 @@ background:#ef4444;
 <h2>Portfolio</h2>
 <h1 id="balance">0 USDT</h1>
 
-<div class="grid">
 <button onclick="nav('trade')">Trade</button>
 <button onclick="nav('book')">Order Book</button>
 <button onclick="nav('trades')">Trades</button>
-<button onclick="nav('wallet')">Wallet</button>
-</div>
-</div>
-</div>
-
-<!-- WALLET -->
-<div id="wallet" class="page">
-<div class="card">
-<h3>Assets</h3>
-<div id="assets"></div>
 </div>
 </div>
 
@@ -123,14 +97,14 @@ background:#ef4444;
 <input id="price" placeholder="Price"/>
 <input id="amount" placeholder="Amount"/>
 
-<button onclick="placeOrder()">Submit Order</button>
+<button onclick="placeOrder()">Submit</button>
 </div>
 </div>
 
 <!-- ORDER BOOK -->
 <div id="book" class="page">
 <div class="card">
-<h3>Order Book (Depth)</h3>
+<h3>Order Book Depth</h3>
 
 <h4>BUY</h4>
 <div id="bids"></div>
@@ -143,7 +117,7 @@ background:#ef4444;
 <!-- TRADES -->
 <div id="trades" class="page">
 <div class="card">
-<h3>Trade History</h3>
+<h3>Trade Stream</h3>
 <div id="tradeBox"></div>
 </div>
 </div>
@@ -176,7 +150,7 @@ const auth = getAuth(app);
 
 let user=null;
 
-/* INIT */
+/* INIT USER */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
 user=u;
@@ -192,39 +166,50 @@ assets:{USDT:1000,BTC:0}
 }
 
 loadWallet();
-startEngine();
+start();
 });
 
 /* WALLET */
 async function loadWallet(){
-const snap=await getDoc(doc(db,"users",user.uid));
-const d=snap.data();
-
+const d=(await getDoc(doc(db,"users",user.uid))).data();
 document.getElementById("balance").innerText =
 d.balance.toFixed(2)+" USDT";
-
-document.getElementById("assets").innerHTML =
-Object.entries(d.assets).map(([k,v])=>`${k}: ${v}`).join("<br>");
 }
+
+/* =========================
+   ORDER QUEUE SYSTEM
+========================= */
+let orderQueue = [];
 
 /* PLACE ORDER */
 window.placeOrder = async function(){
 
-await addDoc(collection(db,"orders"),{
+const order = {
 uid:user.uid,
 side:side.value,
 price:Number(price.value),
 amount:Number(amount.value),
 filled:0,
 status:"open",
-ts:Date.now()
-});
+ts:Date.now(),
+id:Math.random().toString(36).slice(2)
+};
 
-alert("Order placed");
+orderQueue.push(order);
+
+await addDoc(collection(db,"orders"),order);
+
+}
+
+/* CANCEL ORDER */
+window.cancelOrder = async function(id){
+
+orderQueue = orderQueue.filter(o=>o.id!==id);
+
 }
 
 /* =========================
-   MATCH ENGINE V7 (SAFE QUEUE + FEE)
+   ENGINE V8 (QUEUE + MATCH)
 ========================= */
 async function engine(){
 
@@ -237,14 +222,17 @@ snap.forEach(d=>{
 let o=d.data();
 o.id=d.id;
 
+if(o.status==="cancelled") return;
+
 if(o.side==="buy") buys.push(o);
 if(o.side==="sell") sells.push(o);
 });
 
-buys.sort((a,b)=>b.price-a.price);
-sells.sort((a,b)=>a.price-b.price);
+/* SORT PRIORITY */
+buys.sort((a,b)=>b.price-a.price || a.ts-b.ts);
+sells.sort((a,b)=>a.price-b.price || a.ts-b.ts);
 
-/* ORDER BOOK DEPTH */
+/* DEPTH MAP */
 let bidLevels={}, askLevels={};
 
 for(let b of buys){
@@ -261,7 +249,7 @@ Object.entries(bidLevels).map(([p,a])=>`🟢 ${p} | ${a.toFixed(2)}`).join("<br>
 document.getElementById("asks").innerHTML =
 Object.entries(askLevels).map(([p,a])=>`🔴 ${p} | ${a.toFixed(2)}`).join("<br>");
 
-/* MATCHING */
+/* MATCH ENGINE */
 for(let buy of buys){
 for(let sell of sells){
 
@@ -274,28 +262,24 @@ buy.amount - buy.filled,
 sell.amount - sell.filled
 );
 
-/* FEE */
-let fee = qty * 0.001; // 0.1%
-let netQty = qty - fee;
-
+/* fill */
 buy.filled += qty;
 sell.filled += qty;
 
-/* TRADE */
+/* trade */
 await addDoc(collection(db,"trades"),{
 buyId:buy.id,
 sellId:sell.id,
 price:sell.price,
-amount:netQty,
-fee:fee,
+amount:qty,
 ts:Date.now()
 });
 
-/* WALLET UPDATE */
-await updateWallet(buy.uid,"buy",netQty,buy.price);
-await updateWallet(sell.uid,"sell",netQty,sell.price);
+/* wallet */
+await updateWallet(buy.uid,"buy",qty,buy.price);
+await updateWallet(sell.uid,"sell",qty,sell.price);
 
-/* UPDATE ORDERS */
+/* update orders */
 await updateDoc(doc(db,"orders",buy.id),buy);
 await updateDoc(doc(db,"orders",sell.id),sell);
 
@@ -303,19 +287,19 @@ await updateDoc(doc(db,"orders",sell.id),sell);
 }
 }
 
-/* TRADE HISTORY */
-const tradesSnap = await getDocs(collection(db,"trades"));
+/* TRADE STREAM */
+const tSnap = await getDocs(collection(db,"trades"));
 
 document.getElementById("tradeBox").innerHTML =
-tradesSnap.docs.map(d=>{
+tSnap.docs.map(d=>{
 let t=d.data();
-return `⚡ ${t.amount} @ ${t.price} (fee ${t.fee})`;
+return `⚡ ${t.amount} @ ${t.price}`;
 }).join("<br>");
 
 }
 
-/* WALLET ENGINE */
-async function updateWallet(uid, side, amount, price){
+/* WALLET */
+async function updateWallet(uid,side,amount,price){
 
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
@@ -334,9 +318,9 @@ u.assets.BTC -= amount/price;
 await updateDoc(ref,u);
 }
 
-/* RUN */
-function startEngine(){
-setInterval(engine, 2000);
+/* LOOP */
+function start(){
+setInterval(engine,2000);
 }
 
 /* NAV */
