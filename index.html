@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V3</title>
+<title>Zero Exchange V4</title>
 
 <style>
 body{
@@ -34,6 +34,9 @@ font-weight:bold;
 cursor:pointer;
 }
 
+.red{background:#ef4444}
+.green{background:#22c55e}
+
 .row{
 padding:8px;
 margin-top:6px;
@@ -56,25 +59,32 @@ border-radius:8px;
 </div>
 
 <div class="card">
-<h3>Place Order</h3>
+<h3>Place LIMIT ORDER</h3>
 
 <select id="side">
 <option value="buy">BUY</option>
 <option value="sell">SELL</option>
 </select>
 
-<input id="amount" placeholder="Amount (USDT)"/>
-<button onclick="placeOrder()">Submit</button>
+<input id="priceInput" placeholder="Limit Price"/>
+<input id="amountInput" placeholder="Amount (USDT)"/>
+
+<button onclick="placeOrder()">Place Order</button>
 </div>
 
 <div class="card">
-<h3>ORDER BOOK</h3>
+<h3>ORDER BOOK DEPTH</h3>
 
-<h4>BUY ORDERS</h4>
+<h4>BUY</h4>
 <div id="buys"></div>
 
-<h4>SELL ORDERS</h4>
+<h4>SELL</h4>
 <div id="sells"></div>
+</div>
+
+<div class="card">
+<h3>OPEN ORDERS</h3>
+<div id="openOrders"></div>
 </div>
 
 <div class="card">
@@ -84,15 +94,14 @@ border-radius:8px;
 
 <script>
 /* =========================
-   1. MARKET PRICE
+   MARKET PRICE
 ========================= */
 let btcPrice = 0;
 
 async function loadPrice(){
-const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
-const data = await res.json();
-
-btcPrice = Number(data.price);
+const r = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
+const d = await r.json();
+btcPrice = Number(d.price);
 
 document.getElementById("price").innerText =
 "$ " + btcPrice.toFixed(2);
@@ -102,7 +111,7 @@ setInterval(loadPrice,2000);
 loadPrice();
 
 /* =========================
-   2. WALLET
+   WALLET
 ========================= */
 let wallet = {
 USDT:1000,
@@ -117,93 +126,127 @@ document.getElementById("wallet").innerHTML =
 renderWallet();
 
 /* =========================
-   3. ORDER BOOK
+   ORDER SYSTEM
 ========================= */
 let buyOrders = [];
 let sellOrders = [];
 let trades = [];
 
 /* =========================
-   4. PLACE ORDER
+   PLACE LIMIT ORDER
 ========================= */
 function placeOrder(){
 
-let amount = Number(document.getElementById("amount").value);
 let side = document.getElementById("side").value;
+let price = Number(document.getElementById("priceInput").value);
+let amount = Number(document.getElementById("amountInput").value);
 
-if(!amount) return alert("Enter amount");
+if(!price || !amount) return alert("Fill inputs");
 
 let order = {
-id: Math.random().toString(36).slice(2),
+id:Math.random().toString(36).slice(2),
 side,
+price,
 amount,
-price: btcPrice,
 filled:0,
+status:"open",
 time:Date.now()
 };
 
-/* ADD TO BOOK */
 if(side==="buy") buyOrders.push(order);
 if(side==="sell") sellOrders.push(order);
 
-matchOrders();
-renderBook();
+match();
+render();
 }
 
 /* =========================
-   5. MATCH ENGINE (REAL LOGIC)
+   CANCEL ORDER
 ========================= */
-function matchOrders(){
+function cancelOrder(id){
 
-/* sort */
-buyOrders.sort((a,b)=>b.price - a.price);
-sellOrders.sort((a,b)=>a.price - b.price);
+buyOrders = buyOrders.filter(o=>o.id!==id);
+sellOrders = sellOrders.filter(o=>o.id!==id);
 
-/* matching */
-for(let buy of buyOrders){
-for(let sell of sellOrders){
+render();
+}
 
-if(buy.price >= sell.price && buy.filled < buy.amount && sell.filled < sell.amount){
+/* =========================
+   MATCH ENGINE (LIMIT LOGIC)
+========================= */
+function match(){
+
+buyOrders.sort((a,b)=>b.price-a.price);
+sellOrders.sort((a,b)=>a.price-b.price);
+
+for(let b of buyOrders){
+for(let s of sellOrders){
+
+if(b.price >= s.price && b.filled < b.amount && s.filled < s.amount){
 
 let qty = Math.min(
-buy.amount - buy.filled,
-sell.amount - sell.filled
+b.amount - b.filled,
+s.amount - s.filled
 );
 
-/* fill */
-buy.filled += qty;
-sell.filled += qty;
+b.filled += qty;
+s.filled += qty;
 
-/* trade */
+/* TRADE */
 trades.push({
-price: sell.price,
-amount: qty,
-time: Date.now()
+price:s.price,
+amount:qty,
+time:Date.now()
 });
 
-/* wallet update */
-wallet.USDT -= qty;
-wallet.BTC += qty / sell.price;
+/* FEE 0.1% */
+let fee = qty * 0.001;
 
-/* mark filled orders */
+/* WALLET UPDATE */
+wallet.BTC += (qty - fee) / s.price;
+wallet.USDT -= qty;
+
 }
 }
 }
 }
 
 /* =========================
-   6. RENDER ORDER BOOK
+   ORDER BOOK DEPTH
 ========================= */
-function renderBook(){
+function groupDepth(orders){
+let map={};
+
+for(let o of orders){
+let remaining = o.amount - o.filled;
+if(remaining<=0) continue;
+
+map[o.price]=(map[o.price]||0)+remaining;
+}
+
+return map;
+}
+
+/* =========================
+   RENDER
+========================= */
+function render(){
+
+let b = groupDepth(buyOrders);
+let s = groupDepth(sellOrders);
 
 document.getElementById("buys").innerHTML =
-buyOrders.map(o=>
-`🟢 ${o.amount} USDT | filled ${o.filled}`
-).join("<br>");
+Object.entries(b).sort((a,b)=>b[0]-a[0])
+.map(([p,a])=>`🟢 ${p} | ${a}`).join("<br>");
 
 document.getElementById("sells").innerHTML =
-sellOrders.map(o=>
-`🔴 ${o.amount} USDT | filled ${o.filled}`
+Object.entries(s).sort((a,b)=>a[0]-b[0])
+.map(([p,a])=>`🔴 ${p} | ${a}`).join("<br>");
+
+document.getElementById("openOrders").innerHTML =
+[...buyOrders,...sellOrders].map(o=>
+`${o.side.toUpperCase()} ${o.price} | ${o.amount-o.filled}
+<button onclick="cancelOrder('${o.id}')">Cancel</button>`
 ).join("<br>");
 
 document.getElementById("trades").innerHTML =
@@ -214,8 +257,7 @@ trades.slice().reverse().map(t=>
 renderWallet();
 }
 
-/* auto refresh book */
-setInterval(renderBook,2000);
+setInterval(render,2000);
 </script>
 
 </body>
