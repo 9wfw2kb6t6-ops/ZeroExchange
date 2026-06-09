@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V13 Core</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+<title>Zero Exchange REAL MVP</title>
 
 <style>
 body{
 margin:0;
-font-family:Inter;
-background:#020617;
+font-family:Arial;
+background:#0b1020;
 color:white;
 }
 
@@ -20,39 +17,31 @@ color:white;
 .page.active{display:block;}
 
 .card{
-background:rgba(255,255,255,0.04);
-padding:18px;
-border-radius:18px;
-margin-bottom:12px;
-border:1px solid rgba(255,255,255,0.06);
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:10px;
-border:none;
+background:#141b2d;
+padding:16px;
 border-radius:12px;
-background:#f5b942;
-font-weight:800;
-cursor:pointer;
+margin-bottom:10px;
 }
 
 input,select{
 width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:12px;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
 border:none;
 background:#0f172a;
 color:white;
 }
 
-.market{
-display:flex;
-justify-content:space-between;
-padding:12px 0;
-border-bottom:1px solid rgba(255,255,255,0.05);
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#f5b942;
+font-weight:bold;
+cursor:pointer;
 }
 
 .green{color:#22c55e;}
@@ -64,34 +53,22 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 
 <!-- HOME -->
 <div id="homePage" class="page active">
-
 <div class="card">
-<h2>Portfolio</h2>
-<div style="font-size:38px;font-weight:900">
-<span id="balance">0</span> USDT
-</div>
+<h2>Balance</h2>
+<h1 id="balance">0</h1>
 </div>
 
 <div class="card">
-<button onclick="switchPage('marketsPage')">Markets</button>
-<button onclick="switchPage('depositPage')">Deposit</button>
-<button onclick="switchPage('withdrawPage')">Withdraw</button>
-</div>
-
-</div>
-
-<!-- MARKETS -->
-<div id="marketsPage" class="page">
-<div class="card">
-<h2>Live Markets</h2>
-<div id="markets">Loading...</div>
+<button onclick="nav('deposit')">Deposit</button>
+<button onclick="nav('withdraw')">Withdraw</button>
+<button onclick="nav('markets')">Markets</button>
 </div>
 </div>
 
 <!-- DEPOSIT -->
-<div id="depositPage" class="page">
+<div id="deposit" class="page">
 <div class="card">
-<h2>Deposit Request</h2>
+<h3>Deposit Request</h3>
 
 <select id="dcoin">
 <option>USDT</option>
@@ -101,14 +78,14 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 
 <input id="damount" placeholder="Amount"/>
 
-<button onclick="deposit()">Submit Deposit</button>
+<button onclick="deposit()">Submit</button>
 </div>
 </div>
 
 <!-- WITHDRAW -->
-<div id="withdrawPage" class="page">
+<div id="withdraw" class="page">
 <div class="card">
-<h2>Withdraw Request</h2>
+<h3>Withdraw Request</h3>
 
 <select id="wcoin">
 <option>USDT</option>
@@ -117,9 +94,17 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 </select>
 
 <input id="wamount" placeholder="Amount"/>
-<input id="waddress" placeholder="Wallet Address"/>
+<input id="waddress" placeholder="Wallet"/>
 
-<button onclick="withdraw()">Submit Withdraw</button>
+<button onclick="withdraw()">Submit</button>
+</div>
+</div>
+
+<!-- MARKETS -->
+<div id="markets" class="page">
+<div class="card">
+<h3>Live Markets</h3>
+<div id="marketBox">Loading...</div>
 </div>
 </div>
 
@@ -127,18 +112,18 @@ border-bottom:1px solid rgba(255,255,255,0.05);
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc
+getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
 getAuth, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* FIREBASE */
 const firebaseConfig = {
 apiKey:"YOUR_KEY",
 authDomain:"YOUR_DOMAIN",
-projectId:"YOUR_PROJECT",
-appId:"YOUR_APP"
+projectId:"YOUR_PROJECT"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -147,10 +132,9 @@ const auth = getAuth(app);
 
 let user=null;
 
-/* INIT USER */
+/* USER INIT */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
-
 user=u;
 
 const ref=doc(db,"users",u.uid);
@@ -168,11 +152,11 @@ loadMarkets();
 async function loadBalance(){
 const ref=doc(db,"users",user.uid);
 const snap=await getDoc(ref);
-document.getElementById("balance").innerText = snap.data().balance;
+document.getElementById("balance").innerText=snap.data().balance;
 }
 
 /* DEPOSIT */
-window.deposit = async function(){
+window.deposit=async function(){
 
 await addDoc(collection(db,"transactions"),{
 uid:user.uid,
@@ -183,11 +167,11 @@ status:"pending",
 createdAt:serverTimestamp()
 });
 
-alert("Deposit request sent");
+alert("Deposit sent");
 }
 
 /* WITHDRAW */
-window.withdraw = async function(){
+window.withdraw=async function(){
 
 await addDoc(collection(db,"transactions"),{
 uid:user.uid,
@@ -199,58 +183,44 @@ status:"pending",
 createdAt:serverTimestamp()
 });
 
-alert("Withdraw request sent");
+alert("Withdraw sent");
 }
 
 /* MARKETS */
 async function loadMarkets(){
 
-try{
-
-const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true");
-const data = await res.json();
-
-if(!data) return;
+const res=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,toncoin,binancecoin,dogecoin,ripple,solana&vs_currencies=usd&include_24hr_change=true");
+const d=await res.json();
 
 const coins=[
-{name:"BTC",price:data.bitcoin.usd,change:data.bitcoin.usd_24h_change},
-{name:"ETH",price:data.ethereum.usd,change:data.ethereum.usd_24h_change},
-{name:"USDT",price:data.tether.usd,change:data.tether.usd_24h_change},
-{name:"TON",price:data.toncoin.usd,change:data.toncoin.usd_24h_change},
-{name:"BNB",price:data.binancecoin.usd,change:data.binancecoin.usd_24h_change},
-{name:"DOGE",price:data.dogecoin.usd,change:data.dogecoin.usd_24h_change},
-{name:"XRP",price:data.ripple.usd,change:data.ripple.usd_24h_change},
-{name:"SOL",price:data.solana.usd,change:data.solana.usd_24h_change}
+["BTC",d.bitcoin],
+["ETH",d.ethereum],
+["USDT",d.tether],
+["TON",d.toncoin],
+["BNB",d.binancecoin],
+["DOGE",d.dogecoin],
+["XRP",d.ripple],
+["SOL",d.solana]
 ];
 
 let html="";
 
 coins.forEach(c=>{
 html+=`
-<div class="market">
-<div>${c.name}</div>
-<div>
-<div>$${Number(c.price).toFixed(2)}</div>
-<div class="${c.change>=0?'green':'red'}">
-${Number(c.change).toFixed(2)}%
-</div>
-</div>
+<div class="card">
+<b>${c[0]}</b><br>
+$${c[1].usd}
+<span class="${c[1].usd_24h_change>=0?'green':'red'}">
+(${c[1].usd_24h_change.toFixed(2)}%)
+</span>
 </div>
 `;
 });
 
-document.getElementById("markets").innerHTML=html;
-
-}catch(e){
-document.getElementById("markets").innerHTML="Market error";
+document.getElementById("marketBox").innerHTML=html;
 }
 
-setInterval(loadMarkets,5000);
-
-}
-
-/* NAV */
-window.switchPage=(p)=>{
+window.nav=(p)=>{
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(p).classList.add("active");
 };
