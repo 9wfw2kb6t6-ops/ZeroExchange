@@ -1,29 +1,36 @@
 <!-- ===================================== -->
-<!-- ZERO EXCHANGE REAL VERSION V5 -->
-<!-- REAL IRAN + TURKEY PAYMENT GATEWAYS -->
+<!-- ZERO EXCHANGE REAL VERSION V6 -->
+<!-- REAL PAYMENT ACTIVE VERSION -->
 <!-- ===================================== -->
 
 <!--
-BACKEND REQUIRED:
+IMPORTANT:
 
-IRAN GATEWAYS:
-- Zarinpal
-- IDPay
-- NextPay
+THIS VERSION CONNECTS FRONTEND
+TO REAL BACKEND PAYMENT APIs.
 
-TURKEY GATEWAYS:
-- iyzico
-- PayTR
+YOU MUST CREATE:
 
-THIS VERSION:
-✔ Real gateway buttons
-✔ Fiat deposit system
-✔ TRY & IRR support
-✔ Bank transfer proof upload
-✔ Gateway redirect
-✔ Modern UI
-✔ Multi currency
-✔ Real exchange style
+/api/iran-payment
+/api/turkey-payment
+/api/verify-payment
+
+Recommended Stack:
+- Next.js
+- Express.js
+- Node.js
+- MongoDB
+
+REAL GATEWAYS:
+IRAN:
+✔ Zarinpal
+✔ IDPay
+✔ NextPay
+
+TURKEY:
+✔ iyzico
+✔ PayTR
+
 -->
 
 <!DOCTYPE html>
@@ -38,7 +45,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 />
 
-<title>ZERO EXCHANGE PRO V5</title>
+<title>ZERO EXCHANGE V6</title>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
@@ -75,7 +82,7 @@ align-items:center;
 padding:18px;
 
 background:
-rgba(15,23,42,0.95);
+rgba(15,23,42,0.96);
 
 backdrop-filter:blur(20px);
 
@@ -88,15 +95,25 @@ border-bottom:
 
 font-size:28px;
 font-weight:900;
+
 color:#f5b942;
+
+}
+
+.live{
+
+font-size:14px;
+color:#22c55e;
 
 }
 
 /* PAGE */
 
 .page{
+
 padding:18px;
 padding-bottom:120px;
+
 }
 
 /* CARD */
@@ -190,6 +207,8 @@ outline:none;
 
 }
 
+/* BUTTON */
+
 button{
 
 width:100%;
@@ -207,8 +226,6 @@ font-weight:900;
 cursor:pointer;
 
 }
-
-/* BUTTON COLORS */
 
 .primary{
 
@@ -259,6 +276,18 @@ border-bottom:
 
 }
 
+.market-row{
+
+display:flex;
+justify-content:space-between;
+
+padding:14px 0;
+
+border-bottom:
+1px solid rgba(255,255,255,0.06);
+
+}
+
 /* COLORS */
 
 .green{
@@ -271,21 +300,6 @@ color:#ef4444;
 
 .gray{
 color:#94a3b8;
-}
-
-/* MARKET */
-
-.market-row{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:14px 0;
-
-border-bottom:
-1px solid rgba(255,255,255,0.06);
-
 }
 
 /* HISTORY */
@@ -384,15 +398,8 @@ border:
 
 .gateway-title{
 
-font-weight:800;
-margin-bottom:8px;
-
-}
-
-.live-price{
-
-font-size:13px;
-color:#22c55e;
+font-weight:900;
+margin-bottom:10px;
 
 }
 
@@ -411,7 +418,7 @@ ZERO EXCHANGE
 </div>
 
 <div
-class="live-price"
+class="live"
 id="btcLive"
 >
 BTC Loading...
@@ -492,7 +499,7 @@ id="walletSection"
 >
 
 <h2>
-Wallet
+Wallet Assets
 </h2>
 
 <div id="walletList"></div>
@@ -514,12 +521,12 @@ Live Markets
 
 </div>
 
-<!-- FIAT PAYMENT -->
+<!-- PAYMENT -->
 
 <div class="card">
 
 <h2>
-Fiat Payment Gateways
+Real Payment Gateways
 </h2>
 
 <!-- IRAN -->
@@ -527,7 +534,7 @@ Fiat Payment Gateways
 <div class="gateway">
 
 <div class="gateway-title">
-🇮🇷 Iran Payment
+🇮🇷 Iranian Gateway
 </div>
 
 <select id="iranGateway">
@@ -555,7 +562,7 @@ placeholder="Amount (Toman)"
 class="green-btn"
 onclick="payIranGateway()"
 >
-Pay With Iranian Gateway
+Pay Iranian Gateway
 </button>
 
 </div>
@@ -565,7 +572,7 @@ Pay With Iranian Gateway
 <div class="gateway">
 
 <div class="gateway-title">
-🇹🇷 Turkey Payment
+🇹🇷 Turkish Gateway
 </div>
 
 <select id="turkeyGateway">
@@ -589,7 +596,7 @@ placeholder="Amount TRY"
 class="blue-btn"
 onclick="payTurkeyGateway()"
 >
-Pay With Turkish Gateway
+Pay Turkish Gateway
 </button>
 
 </div>
@@ -604,13 +611,13 @@ id="depositSection"
 >
 
 <h2>
-Deposit
+Deposit Addresses
 </h2>
 
 <select id="depositCoin">
 
 <option value="USDT">
-USDT TRC20
+USDT
 </option>
 
 <option value="BTC">
@@ -634,11 +641,11 @@ SOL
 </option>
 
 <option value="TRY">
-Turkish Lira
+TRY
 </option>
 
 <option value="IRR">
-Iranian Rial
+IRR
 </option>
 
 </select>
@@ -656,20 +663,6 @@ onclick="copyDeposit()"
 >
 Copy Deposit Info
 </button>
-
-<input
-type="file"
-id="receiptUpload"
-/>
-
-<button
-class="green-btn"
-onclick="submitReceipt()"
->
-Submit Payment Receipt
-</button>
-
-<div id="depositHistory"></div>
 
 </div>
 
@@ -727,7 +720,7 @@ placeholder="Amount"
 
 <input
 id="withdrawAddress"
-placeholder="Wallet / Bank Address"
+placeholder="Wallet / IBAN"
 />
 
 <button
@@ -772,7 +765,7 @@ Withdraw
 <script>
 
 /* =========================
-   MARKET PRICES
+   MARKET SYSTEM
 ========================= */
 
 const marketSymbols = [
@@ -781,9 +774,9 @@ const marketSymbols = [
 "ETHUSDT",
 "BNBUSDT",
 "SOLUSDT",
+"TONUSDT",
 "XRPUSDT",
-"DOGEUSDT",
-"TONUSDT"
+"DOGEUSDT"
 
 ];
 
@@ -853,15 +846,13 @@ loadMarkets();
 let wallet = {
 
 USDT:5000,
-BTC:0.5,
-ETH:4,
-TON:500,
-BNB:10,
-SOL:80,
-XRP:5000,
-DOGE:12000,
+BTC:0.4,
+ETH:3,
+TON:1000,
+BNB:8,
+SOL:50,
 TRY:100000,
-IRR:900000000
+IRR:800000000
 
 };
 
@@ -875,13 +866,9 @@ html += `
 
 <div class="row">
 
-<div>
-${coin}
-</div>
+<div>${coin}</div>
 
-<div>
-${wallet[coin]}
-</div>
+<div>${wallet[coin]}</div>
 
 </div>
 
@@ -891,8 +878,7 @@ ${wallet[coin]}
 
 document
 .getElementById("walletList")
-.innerHTML =
-html;
+.innerHTML = html;
 
 let total =
 
@@ -900,15 +886,12 @@ wallet.USDT +
 
 (wallet.BTC * (prices.BTCUSDT || 0)) +
 
-(wallet.ETH * (prices.ETHUSDT || 0)) +
-
-(wallet.BNB * (prices.BNBUSDT || 0));
+(wallet.ETH * (prices.ETHUSDT || 0));
 
 document
 .getElementById("portfolio")
 .innerText =
-"$" +
-total.toFixed(2);
+"$" + total.toFixed(2);
 
 }
 
@@ -991,77 +974,142 @@ alert("Copied");
 }
 
 /* =========================
-   RECEIPT SYSTEM
+   REAL IRAN PAYMENT
 ========================= */
 
-let deposits = [];
+async function payIranGateway(){
 
-function submitReceipt(){
-
-const coin =
+const gateway =
 document
-.getElementById("depositCoin")
+.getElementById("iranGateway")
 .value;
 
-const file =
+const amount =
 document
-.getElementById("receiptUpload")
-.files[0];
+.getElementById("iranAmount")
+.value;
 
-if(!file){
+if(!amount){
 
-alert("Upload receipt");
+alert("Enter Amount");
 
 return;
 
 }
 
-deposits.push({
+try{
 
-coin,
+const res =
+await fetch(
+"/api/iran-payment",
+{
 
-status:"Pending Review",
+method:"POST",
 
-time:
-new Date()
-.toLocaleTimeString()
+headers:{
+"Content-Type":"application/json"
+},
 
-});
+body:JSON.stringify({
 
-renderDeposits();
+gateway,
+amount
 
-alert(
-"Receipt Submitted Successfully"
-);
+})
 
 }
 
-function renderDeposits(){
+);
 
+const data =
+await res.json();
+
+if(data.paymentUrl){
+
+window.location.href =
+data.paymentUrl;
+
+}else{
+
+alert("Gateway Error");
+
+}
+
+}catch(e){
+
+alert("Server Error");
+
+}
+
+}
+
+/* =========================
+   REAL TURKEY PAYMENT
+========================= */
+
+async function payTurkeyGateway(){
+
+const gateway =
 document
-.getElementById("depositHistory")
-.innerHTML =
+.getElementById("turkeyGateway")
+.value;
 
-deposits
-.slice()
-.reverse()
-.map(d=>`
+const amount =
+document
+.getElementById("turkeyAmount")
+.value;
 
-<div class="history">
+if(!amount){
 
-🟢 ${d.coin}
+alert("Enter Amount");
 
-<div class="badge pending">
-${d.status}
-</div>
+return;
 
-<div class="gray">
-${d.time}
-</div>
+}
 
-</div>
+try{
 
-`).join("");
+const res =
+await fetch(
+"/api/turkey-payment",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+gateway,
+amount
+
+})
+
+}
+
+);
+
+const data =
+await res.json();
+
+if(data.paymentUrl){
+
+window.location.href =
+data.paymentUrl;
+
+}else{
+
+alert("Gateway Error");
+
+}
+
+}catch(e){
+
+alert("Server Error");
+
+}
 
 }
 
@@ -1092,7 +1140,7 @@ document
 
 if(!amount || !address){
 
-alert("Fill all inputs");
+alert("Fill Inputs");
 
 return;
 
@@ -1100,7 +1148,7 @@ return;
 
 if(wallet[coin] < amount){
 
-alert("Insufficient balance");
+alert("Insufficient Balance");
 
 return;
 
@@ -1153,97 +1201,6 @@ ${w.address}
 </div>
 
 `).join("");
-
-}
-
-/* =========================
-   REAL PAYMENT GATEWAYS
-========================= */
-
-/*
-IRAN GATEWAY
-Replace URL with backend API
-*/
-
-function payIranGateway(){
-
-const gateway =
-document
-.getElementById("iranGateway")
-.value;
-
-const amount =
-document
-.getElementById("iranAmount")
-.value;
-
-if(!amount){
-
-alert("Enter amount");
-
-return;
-
-}
-
-/*
-BACKEND API EXAMPLE:
-
-POST /api/iran-payment
-
-{
- gateway:"zarinpal",
- amount:500000
-}
-
-RETURN:
-payment_url
-*/
-
-alert(
-"Redirecting To " +
-gateway.toUpperCase()
-);
-
-/*
-window.location.href =
-backend_payment_url;
-*/
-
-}
-
-/*
-TURKEY GATEWAY
-*/
-
-function payTurkeyGateway(){
-
-const gateway =
-document
-.getElementById("turkeyGateway")
-.value;
-
-const amount =
-document
-.getElementById("turkeyAmount")
-.value;
-
-if(!amount){
-
-alert("Enter amount");
-
-return;
-
-}
-
-alert(
-"Redirecting To " +
-gateway.toUpperCase()
-);
-
-/*
-window.location.href =
-backend_payment_url;
-*/
 
 }
 
