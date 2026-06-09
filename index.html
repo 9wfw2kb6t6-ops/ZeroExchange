@@ -14,47 +14,81 @@ margin:0;
 font-family:'Inter',sans-serif;
 background:linear-gradient(180deg,#020617,#08112b);
 color:white;
+overflow-x:hidden;
 }
 
 .page{display:none;padding:20px;}
 .page.active{display:block;}
 
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px;
+background:rgba(0,0,0,0.4);
+position:sticky;
+top:0;
+}
+
 .card{
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.06);
-border-radius:20px;
+background:rgba(255,255,255,0.05);
 padding:20px;
+border-radius:20px;
 margin-bottom:15px;
+border:1px solid rgba(255,255,255,0.08);
 }
 
 button{
 cursor:pointer;
+padding:12px;
+border:none;
+border-radius:12px;
+margin-top:10px;
+background:#f5b942;
+font-weight:800;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:12px;
+border:none;
+background:#0f172a;
+color:white;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+<div class="header">
+<div>⚡ Zero Exchange</div>
+<button onclick="logout()">Logout</button>
+</div>
+
 <!-- HOME -->
 <div id="homePage" class="page active">
+
 <div class="card">
-<h2>Portfolio</h2>
-
+<h2>Portfolio Balance</h2>
 <div style="font-size:40px;font-weight:900">
-<span id="balance">Loading...</span>
-</div>
-
-<div style="color:#94a3b8">
-USD: <span id="usdBalance">-</span>
+<span id="balance">0</span> USDT
 </div>
 </div>
 
+<div class="card">
 <button onclick="switchPage('depositPage')">Deposit</button>
 <button onclick="switchPage('withdrawPage')">Withdraw</button>
+<button onclick="switchPage('historyPage')">History</button>
+</div>
+
 </div>
 
 <!-- DEPOSIT -->
 <div id="depositPage" class="page">
+
 <div class="card">
 <h2>Deposit Request</h2>
 
@@ -66,12 +100,14 @@ USD: <span id="usdBalance">-</span>
 
 <input id="depositAmount" placeholder="Amount"/>
 
-<button onclick="createDeposit()">Submit Deposit Request</button>
+<button onclick="createDeposit()">Submit Deposit</button>
 </div>
+
 </div>
 
 <!-- WITHDRAW -->
 <div id="withdrawPage" class="page">
+
 <div class="card">
 <h2>Withdraw Request</h2>
 
@@ -84,8 +120,19 @@ USD: <span id="usdBalance">-</span>
 <input id="withdrawAmount" placeholder="Amount"/>
 <input id="withdrawAddress" placeholder="Wallet Address"/>
 
-<button onclick="createWithdraw()">Submit Withdraw Request</button>
+<button onclick="createWithdraw()">Submit Withdraw</button>
 </div>
+
+</div>
+
+<!-- HISTORY -->
+<div id="historyPage" class="page">
+
+<div class="card">
+<h2>Transactions</h2>
+<div id="txList"></div>
+</div>
+
 </div>
 
 <!-- FIREBASE -->
@@ -95,7 +142,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
 getAuth,
 onAuthStateChanged,
-signInWithEmailAndPassword
+signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -103,10 +150,12 @@ getFirestore,
 doc,
 getDoc,
 setDoc,
-updateDoc,
-collection,
 addDoc,
-serverTimestamp
+collection,
+serverTimestamp,
+query,
+where,
+getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* CONFIG */
@@ -121,85 +170,97 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let currentUser = null;
+let user = null;
 
-/* AUTH LISTENER */
-onAuthStateChanged(auth, async (user)=>{
-if(!user) return;
+/* INIT USER */
+onAuthStateChanged(auth, async (u)=>{
+if(!u) return;
 
-currentUser = user;
+user = u;
 
-const ref = doc(db,"users",user.uid);
+const ref = doc(db,"users",u.uid);
 const snap = await getDoc(ref);
 
 if(!snap.exists()){
-await setDoc(ref,{
-balance: 0,
-createdAt: Date.now()
-});
+await setDoc(ref,{balance:0});
 }
 
 loadBalance();
+loadHistory();
 });
 
-/* LOAD BALANCE (REAL SOURCE OF TRUTH) */
+/* LOAD BALANCE (REAL) */
 async function loadBalance(){
-const ref = doc(db,"users",currentUser.uid);
+const ref = doc(db,"users",user.uid);
 const snap = await getDoc(ref);
-
-const data = snap.data();
-
-document.getElementById("balance").innerText = data.balance + " USDT";
-document.getElementById("usdBalance").innerText = "$" + data.balance;
+document.getElementById("balance").innerText = snap.data().balance;
 }
 
-/* DEPOSIT REQUEST */
+/* CREATE DEPOSIT */
 window.createDeposit = async function(){
 
-const coin = document.getElementById("depositCoin").value;
-const amount = Number(document.getElementById("depositAmount").value);
-
 await addDoc(collection(db,"transactions"),{
-uid: currentUser.uid,
-type: "deposit",
-coin,
-amount,
-status: "pending",
-createdAt: serverTimestamp()
+uid:user.uid,
+type:"deposit",
+coin:depositCoin.value,
+amount:Number(depositAmount.value),
+status:"pending",
+createdAt:serverTimestamp()
 });
 
-alert("Deposit Request Sent");
+alert("Deposit sent");
 }
 
-/* WITHDRAW REQUEST */
+/* CREATE WITHDRAW */
 window.createWithdraw = async function(){
 
-const coin = document.getElementById("withdrawCoin").value;
-const amount = Number(document.getElementById("withdrawAmount").value);
-const address = document.getElementById("withdrawAddress").value;
-
-if(!amount || !address) return alert("Fill all fields");
-
 await addDoc(collection(db,"transactions"),{
-uid: currentUser.uid,
-type: "withdraw",
-coin,
-amount,
-address,
-status: "pending",
-createdAt: serverTimestamp()
+uid:user.uid,
+type:"withdraw",
+coin:withdrawCoin.value,
+amount:Number(withdrawAmount.value),
+address:withdrawAddress.value,
+status:"pending",
+createdAt:serverTimestamp()
 });
 
-alert("Withdraw Request Sent");
+alert("Withdraw sent");
 }
 
-/* SIMPLE NAV */
-window.switchPage = function(id){
+/* HISTORY */
+async function loadHistory(){
 
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+const q = query(
+collection(db,"transactions"),
+where("uid","==",user.uid)
+);
 
+const snap = await getDocs(q);
+
+let html="";
+
+snap.forEach(d=>{
+const t=d.data();
+html+=`
+<div style="padding:10px;border-bottom:1px solid #333">
+${t.type.toUpperCase()} - ${t.amount} ${t.coin}
+<br>
+<small>Status: ${t.status}</small>
+</div>
+`;
+});
+
+document.getElementById("txList").innerHTML = html;
 }
+
+/* NAV */
+window.switchPage=(p)=>{
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(p).classList.add("active");
+}
+
+/* LOGOUT */
+window.logout=()=>auth.signOut();
 
 </script>
 
