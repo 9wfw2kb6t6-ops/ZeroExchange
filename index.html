@@ -2,19 +2,21 @@
 <html>
 <head>
 <meta charset="UTF-8"/>
-<title>Zero Exchange V5</title>
+<title>Zero Exchange V6</title>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <style>
 body{background:#0b1220;color:white;font-family:Arial}
 .card{margin:10px;padding:10px;background:#111a2e;border-radius:10px}
-button{padding:10px;width:100%;margin-top:5px}
+input,select,button{width:100%;padding:10px;margin-top:5px}
+button{background:#f5b942;font-weight:bold}
 </style>
 </head>
 <body>
 
 <div class="card">
-<h2>REAL TIME EXCHANGE</h2>
+<h2>MY WALLET</h2>
+<div id="wallet"></div>
 </div>
 
 <div class="card">
@@ -24,12 +26,12 @@ button{padding:10px;width:100%;margin-top:5px}
 <option value="buy">BUY</option>
 <option value="sell">SELL</option>
 </select>
-<button onclick="sendOrder()">SEND ORDER</button>
+<button onclick="send()">SEND ORDER</button>
 </div>
 
 <div class="card">
-<h3>ORDER BOOK</h3>
-<div id="book"></div>
+<h3>ORDERS</h3>
+<div id="orders"></div>
 </div>
 
 <div class="card">
@@ -41,48 +43,44 @@ button{padding:10px;width:100%;margin-top:5px}
 
 const socket = io("http://localhost:3000");
 
-let state = {buyOrders:[], sellOrders:[], trades:[]};
+let state={};
 
 /* INIT */
-socket.on("init",(data)=>{
-state = data;
+socket.on("state",(data)=>{
+state=data;
 render();
 });
 
 /* UPDATE */
 socket.on("update",(data)=>{
-state = data;
+state=data;
 render();
 });
 
-/* SEND ORDER */
-function sendOrder(){
-
+/* SEND */
+function send(){
 socket.emit("order",{
-price: Number(price.value),
-amount: Number(amount.value),
-side: side.value,
-time: Date.now()
+price:Number(price.value),
+amount:Number(amount.value),
+side:side.value
 });
-
 }
 
 /* RENDER */
 function render(){
 
-document.getElementById("book").innerHTML = `
-<h4>BUY</h4>
-${state.buyOrders.map(o=>`🟢 ${o.price} | ${o.amount}`).join("<br>")}
+document.getElementById("wallet").innerHTML =
+`USDT: ${state.users?.USDT || 0}<br>BTC: ${state.users?.BTC || 0}`;
 
-<h4>SELL</h4>
-${state.sellOrders.map(o=>`🔴 ${o.price} | ${o.amount}`).join("<br>")}
-`;
-
-document.getElementById("trades").innerHTML =
-state.trades.slice().reverse().map(t=>
-`⚡ ${t.amount} @ ${t.price}`
+document.getElementById("orders").innerHTML =
+(state.orders||[]).map(o=>
+`${o.side} ${o.price} | ${o.amount}`
 ).join("<br>");
 
+document.getElementById("trades").innerHTML =
+(state.trades||[]).slice().reverse().map(t=>
+`⚡ ${t.amount} @ ${t.price}`
+).join("<br>");
 }
 
 </script>
