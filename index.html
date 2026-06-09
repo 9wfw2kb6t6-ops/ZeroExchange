@@ -1,14 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<title>Zero Exchange V1 REAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zero Exchange V2</title>
+
 <style>
-body{background:#0b1220;color:white;font-family:Arial;margin:0}
-.card{padding:14px;background:#111a2e;margin:10px;border-radius:12px}
-.price{font-size:32px;font-weight:bold}
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+}
+
+.card{
+margin:12px;
+padding:14px;
+background:#111a2e;
+border-radius:12px;
+}
+
+input,button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:8px;
+}
+
+button{
+background:#f5b942;
+font-weight:bold;
+cursor:pointer;
+}
+
+.price{
+font-size:30px;
+font-weight:bold;
+}
+
+.row{
+margin-top:10px;
+padding:8px;
+background:#0f172a;
+border-radius:8px;
+}
 </style>
 </head>
+
 <body>
 
 <div class="card">
@@ -18,26 +57,47 @@ body{background:#0b1220;color:white;font-family:Arial;margin:0}
 
 <div class="card">
 <h3>Wallet</h3>
-<div id="wallet">Loading...</div>
+<div id="wallet"></div>
+</div>
+
+<div class="card">
+<h3>Place Order</h3>
+
+<select id="side">
+<option value="buy">BUY</option>
+<option value="sell">SELL</option>
+</select>
+
+<input id="amount" placeholder="Amount (USDT)"/>
+<button onclick="placeOrder()">Submit Order</button>
+</div>
+
+<div class="card">
+<h3>Orders</h3>
+<div id="orders"></div>
 </div>
 
 <script>
 /* =========================
-   1. REAL MARKET DATA
+   1. LIVE PRICE (REAL)
 ========================= */
+let btcPrice = 0;
+
 async function loadPrice(){
 const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
 const data = await res.json();
 
+btcPrice = Number(data.price);
+
 document.getElementById("price").innerText =
-"$ " + Number(data.price).toFixed(2);
+"$ " + btcPrice.toFixed(2);
 }
 
-setInterval(loadPrice, 2000);
+setInterval(loadPrice,2000);
 loadPrice();
 
 /* =========================
-   2. SIMPLE WALLET (MOCK)
+   2. WALLET
 ========================= */
 let wallet = {
 USDT: 1000,
@@ -46,10 +106,68 @@ BTC: 0
 
 function renderWallet(){
 document.getElementById("wallet").innerHTML =
-`USDT: ${wallet.USDT} <br> BTC: ${wallet.BTC}`;
+`USDT: ${wallet.USDT.toFixed(2)} <br> BTC: ${wallet.BTC.toFixed(6)}`;
 }
 
 renderWallet();
+
+/* =========================
+   3. ORDERS (REAL LOGIC)
+========================= */
+let orders = [];
+
+function placeOrder(){
+
+let amount = Number(document.getElementById("amount").value);
+let side = document.getElementById("side").value;
+
+if(!amount) return alert("Enter amount");
+
+let order = {
+side,
+amount,
+price: btcPrice,
+time: Date.now()
+};
+
+orders.push(order);
+
+/* EXECUTION (simple real fill) */
+if(side === "buy"){
+let btc = amount / btcPrice;
+wallet.USDT -= amount;
+wallet.BTC += btc;
+}
+
+if(side === "sell"){
+let btc = amount / btcPrice;
+wallet.USDT += amount;
+wallet.BTC -= btc;
+}
+
+renderOrders();
+renderWallet();
+}
+
+/* =========================
+   4. ORDER HISTORY
+========================= */
+function renderOrders(){
+
+let html = "";
+
+orders.slice().reverse().forEach(o=>{
+html += `
+<div class="row">
+${o.side.toUpperCase()}<br>
+Amount: ${o.amount}$<br>
+Price: ${o.price}
+</div>
+`;
+});
+
+document.getElementById("orders").innerHTML = html;
+}
 </script>
 
 </body>
