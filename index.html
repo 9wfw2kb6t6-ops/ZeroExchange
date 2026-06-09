@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange V3</title>
+<title>Zero Exchange V4</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
@@ -96,8 +96,8 @@ color:#f5b942;
 <body>
 
 <div class="topbar">
-<div><b>ZERO EXCHANGE V3</b></div>
-<div>LIVE</div>
+<div><b>ZERO EXCHANGE V4</b></div>
+<div>LIVE ENGINE</div>
 </div>
 
 <!-- HOME -->
@@ -110,7 +110,6 @@ color:#f5b942;
 <button onclick="nav('trade')">Trade</button>
 <button onclick="nav('wallet')">Wallet</button>
 <button onclick="nav('orderbook')">Order Book</button>
-<button onclick="nav('admin')">Admin</button>
 </div>
 </div>
 </div>
@@ -153,21 +152,12 @@ color:#f5b942;
 </div>
 </div>
 
-<!-- ADMIN -->
-<div id="admin" class="page">
-<div class="card">
-<h3>Admin Panel</h3>
-<div id="ordersBox"></div>
-</div>
-</div>
-
 <!-- NAV -->
 <div class="nav">
 <button onclick="nav('home')" class="active">Home</button>
 <button onclick="nav('trade')">Trade</button>
 <button onclick="nav('wallet')">Wallet</button>
 <button onclick="nav('orderbook')">Book</button>
-<button onclick="nav('admin')">Admin</button>
 </div>
 
 <script type="module">
@@ -178,12 +168,12 @@ getFirestore,
 doc,getDoc,setDoc,
 addDoc,collection,
 updateDoc,
-onSnapshot,
-query
+onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* 🔥 FIREBASE CONFIG */
 const app = initializeApp({
 apiKey:"YOUR_KEY",
 authDomain:"YOUR_DOMAIN",
@@ -195,7 +185,9 @@ const auth = getAuth(app);
 
 let user=null;
 
-/* INIT */
+/* =========================
+   INIT USER
+========================= */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
 user=u;
@@ -214,12 +206,15 @@ loadWallet();
 listenOrders();
 });
 
-/* WALLET */
+/* =========================
+   WALLET
+========================= */
 async function loadWallet(){
 const snap = await getDoc(doc(db,"users",user.uid));
 const d = snap.data();
 
-document.getElementById("balance").innerText = d.balance+" USDT";
+document.getElementById("balance").innerText =
+d.balance + " USDT";
 
 document.getElementById("assets").innerHTML =
 Object.entries(d.assets)
@@ -227,7 +222,9 @@ Object.entries(d.assets)
 .join("<br>");
 }
 
-/* PLACE ORDER */
+/* =========================
+   PLACE ORDER
+========================= */
 window.placeOrder = async function(){
 
 await addDoc(collection(db,"orders"),{
@@ -243,77 +240,94 @@ createdAt:Date.now()
 alert("Order placed");
 }
 
-/* ORDER BOOK */
+/* =========================
+   ORDER LISTENER + ENGINE
+========================= */
 function listenOrders(){
 
-onSnapshot(collection(db,"orders"),(snap)=>{
+onSnapshot(collection(db,"orders"), async (snap)=>{
 
-let bids=[];
-let asks=[];
-let html="";
+let buys=[];
+let sells=[];
 
 snap.forEach(d=>{
-const o=d.data();
+let o=d.data();
 o.id=d.id;
 
-if(o.side==="buy") bids.push(o);
-if(o.side==="sell") asks.push(o);
-
-html+=`
-<div class="card">
-${o.side} ${o.amount} @ ${o.price} (${o.status})
-<button onclick="execute('${o.id}')">Execute</button>
-</div>
-`;
+if(o.side==="buy") buys.push(o);
+if(o.side==="sell") sells.push(o);
 });
 
-document.getElementById("ordersBox").innerHTML=html;
+/* SORT */
+buys.sort((a,b)=>b.price-a.price);
+sells.sort((a,b)=>a.price-b.price);
 
 /* ORDER BOOK UI */
-bids.sort((a,b)=>b.price-a.price);
-asks.sort((a,b)=>a.price-a.price);
-
 document.getElementById("bids").innerHTML =
-bids.map(b=>`🟢 ${b.price} | ${b.amount}`).join("<br>");
+buys.map(b=>`🟢 ${b.price} | ${b.amount}`).join("<br>");
 
 document.getElementById("asks").innerHTML =
-asks.map(a=>`🔴 ${a.price} | ${a.amount}`).join("<br>");
+sells.map(s=>`🔴 ${s.price} | ${s.amount}`).join("<br>");
+
+/* =========================
+   MATCH ENGINE (AUTO)
+========================= */
+for(let buy of buys){
+for(let sell of sells){
+
+if(buy.price >= sell.price && buy.filled < buy.amount && sell.filled < sell.amount){
+
+let qty = Math.min(
+buy.amount - buy.filled,
+sell.amount - sell.filled
+);
+
+/* update fills */
+buy.filled += qty;
+sell.filled += qty;
+
+/* USERS */
+await updateWallet(buy.uid,"buy",qty,buy.price);
+await updateWallet(sell.uid,"sell",qty,sell.price);
+
+/* update orders */
+await updateDoc(doc(db,"orders",buy.id),buy);
+await updateDoc(doc(db,"orders",sell.id),sell);
+
+}
+}
+}
 
 });
 }
 
-/* MATCH ENGINE */
-window.execute = async function(id){
+/* =========================
+   WALLET ENGINE
+========================= */
+async function updateWallet(uid, side, amount, price){
 
-const orderRef = doc(db,"orders",id);
-const snap = await getDoc(orderRef);
-const o = snap.data();
+const ref = doc(db,"users",uid);
+const snap = await getDoc(ref);
+let u = snap.data();
 
-const userRef = doc(db,"users",o.uid);
-const userSnap = await getDoc(userRef);
-let u = userSnap.data();
-
-const price = o.price;
-const amount = o.amount;
-
-/* SIMPLE TRADE ENGINE */
-if(o.side==="buy"){
+/* BUY */
+if(side==="buy"){
 u.balance -= amount;
 u.assets.BTC += amount/price;
 }
 
-if(o.side==="sell"){
+/* SELL */
+if(side==="sell"){
 u.balance += amount;
 u.assets.BTC -= amount/price;
 }
 
-await updateDoc(userRef,u);
-await updateDoc(orderRef,{status:"filled"});
-
-alert("Executed");
+await updateDoc(ref,u);
 }
 
-/* NAV */
+/* =========================
+   NAV
+========================= */
 window.nav=(p)=>{
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(p).classList.add("active");
