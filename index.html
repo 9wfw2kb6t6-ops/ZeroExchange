@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Zero Exchange Pro</title>
+<title>Zero Exchange Pro MVP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
 <style>
-
 body{
 margin:0;
 font-family:Inter;
-background:#0b1020;
+background:#0a0f1f;
 color:white;
 }
 
@@ -26,7 +24,7 @@ position:sticky;
 top:0;
 }
 
-.page{display:none;padding:16px;}
+.page{display:none;padding:14px;}
 .active{display:block;}
 
 .card{
@@ -53,28 +51,32 @@ width:100%;
 padding:10px;
 margin-top:8px;
 border-radius:10px;
-border:none;
-background:#0f172a;
+background:#0b1224;
 color:white;
+border:none;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
 }
 
 .market{
 display:flex;
 justify-content:space-between;
-padding:10px 0;
+padding:8px 0;
 border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 .nav{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
 display:flex;
 justify-content:space-around;
 background:#0f172a;
 padding:10px;
-border-top:1px solid rgba(255,255,255,0.06);
 }
 
 .nav button{
@@ -82,20 +84,19 @@ background:none;
 border:none;
 color:#94a3b8;
 font-size:12px;
-font-weight:600;
+font-weight:700;
 }
 
 .nav button.active{
 color:#f5b942;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-<div><b>Zero Exchange</b></div>
+<div><b>ZERO EXCHANGE MVP</b></div>
 <div>LIVE</div>
 </div>
 
@@ -105,94 +106,71 @@ color:#f5b942;
 <div class="card">
 <h2>Portfolio</h2>
 <h1 id="balance">0 USDT</h1>
-</div>
 
-<div class="card">
-<button onclick="nav('deposit')">Deposit</button>
-<button onclick="nav('withdraw')">Withdraw</button>
+<div class="grid">
+<button onclick="nav('trade')">Trade</button>
 <button onclick="nav('wallet')">Wallet</button>
 <button onclick="nav('markets')">Markets</button>
 <button onclick="nav('admin')">Admin</button>
+</div>
 </div>
 
 </div>
 
 <!-- WALLET -->
 <div id="wallet" class="page">
-
 <div class="card">
 <h3>Assets</h3>
-<div id="assets">Loading...</div>
+<div id="assets"></div>
+</div>
 </div>
 
-</div>
-
-<!-- DEPOSIT -->
-<div id="deposit" class="page">
-
+<!-- TRADE -->
+<div id="trade" class="page">
 <div class="card">
-<h3>Deposit Request</h3>
+<h3>Spot Trade</h3>
 
-<select id="dcoin">
-<option>USDT</option>
-<option>BTC</option>
-<option>ETH</option>
+<select id="pair">
+<option value="BTC">BTC/USDT</option>
+<option value="ETH">ETH/USDT</option>
+<option value="TON">TON/USDT</option>
 </select>
 
-<input id="damount" placeholder="Amount"/>
-
-<button onclick="deposit()">Submit Deposit</button>
-</div>
-
-</div>
-
-<!-- WITHDRAW -->
-<div id="withdraw" class="page">
-
-<div class="card">
-<h3>Withdraw Request</h3>
-
-<select id="wcoin">
-<option>USDT</option>
-<option>BTC</option>
-<option>ETH</option>
+<select id="side">
+<option value="buy">BUY</option>
+<option value="sell">SELL</option>
 </select>
 
-<input id="wamount" placeholder="Amount"/>
-<input id="waddress" placeholder="Wallet Address"/>
+<input id="amount" placeholder="Amount"/>
+<input id="price" placeholder="Price"/>
 
-<button onclick="withdraw()">Submit Withdraw</button>
+<button onclick="placeOrder()">Place Order</button>
 </div>
-
 </div>
 
 <!-- MARKETS -->
 <div id="markets" class="page">
-
 <div class="card">
 <h3>Live Markets</h3>
 <div id="marketBox">Loading...</div>
 </div>
-
 </div>
 
 <!-- ADMIN -->
 <div id="admin" class="page">
-
 <div class="card">
 <h3>Admin Panel</h3>
 <div id="txBox">Loading...</div>
 </div>
-
 </div>
 
 <!-- NAV -->
 <div class="nav">
 <button onclick="nav('home')" class="active">Home</button>
-<button onclick="nav('markets')">Markets</button>
+<button onclick="nav('trade')">Trade</button>
 <button onclick="nav('wallet')">Wallet</button>
-<button onclick="nav('deposit')">Deposit</button>
-<button onclick="nav('withdraw')">Withdraw</button>
+<button onclick="nav('markets')">Markets</button>
+<button onclick="nav('admin')">Admin</button>
 </div>
 
 <script type="module">
@@ -211,19 +189,18 @@ query
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 /* FIREBASE */
-const firebaseConfig = {
+const app = initializeApp({
 apiKey:"YOUR_KEY",
 authDomain:"YOUR_DOMAIN",
 projectId:"YOUR_PROJECT"
-};
+});
 
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
 let user=null;
 
-/* AUTH */
+/* INIT */
 onAuthStateChanged(auth, async (u)=>{
 if(!u) return;
 user=u;
@@ -233,71 +210,50 @@ const snap=await getDoc(ref);
 
 if(!snap.exists()){
 await setDoc(ref,{
-balance:0,
-assets:{USDT:0,BTC:0,ETH:0}
+balance:1000,
+assets:{USDT:1000,BTC:0,ETH:0,TON:0}
 });
 }
 
-loadBalance();
-listenTx();
+loadWallet();
+listenOrders();
 loadMarkets();
 });
 
-/* BALANCE */
-async function loadBalance(){
+/* WALLET */
+async function loadWallet(){
 const snap = await getDoc(doc(db,"users",user.uid));
+const d = snap.data();
+
 document.getElementById("balance").innerText =
-snap.data().balance + " USDT";
+d.balance + " USDT";
 
 document.getElementById("assets").innerHTML =
-Object.entries(snap.data().assets)
+Object.entries(d.assets)
 .map(([k,v])=>`${k}: ${v}`)
 .join("<br>");
 }
 
-/* DEPOSIT */
-window.deposit = async function(){
+/* ORDER */
+window.placeOrder = async function(){
 
-await addDoc(collection(db,"transactions"),{
+await addDoc(collection(db,"orders"),{
 uid:user.uid,
-type:"deposit",
-coin:dcoin.value,
-amount:Number(damount.value),
-status:"pending",
+pair:pair.value,
+side:side.value,
+amount:Number(amount.value),
+price:Number(price.value),
+status:"open",
 createdAt:serverTimestamp()
 });
 
-alert("Deposit sent");
+alert("Order placed");
 }
 
-/* WITHDRAW SAFE */
-window.withdraw = async function(){
+/* ADMIN ENGINE */
+function listenOrders(){
 
-const snap = await getDoc(doc(db,"users",user.uid));
-const bal = snap.data().balance;
-
-if(Number(wamount.value) > bal){
-alert("Not enough balance");
-return;
-}
-
-await addDoc(collection(db,"transactions"),{
-uid:user.uid,
-type:"withdraw",
-coin:wcoin.value,
-amount:Number(wamount.value),
-address:waddress.value,
-status:"pending",
-createdAt:serverTimestamp()
-});
-
-alert("Withdraw sent");
-}
-
-/* ADMIN + TX LISTENER */
-function listenTx(){
-
-const q = query(collection(db,"transactions"));
+const q = query(collection(db,"orders"));
 
 onSnapshot(q,(snap)=>{
 
@@ -305,22 +261,15 @@ let html="";
 
 snap.forEach(d=>{
 
-const t=d.data();
+const o=d.data();
 
 html+=`
 <div class="card">
-<b>${t.type}</b><br>
-${t.amount} ${t.coin}<br>
-Status: ${t.status}<br>
+${o.side.toUpperCase()} ${o.amount} ${o.pair} @ ${o.price}
 
-<button onclick="approve('${d.id}',${t.amount},'${t.uid}','${t.type}','${t.coin}')">
-Approve
+<button onclick="execute('${d.id}','${o.side}',${o.amount},${o.price})">
+EXECUTE
 </button>
-
-<button onclick="reject('${d.id}')">
-Reject
-</button>
-
 </div>
 `;
 });
@@ -331,41 +280,27 @@ document.getElementById("txBox").innerHTML=html;
 
 }
 
-/* APPROVE ENGINE */
-window.approve = async function(id,amount,uid,type,coin){
+/* TRADING ENGINE */
+window.execute = async function(id,side,amount,price){
 
-const userRef=doc(db,"users",uid);
-const txRef=doc(db,"transactions",id);
+const ref = doc(db,"users",user.uid);
+const snap = await getDoc(ref);
+let d = snap.data();
 
-const snap=await getDoc(userRef);
-let data=snap.data();
-
-let balance=data.balance;
-let assets=data.assets;
-
-/* deposit */
-if(type==="deposit"){
-balance+=amount;
-assets[coin]=(assets[coin]||0)+amount;
+if(side==="buy"){
+d.balance -= amount;
+d.assets.BTC += amount/price;
 }
 
-/* withdraw */
-if(type==="withdraw"){
-balance-=amount;
-assets[coin]=(assets[coin]||0)-amount;
+if(side==="sell"){
+d.balance += amount;
+d.assets.BTC -= amount/price;
 }
 
-await updateDoc(userRef,{balance,assets});
-await updateDoc(txRef,{status:"approved"});
+await updateDoc(ref,d);
+await updateDoc(doc(db,"orders",id),{status:"filled"});
 
-alert("Approved");
-}
-
-/* REJECT */
-window.reject = async function(id){
-await updateDoc(doc(db,"transactions",id),{
-status:"rejected"
-});
+alert("Executed");
 }
 
 /* MARKETS */
@@ -373,8 +308,8 @@ async function loadMarkets(){
 
 try{
 
-const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,toncoin&vs_currencies=usd");
-const d=await r.json();
+const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,toncoin&vs_currencies=usd");
+const d = await r.json();
 
 document.getElementById("marketBox").innerHTML=`
 <div class="market">BTC: $${d.bitcoin.usd}</div>
